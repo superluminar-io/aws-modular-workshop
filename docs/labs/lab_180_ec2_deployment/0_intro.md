@@ -37,7 +37,7 @@ Instructions for draw.io:
 
 EC2 offers various instance types optimized for different use cases:
 
-1. **General Purpose (t2, t3, m5)**
+1. **General Purpose (t3, t4g, m5)**
 
    - Balanced compute, memory, and networking
    - Ideal for web servers and development environments
@@ -93,7 +93,7 @@ EC2 offers multiple storage options:
    - High I/O performance
 
 3. **EBS Volume Types**
-   - General Purpose (gp2, gp3)
+   - General Purpose (gp3)
    - Provisioned IOPS (io1, io2)
    - Throughput Optimized (st1)
    - Cold Storage (sc1)

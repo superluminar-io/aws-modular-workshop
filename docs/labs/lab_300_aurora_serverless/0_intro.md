@@ -50,6 +50,19 @@ Instructions for draw.io:
    │  ┌───────────────────────┐     │
    │  │    Data API Layer     │     │
    │  └───────────────────────┘     │
+   │         │                      │
+   │         ▼                      │
+   │  ┌──────────┐  ┌──────────┐   │
+   │  │ Compute  │  │ Compute  │   │
+   │  │  Node 1  │  │  Node 2  │   │
+   │  └──────────┘  └──────────┘   │
+   │         │             │        │
+   │         └─────────────┘        │
+   │                │               │
+   │         ┌──────────┐          │
+   │         │ Storage  │          │
+   │         │  Layer   │          │
+   │         └──────────┘          │
    └─────────────────────────────────┘
    ```
 
@@ -57,6 +70,8 @@ Instructions for draw.io:
    - Scaling configuration
    - Data API
    - Connection management
+   - Distributed compute nodes
+   - Shared storage layer
 
 2. **Auto-scaling**
    - Minimum and maximum ACUs

@@ -101,7 +101,27 @@ Instructions for draw.io:
          "Action": [
            "ssm:UpdateInstanceInformation",
            "ssm:ListInstanceAssociations",
-           "ssm:DescribeInstanceAssociations"
+           "ssm:DescribeInstanceAssociations",
+           "ssm:GetParameter",
+           "ssm:GetParameters",
+           "ssm:PutParameter",
+           "ssm:StartSession",
+           "ssm:TerminateSession",
+           "ssm:ResumeSession",
+           "ssm:DescribeSessions",
+           "ssm:GetConnectionStatus"
+         ],
+         "Resource": "*"
+       },
+       {
+         "Effect": "Allow",
+         "Action": [
+           "ec2messages:AcknowledgeMessage",
+           "ec2messages:DeleteMessage",
+           "ec2messages:FailMessage",
+           "ec2messages:GetEndpoint",
+           "ec2messages:GetMessages",
+           "ec2messages:SendReply"
          ],
          "Resource": "*"
        }

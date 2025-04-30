@@ -50,13 +50,17 @@ Instructions for draw.io:
    │  │ GitHub/ │  │  CDK   │  │  Stage  │  │
    │  │ CodeCmmt│  │ Synth  │  │ Deploy  │  │
    │  └─────────┘  └────────┘  └─────────┘  │
+   │       │           ▲            │        │
+   │       └───────────┼────────────┘        │
+   │                   │                     │
+   │            Self-Mutation                │
    └─────────────────────────────────────────┘
    ```
 
    - Source stage
    - Build and synthesis
    - Deployment stages
-   - Self-mutation
+   - Self-mutation (updates pipeline itself)
 
 2. **Pipeline Stages**
    ```

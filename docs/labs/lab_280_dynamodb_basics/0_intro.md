@@ -146,14 +146,24 @@ Instructions for draw.io:
 
 1. **Read Consistency**
    ```
-   Write       Eventually     Strongly
-   Request     Consistent     Consistent
-     │             │             │
-     ▼             ▼             ▼
-   ┌────┐    ┌──────────┐  ┌──────────┐
-   │Node│───▶│Replicas  │  │All Nodes │
-   └────┘    │Available │  │  Agree   │
-             └──────────┘  └──────────┘
+   Write Request
+        │
+        ▼
+   ┌──────────┐
+   │ Primary  │
+   │  Node    │
+   └──────────┘
+        │
+        ▼
+   ┌──────────┐  ┌──────────┐  ┌──────────┐
+   │ Replica  │  │ Replica  │  │ Replica  │
+   │  Node    │  │  Node    │  │  Node    │
+   └──────────┘  └──────────┘  └──────────┘
+        │             │             │
+        ▼             ▼             ▼
+   Eventually     Eventually     Strongly
+   Consistent     Consistent     Consistent
+   (Any Node)     (Any Node)    (All Nodes)
    ```
    - Eventually Consistent Reads
    - Strongly Consistent Reads
