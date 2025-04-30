@@ -5,18 +5,22 @@
 Amazon Virtual Private Cloud (VPC) is a service that lets you launch AWS resources in a logically isolated virtual network that you define. In this lab, you'll learn how to create and manage VPCs using AWS CDK.
 
 [DIAGRAM: VPC Overview]
-Description: A high-level diagram showing the key components of Amazon VPC and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main VPC components:
-   - VPC
-   - Subnets (Public and Private)
-   - Route Tables
-   - Internet Gateway
-   - NAT Gateway
-2. Illustrate the relationships between components
-3. Show how VPC interacts with other AWS services
-4. Include common networking patterns
-   Use AWS's standard color scheme with blue for AWS services and green for VPC components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS VPC icon
+   - AWS EC2 icon
+   - AWS Route 53 icon
+   - AWS Direct Connect icon
+   - AWS VPN icon
+3. Layout:
+   - Place VPC at the center
+   - Add subnets on the left and right
+   - Place gateways at the top
+   - Show route tables in the middle
+4. Use AWS's standard connector arrows to show network flow
+5. Add CIDR block visualization with IP ranges
 
 ## Learning Objectives
 
@@ -190,14 +194,22 @@ In the hands-on section, you'll:
 - Learn to troubleshoot common networking issues
 
 [DIAGRAM: VPC Network Flow]
-Description: A detailed flowchart showing how network traffic flows through a VPC. The diagram should:
+Instructions for draw.io:
 
-1. Show the network flow process:
-   - Internet traffic
-   - Internal VPC traffic
-   - Cross-subnet communication
-   - External service access
-2. Include different types of gateways
-3. Show routing patterns
-4. Illustrate security group and NACL interactions
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS VPC icon
+   - AWS Internet Gateway icon
+   - AWS NAT Gateway icon
+   - AWS Security Group icon
+   - AWS Network ACL icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for security checks
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Traffic ingress/egress
+   - Security group evaluation
+   - NACL evaluation
+   - Routing decisions
+5. Use AWS's standard color scheme for all elements

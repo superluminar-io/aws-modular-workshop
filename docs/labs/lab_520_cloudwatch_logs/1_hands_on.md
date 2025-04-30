@@ -7,18 +7,27 @@
 - Resources to monitor (EC2, Lambda, etc.)
 
 [DIAGRAM: CloudWatch Implementation]
-Description: A high-level diagram showing the implementation of the CloudWatch lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the main components being implemented:
-   - CloudWatch Dashboard
-   - Alarms
-   - Log Groups
-   - Metric Filters
-   - Custom Metrics
-2. Illustrate the relationships between components
-3. Show the monitoring flow
-4. Include the implementation steps
-   Use AWS's standard color scheme with blue for AWS services and green for CloudWatch components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS CloudWatch icon
+   - AWS Lambda icon
+   - AWS SNS icon
+   - AWS EventBridge icon
+   - AWS EC2 icon
+   - AWS CloudWatch Logs icon
+3. Layout:
+   - Place CloudWatch Dashboard at the center
+   - Add alarms and metrics on the left
+   - Place log groups and filters on the right
+   - Show custom metrics at the bottom
+4. Use AWS's standard connector arrows to show relationships
+5. Add monitoring flow visualization with data collection
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for CloudWatch components
+   - Gray for infrastructure elements
 
 ## Lab Steps
 

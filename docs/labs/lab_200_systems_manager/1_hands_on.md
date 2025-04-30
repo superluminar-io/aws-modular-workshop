@@ -1,6 +1,24 @@
 # Systems Manager - Hands-on Lab
 
 [DIAGRAM: Systems Manager Hands-on Architecture]
+Instructions for draw.io:
+
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Systems Manager icon
+   - AWS EC2 icon
+   - AWS IAM icon
+   - AWS VPC icon
+   - AWS Parameter Store icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place Systems Manager at the center
+   - Add EC2 instances on the left
+   - Place IAM roles and policies on the right
+   - Show VPC configuration at the bottom
+4. Use AWS's standard connector arrows to show relationships
+5. Add management visualization with automation states
+
 Description: A detailed diagram showing the Systems Manager resources we'll create in this lab. The diagram should:
 
 1. Show the complete architecture:

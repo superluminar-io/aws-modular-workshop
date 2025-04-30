@@ -5,18 +5,22 @@
 AWS CDK Pipelines enables you to create continuous delivery pipelines that deploy your AWS CDK applications across AWS accounts and regions. This lab introduces CDK Pipelines concepts and demonstrates how to set up an automated deployment pipeline for your infrastructure.
 
 [DIAGRAM: CI/CD Overview]
-Description: A high-level diagram showing the key components of AWS CI/CD services and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main CI/CD components:
-   - CodePipeline
-   - CodeBuild
-   - CodeCommit
-   - CodeDeploy
-   - Artifacts
-2. Illustrate the relationships between components
-3. Show how CI/CD interacts with other AWS services
-4. Include common pipeline patterns
-   Use AWS's standard color scheme with blue for AWS services and green for CI/CD components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS CodePipeline icon
+   - AWS CodeBuild icon
+   - AWS CodeCommit icon
+   - AWS CodeDeploy icon
+   - AWS S3 icon for artifacts
+3. Layout:
+   - Place CodePipeline at the center
+   - Add source repositories on the left
+   - Place build and test stages in the middle
+   - Add deployment targets on the right
+4. Use AWS's standard connector arrows to show pipeline flow
+5. Add cross-account deployment visualization
 
 ## Learning Objectives
 
@@ -189,14 +193,22 @@ In the hands-on section, you'll:
 - Implement best practices
 
 [DIAGRAM: CI/CD Workflow]
-Description: A detailed flowchart showing how CI/CD operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the workflow process:
-   - Source code management
-   - Build process
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS CodePipeline icon
+   - AWS CodeBuild icon
+   - AWS CodeCommit icon
+   - AWS CodeDeploy icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Source Code Management
+   - Build Process
    - Testing
    - Deployment
-2. Include different pipeline stages
-3. Show the automation process
-4. Illustrate the deployment patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+5. Use AWS's standard color scheme for all elements

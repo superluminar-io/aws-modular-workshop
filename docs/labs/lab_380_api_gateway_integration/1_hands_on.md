@@ -1,18 +1,26 @@
 # API Gateway Integration - Hands-on Lab
 
 [DIAGRAM: API Gateway Hands-on Architecture]
-Description: A detailed diagram showing the API Gateway resources we'll create in this lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the complete architecture:
-   - REST API
-   - Lambda Integrations
-   - Authorizers
-   - Usage Plans
-   - API Keys
-2. Illustrate the relationships between components
-3. Show the API patterns
-4. Include example service integrations
-   Use AWS's standard color scheme with blue for AWS services and green for API Gateway components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS API Gateway icon
+   - AWS Lambda icon
+   - AWS DynamoDB icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place API Gateway at the center
+   - Add Lambda functions on the left
+   - Place DynamoDB on the right
+   - Show security components above
+4. Use AWS's standard connector arrows to show data flow
+5. Add clear labels for each component
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for API Gateway components
+   - Gray for infrastructure elements
 
 ## Prerequisites
 
@@ -320,16 +328,24 @@ cdk destroy ApiStack --profile your-profile-name
 ```
 
 [DIAGRAM: API Gateway Setup Flow]
-Description: A sequence diagram showing how the API Gateway setup will work in our lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the setup flow:
-   - API creation
-   - Integration configuration
-   - Security setup
-   - Deployment configuration
-2. Include the specific operations we perform in the lab
-3. Show how different components interact
-4. Illustrate the API patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS API Gateway icon
+   - AWS Lambda icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - API Creation
+   - Integration Configuration
+   - Security Setup
+   - Deployment Configuration
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow
 
 ## Creating API Gateway Resources

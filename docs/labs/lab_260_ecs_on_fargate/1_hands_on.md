@@ -1,18 +1,22 @@
 # ECS on Fargate - Hands-on Lab
 
 [DIAGRAM: ECS Hands-on Architecture]
-Description: A detailed diagram showing the ECS resources we'll create in this lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the complete architecture:
-   - ECS Cluster
-   - Fargate Service
-   - Task Definition
-   - Load Balancer
-   - VPC Configuration
-2. Illustrate the relationships between components
-3. Show the container patterns
-4. Include example service integrations
-   Use AWS's standard color scheme with blue for AWS services and green for ECS components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECS icon
+   - AWS Fargate icon
+   - AWS VPC icon
+   - AWS Application Load Balancer icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place ECS cluster at the center
+   - Add Fargate service around it
+   - Place task definition on the right
+   - Show load balancer on the left
+4. Use AWS's standard connector arrows to show relationships
+5. Add VPC configuration visualization
 
 ## Prerequisites
 

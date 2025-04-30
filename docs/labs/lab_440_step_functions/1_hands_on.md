@@ -16,13 +16,19 @@ Instructions for draw.io:
    - AWS DynamoDB icon
    - AWS SNS icon
    - AWS CloudWatch icon
+   - AWS IAM icon
 3. Layout:
    - Place Step Functions state machine at the center
    - Add Lambda functions around the state machine
    - Place DynamoDB and SNS as service integrations
    - Add CloudWatch monitoring at the bottom
+   - Show IAM roles and policies on the right
 4. Use AWS's standard connector arrows to show workflow flow
 5. Add state transition visualization
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for workflow components
+   - Gray for infrastructure elements
 
 ## Lab Steps
 
@@ -263,17 +269,25 @@ startExecution();
 3. Run test execution:
 
 [DIAGRAM: Step Functions Testing]
-Description: A detailed flowchart showing how to test the Step Functions implementation. The diagram should:
+Instructions for draw.io:
 
-1. Show the testing process:
-   - Execution creation
-   - State transitions
-   - Error handling
-   - Result validation
-2. Include different test scenarios
-3. Show the monitoring process
-4. Illustrate the testing patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Step Functions icon
+   - AWS Lambda icon
+   - AWS CloudWatch icon
+   - AWS X-Ray icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Execution Creation
+   - State Transitions
+   - Error Handling
+   - Result Validation
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each testing step
 
 ### 4. Monitor Execution
 

@@ -7,17 +7,27 @@
 - Completed IAM lab
 
 [DIAGRAM: Secrets Manager Implementation]
-Description: A high-level diagram showing the implementation of the Secrets Manager lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the main components being implemented:
-   - Secrets
-   - KMS Keys
-   - IAM Roles
-   - Lambda Functions
-2. Illustrate the relationships between components
-3. Show the secret management flow
-4. Include the implementation steps
-   Use AWS's standard color scheme with blue for AWS services and green for Secrets Manager components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Secrets Manager icon
+   - AWS KMS icon
+   - AWS IAM icon
+   - AWS Lambda icon
+   - AWS RDS icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place Secrets Manager at the center
+   - Add KMS and IAM on the left
+   - Place Lambda functions and RDS on the right
+   - Show CloudWatch monitoring below
+4. Use AWS's standard connector arrows to show relationships
+5. Add secret flow visualization with encryption
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for Secrets Manager components
+   - Gray for infrastructure elements
 
 ## Lab Steps
 
@@ -213,17 +223,25 @@ apiKeySecret.addRotationSchedule('RotationSchedule', {
 2. Create rotation function `src/rotation-function/index.ts`:
 
 [DIAGRAM: Secrets Manager Rotation]
-Description: A detailed flowchart showing how secret rotation works. The diagram should:
+Instructions for draw.io:
 
-1. Show the rotation process:
-   - Secret creation
-   - Secret testing
-   - Secret update
-   - Rotation completion
-2. Include different rotation steps
-3. Show the error handling process
-4. Illustrate the rotation patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Secrets Manager icon
+   - AWS Lambda icon
+   - AWS KMS icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Secret Creation
+   - Secret Testing
+   - Secret Update
+   - Rotation Completion
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow
 
 ## Validation Steps
 

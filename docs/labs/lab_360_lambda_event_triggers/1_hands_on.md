@@ -1,18 +1,27 @@
 # Lambda Event Triggers - Hands-on Lab
 
 [DIAGRAM: Lambda Hands-on Architecture]
-Description: A detailed diagram showing the Lambda resources we'll create in this lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the complete architecture:
-   - Lambda Functions
-   - Event Sources
-   - IAM Roles
-   - VPC Configuration
-   - CloudWatch Integration
-2. Illustrate the relationships between components
-3. Show the event patterns
-4. Include example service integrations
-   Use AWS's standard color scheme with blue for AWS services and green for Lambda components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Lambda icon
+   - AWS S3 icon
+   - AWS DynamoDB icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS VPC icon
+3. Layout:
+   - Place Lambda functions at the center
+   - Add S3 bucket and DynamoDB table on the left
+   - Place IAM roles and VPC configuration on the right
+   - Add CloudWatch integration below
+4. Use AWS's standard connector arrows to show event flows
+5. Add clear labels for each component
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for Lambda components
+   - Gray for infrastructure elements
 
 ## Prerequisites
 
@@ -294,3 +303,24 @@ Remove the stack:
 ```bash
 cdk destroy LambdaStack --profile your-profile-name
 ```
+
+[DIAGRAM: Lambda Event Processing Flow]
+Instructions for draw.io:
+
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Lambda icon
+   - AWS S3 icon
+   - AWS DynamoDB icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - S3 Event Trigger
+   - Lambda Function Execution
+   - DynamoDB Operations
+   - CloudWatch Logging
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

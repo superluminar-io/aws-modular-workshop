@@ -5,18 +5,26 @@
 Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale. In this lab, you'll learn how to create and manage APIs using API Gateway with AWS CDK.
 
 [DIAGRAM: API Gateway Overview]
-Description: A high-level diagram showing the key components of Amazon API Gateway and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main API Gateway components:
-   - REST APIs
-   - HTTP APIs
-   - WebSocket APIs
-   - Integrations
-   - Authorizers
-2. Illustrate the relationships between components
-3. Show how API Gateway interacts with other AWS services
-4. Include common API patterns
-   Use AWS's standard color scheme with blue for AWS services and green for API Gateway components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS API Gateway icon
+   - AWS Lambda icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Cognito icon
+3. Layout:
+   - Place API Gateway at the center
+   - Add REST, HTTP, and WebSocket APIs on the left
+   - Place integrations and authorizers on the right
+   - Show service interactions below
+4. Use AWS's standard connector arrows to show relationships
+5. Add clear labels for each component
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for API Gateway components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -29,17 +37,25 @@ Description: A high-level diagram showing the key components of Amazon API Gatew
 - Implement best practices for API design
 
 [DIAGRAM: API Gateway Flow]
-Description: A detailed flowchart showing how API Gateway operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the request flow process:
-   - Request handling
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS API Gateway icon
+   - AWS Lambda icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Request Handling
    - Authentication
    - Integration
-   - Response handling
-2. Include different integration types
-3. Show the security process
-4. Illustrate the API patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+   - Response Handling
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow
 
 ## Core Concepts
 

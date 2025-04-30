@@ -5,18 +5,27 @@
 AWS CloudTrail is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. This lab focuses on implementing comprehensive audit logging, analyzing CloudTrail logs, and setting up security controls using CloudTrail data.
 
 [DIAGRAM: CloudTrail Overview]
-Description: A high-level diagram showing the key components of AWS CloudTrail and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main CloudTrail components:
-   - Trails
-   - Event Logging
-   - CloudTrail Lake
-   - CloudWatch Integration
-   - Security Controls
-2. Illustrate the relationships between components
-3. Show how CloudTrail interacts with other AWS services
-4. Include common audit patterns
-   Use AWS's standard color scheme with blue for AWS services and green for CloudTrail components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS CloudTrail icon
+   - AWS S3 icon
+   - AWS CloudWatch icon
+   - AWS KMS icon
+   - AWS IAM icon
+   - AWS CloudTrail Lake icon
+3. Layout:
+   - Place CloudTrail at the center
+   - Add trails and events on the left
+   - Place CloudTrail Lake on the right
+   - Show S3 storage at the bottom
+4. Use AWS's standard connector arrows to show relationships
+5. Add audit flow visualization with events
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for CloudTrail components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -158,14 +167,22 @@ In the hands-on portion of this lab, you will:
 8. Set up automated monitoring
 
 [DIAGRAM: CloudTrail Flow]
-Description: A detailed flowchart showing how CloudTrail operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the audit process:
-   - Event capture
-   - Log delivery
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS CloudTrail icon
+   - AWS S3 icon
+   - AWS CloudWatch icon
+   - AWS CloudTrail Lake icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Event Capture
+   - Log Delivery
    - Analysis
-   - Compliance checks
-2. Include different event types
-3. Show the integration process
-4. Illustrate the security patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+   - Compliance Checks
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

@@ -5,18 +5,27 @@
 Amazon CloudWatch is a monitoring and observability service that provides data and actionable insights for AWS, hybrid, and on-premises applications and infrastructure resources. This lab will guide you through implementing comprehensive monitoring, logging, and alerting using CloudWatch's various features.
 
 [DIAGRAM: CloudWatch Overview]
-Description: A high-level diagram showing the key components of Amazon CloudWatch and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main CloudWatch components:
-   - Metrics
-   - Logs
-   - Alarms
-   - Dashboards
-   - Events
-2. Illustrate the relationships between components
-3. Show how CloudWatch interacts with other AWS services
-4. Include common monitoring patterns
-   Use AWS's standard color scheme with blue for AWS services and green for CloudWatch components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS CloudWatch icon
+   - AWS Lambda icon
+   - AWS SNS icon
+   - AWS EventBridge icon
+   - AWS EC2 icon
+   - AWS RDS icon
+3. Layout:
+   - Place CloudWatch at the center
+   - Add metrics and logs on the left
+   - Place alarms and dashboards on the right
+   - Show events and rules at the bottom
+4. Use AWS's standard connector arrows to show relationships
+5. Add monitoring flow visualization with data collection
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for CloudWatch components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -175,9 +184,13 @@ Instructions for draw.io:
    - AWS EC2 icon
    - AWS RDS icon
 3. Layout:
-   - Place CloudWatch at the center
-   - Add monitored services on the left
-   - Place notification targets on the right
-   - Show metrics and alarms in the middle
-4. Use AWS's standard connector arrows to show data flow
-5. Add monitoring visualization with dashboards
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Data Collection
+   - Metric Processing
+   - Alarm Evaluation
+   - Action Execution
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

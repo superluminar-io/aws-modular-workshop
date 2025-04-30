@@ -329,20 +329,22 @@ cdk destroy ContainerPipelineStack --profile your-profile-name
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
+2. Use the following AWS symbols from the symbol pack:
    - AWS ECR icon
    - AWS CodePipeline icon
    - AWS CodeBuild icon
    - AWS ECS icon
+   - AWS CloudWatch icon
 3. Layout:
    - Create a flowchart using AWS's standard flowchart shapes
    - Use diamond shapes for decision points
    - Use AWS's standard connector arrows
 4. Add process boxes for:
-   - Repository Creation
+   - Repository Setup
+   - Pipeline Creation
    - Build Configuration
-   - Test Setup
-   - Deployment Configuration
+   - Security Setup
+   - Deployment Setup
 5. Use AWS's standard color scheme for all elements
 
 ## Creating Container CI/CD Resources

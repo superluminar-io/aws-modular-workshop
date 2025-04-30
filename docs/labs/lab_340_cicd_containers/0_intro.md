@@ -5,18 +5,22 @@
 This lab demonstrates how to build a continuous integration and continuous deployment (CI/CD) pipeline for containerized applications using AWS services. You'll learn how to automate the building, testing, and deployment of container images to Amazon ECS using AWS CodePipeline, CodeBuild, and ECR.
 
 [DIAGRAM: Container CI/CD Overview]
-Description: A high-level diagram showing the key components of container CI/CD and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main container CI/CD components:
-   - Container Registry (ECR)
-   - Build Pipeline
-   - Container Testing
-   - Deployment Pipeline
-   - Container Orchestration
-2. Illustrate the relationships between components
-3. Show how container CI/CD interacts with other AWS services
-4. Include common container patterns
-   Use AWS's standard color scheme with blue for AWS services and green for container components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECR icon
+   - AWS CodePipeline icon
+   - AWS CodeBuild icon
+   - AWS ECS icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place ECR at the center
+   - Add build pipeline on the left
+   - Place container testing in the middle
+   - Add deployment pipeline on the right
+4. Use AWS's standard connector arrows to show pipeline flow
+5. Add container orchestration visualization
 
 ## Learning Objectives
 
@@ -182,14 +186,22 @@ In the hands-on section, you'll:
 - Implement best practices
 
 [DIAGRAM: Container CI/CD Workflow]
-Description: A detailed flowchart showing how container CI/CD operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the workflow process:
-   - Container build
-   - Image testing
-   - Registry push
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECR icon
+   - AWS CodePipeline icon
+   - AWS CodeBuild icon
+   - AWS ECS icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Container Build
+   - Image Testing
+   - Registry Push
    - Deployment
-2. Include different pipeline stages
-3. Show the automation process
-4. Illustrate the container patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+5. Use AWS's standard color scheme for all elements

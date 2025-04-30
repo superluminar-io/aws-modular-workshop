@@ -9,13 +9,20 @@ Instructions for draw.io:
    - AWS SQS icon for queues
    - AWS Lambda icon for functions
    - AWS CloudWatch icon for monitoring
+   - AWS IAM icon for permissions
 3. Layout:
    - Place SNS topics at the top
    - Add SQS queues below topics
    - Place Lambda functions at the bottom
    - Add DLQ connections with red arrows
+   - Show IAM roles and policies on the right
 4. Use AWS's standard connector arrows to show message flow
 5. Add message filter icons next to SNS topics
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for messaging components
+   - Red for error paths
+   - Gray for infrastructure elements
 
 Description: A detailed diagram showing the messaging resources we'll create in this lab. The diagram should:
 
@@ -40,11 +47,12 @@ Description: A detailed diagram showing the messaging resources we'll create in 
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
+2. Use the following AWS symbols from the symbol pack:
    - AWS SNS icon
    - AWS SQS icon
    - AWS Lambda icon
    - AWS CloudWatch icon
+   - AWS IAM icon
 3. Layout:
    - Create a flowchart using AWS's standard flowchart shapes
    - Use diamond shapes for decision points
@@ -54,7 +62,9 @@ Instructions for draw.io:
    - Queue Configuration
    - Subscription Setup
    - Integration Configuration
+   - Security Setup
 5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow
 
 Description: A sequence diagram showing how the messaging setup will work in our lab. The diagram should:
 

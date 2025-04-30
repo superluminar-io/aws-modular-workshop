@@ -5,18 +5,27 @@
 AWS Backup is a fully managed service that makes it easy to centralize and automate data protection across AWS services. This lab will guide you through implementing AWS Backup to protect various AWS resources, configure backup policies, implement backup plans, and manage recovery points.
 
 [DIAGRAM: AWS Backup Overview]
-Description: A high-level diagram showing the key components of AWS Backup and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main AWS Backup components:
-   - Backup Plans
-   - Backup Rules
-   - Recovery Points
-   - Resource Selection
-   - Cross-Region Backup
-2. Illustrate the relationships between components
-3. Show how AWS Backup interacts with other AWS services
-4. Include common backup patterns
-   Use AWS's standard color scheme with blue for AWS services and green for AWS Backup components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Backup icon
+   - AWS EC2 icon
+   - AWS RDS icon
+   - AWS S3 icon
+   - AWS KMS icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place AWS Backup at the center
+   - Add supported resources around it (EC2, RDS, S3)
+   - Show KMS for encryption
+   - Place CloudWatch for monitoring
+4. Use AWS's standard connector arrows to show relationships
+5. Add backup flow visualization with regions
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for backup components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -167,14 +176,22 @@ In the hands-on portion of this lab, you will:
 7. Use AWS Backup Audit Manager
 
 [DIAGRAM: AWS Backup Flow]
-Description: A detailed flowchart showing how AWS Backup operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the backup process:
-   - Resource selection
-   - Backup creation
-   - Recovery point management
-   - Restore operations
-2. Include different backup types
-3. Show the scheduling process
-4. Illustrate the recovery patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Backup icon
+   - AWS CloudWatch icon
+   - AWS SNS icon
+   - AWS KMS icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Resource Selection
+   - Backup Creation
+   - Recovery Point Management
+   - Restore Operations
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

@@ -1,19 +1,24 @@
 # Setting Up Your Development Environment
 
 [DIAGRAM: Development Environment Setup]
-Description: A comprehensive diagram showing the complete development environment setup for AWS CDK. The diagram should:
+Instructions for draw.io:
 
-1. Show the local development environment with:
-   - IDE/Code editor
-   - Node.js/Python runtime
-   - AWS CLI configuration
-   - CDK CLI installation
-2. Display the connection to AWS services:
-   - IAM roles and permissions
-   - CloudFormation service
-   - S3 bucket for assets
-3. Include the development workflow arrows
-   Use AWS's standard color scheme with blue for AWS services and green for local development components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following symbols:
+   - Local development icons (IDE, Node.js, AWS CLI) from Generic shapes
+   - AWS CDK icon
+   - AWS IAM icon
+   - AWS CloudFormation icon
+   - AWS S3 icon
+3. Layout:
+   - Left side: Local development environment components
+   - Right side: AWS services
+   - Middle: Connection arrows showing workflow
+4. Use AWS's standard connector arrows
+5. Color coding:
+   - Local components: Light gray
+   - AWS services: Standard AWS colors
+   - Connections: Blue arrows
 
 ## Prerequisites
 
@@ -211,15 +216,22 @@ Now that you've created and deployed your first CDK application, you're ready to
 In the next lab, we'll build on these foundations to create more sophisticated infrastructure components.
 
 [DIAGRAM: CDK Development Workflow]
-Description: A sequence diagram showing the typical CDK development workflow. The diagram should:
+Instructions for draw.io:
 
-1. Show the development cycle:
-   - Code writing
-   - Local testing
-   - CDK synthesis
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following symbols:
+   - AWS CDK icon
+   - AWS CloudFormation icon
+   - AWS S3 icon
+   - AWS IAM icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Code Writing
+   - Local Testing
+   - CDK Synthesis
    - Deployment
    - Verification
-2. Include feedback loops and iteration points
-3. Show the relationship between local development and AWS services
-4. Highlight key commands and their effects
-   Use AWS's standard color scheme and include clear labels for each step.
+5. Use AWS's standard color scheme for all elements

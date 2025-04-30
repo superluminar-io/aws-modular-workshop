@@ -1,17 +1,24 @@
 # IAM Permissions - Hands-on Lab
 
 [DIAGRAM: IAM Hands-on Architecture]
-Description: A detailed diagram showing the IAM resources we'll create in this lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the complete architecture:
-   - IAM Users and Groups
-   - Custom Policies
-   - Service Roles
-   - Resource Policies
-2. Illustrate the relationships between components
-3. Show the permission boundaries
-4. Include example service integrations
-   Use AWS's standard color scheme with blue for AWS services and green for IAM components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS IAM icon
+   - AWS Lambda icon
+   - AWS S3 icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place IAM at the center
+   - Add Lambda function on the left
+   - Place S3 bucket on the right
+   - Show CloudWatch logs at the bottom
+4. Use AWS's standard connector arrows
+5. Color coding:
+   - IAM components: Light blue
+   - AWS services: Standard AWS colors
+   - Permission flows: Blue arrows
 
 ## Prerequisites
 
@@ -238,16 +245,23 @@ Now that you understand IAM permissions:
 - Investigate AWS Organizations and SCPs
 
 [DIAGRAM: Policy Evaluation Process]
-Description: A sequence diagram showing how the policies we create will be evaluated. The diagram should:
+Instructions for draw.io:
 
-1. Show the policy evaluation flow:
-   - Request initiation
-   - Policy evaluation steps
-   - Permission decision points
-   - Action execution
-2. Include the specific policies we create in the lab
-3. Show how different policy types interact
-4. Illustrate the final permission outcome
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following symbols:
+   - AWS IAM icon
+   - AWS Lambda icon
+   - AWS S3 icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Request Initiation
+   - Policy Evaluation
+   - Permission Check
+   - Action Execution
+5. Use AWS's standard color scheme for all elements
 
 ## Creating IAM Resources

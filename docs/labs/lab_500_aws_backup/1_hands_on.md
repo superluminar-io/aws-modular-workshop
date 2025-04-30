@@ -7,18 +7,27 @@
 - Completed IAM lab
 
 [DIAGRAM: AWS Backup Implementation]
-Description: A high-level diagram showing the implementation of the AWS Backup lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the main components being implemented:
-   - Backup Vault
-   - Backup Plan
-   - Backup Rules
-   - Resource Selection
-   - Notification System
-2. Illustrate the relationships between components
-3. Show the backup flow
-4. Include the implementation steps
-   Use AWS's standard color scheme with blue for AWS services and green for AWS Backup components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Backup icon
+   - AWS SNS icon
+   - AWS EC2 icon
+   - AWS RDS icon
+   - AWS CloudWatch icon
+   - AWS IAM icon
+3. Layout:
+   - Place Backup Vault at the center
+   - Add Backup Plan and Rules on the left
+   - Place SNS notifications on the right
+   - Show resources to backup (EC2, RDS) at the bottom
+4. Use AWS's standard connector arrows to show relationships
+5. Add backup flow visualization with schedules
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for backup components
+   - Gray for infrastructure elements
 
 ## Lab Steps
 

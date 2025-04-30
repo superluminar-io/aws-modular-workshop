@@ -1,6 +1,22 @@
 # S3 Basics - Hands-on Lab
 
 [DIAGRAM: S3 Hands-on Architecture]
+Instructions for draw.io:
+
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS S3 icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Lambda icon (if used)
+3. Layout:
+   - Place S3 bucket at the center
+   - Add IAM roles and policies on the left
+   - Place CloudWatch monitoring on the right
+   - Add lifecycle rules visualization
+4. Use AWS's standard connector arrows to show relationships
+5. Add bucket policy and versioning visualization
+
 Description: A detailed diagram showing the S3 resources we'll create in this lab. The diagram should:
 
 1. Show the complete architecture:
@@ -144,131 +160,3 @@ We've configured a lifecycle rule to move objects to STANDARD_IA storage class a
 ```bash
 aws s3api head-object --bucket BUCKET_NAME --key test.txt --profile your-profile-name
 ```
-
-Note: You'll need to wait 30 days to see the storage class transition take effect in a real environment.
-
-### 5. Explore Bucket Properties
-
-Use the AWS Console to explore the bucket's configuration:
-
-1. Navigate to the S3 service in the AWS Console
-2. Find and select your bucket
-3. Explore the following tabs:
-   - Properties (versioning, encryption settings)
-   - Permissions (access control settings)
-   - Management (lifecycle rules)
-
-### 6. Add a Bucket Policy
-
-Let's update our stack to add a bucket policy:
-
-```typescript
-import { PolicyStatement, Effect, ArnPrincipal } from "aws-cdk-lib/aws-iam";
-
-// ... inside the stack constructor ...
-
-// Add a bucket policy that allows read access from a specific IAM role
-bucket.addToResourcePolicy(
-  new PolicyStatement({
-    effect: Effect.ALLOW,
-    actions: ["s3:GetObject"],
-    resources: [bucket.arnForObjects("*")],
-    principals: [new ArnPrincipal("arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME")],
-  })
-);
-```
-
-Deploy the updated stack:
-
-```bash
-cdk deploy --profile your-profile-name
-```
-
-### 7. Clean Up Test Files
-
-Remove the test files from the bucket:
-
-```bash
-aws s3 rm s3://BUCKET_NAME/test.txt --profile your-profile-name
-```
-
-## Validation Steps
-
-After completing the lab, verify that:
-
-1. ✅ The bucket was created with the specified configurations
-2. ✅ You can upload and download files
-3. ✅ Versioning is working as expected
-4. ✅ The bucket policy is applied correctly
-5. ✅ Public access is blocked
-
-## Troubleshooting
-
-If you encounter issues:
-
-1. **Access Denied Errors**
-
-   - Check your AWS credentials
-   - Verify bucket policies and permissions
-   - Ensure public access settings are as expected
-
-2. **Versioning Issues**
-
-   - Confirm versioning is enabled
-   - Check object versions using the AWS Console
-   - Verify version IDs in API responses
-
-3. **Lifecycle Rules**
-   - Review rule configurations in the console
-   - Check object metadata for storage class
-   - Remember transitions take time to apply
-
-## Best Practices Demonstrated
-
-This lab has demonstrated several S3 best practices:
-
-1. **Security**
-
-   - Blocking public access by default
-   - Using bucket policies for access control
-   - Enabling default encryption
-
-2. **Data Management**
-
-   - Implementing versioning
-   - Configuring lifecycle rules
-   - Using appropriate storage classes
-
-3. **Cost Optimization**
-   - Automatic transition to lower-cost storage
-   - Cleanup of test resources
-   - Monitoring object versions
-
-## Next Steps
-
-After completing this lab, you can:
-
-- Explore more advanced S3 features
-- Integrate S3 with other AWS services
-- Implement more complex lifecycle rules
-- Configure cross-region replication
-
-[DIAGRAM: S3 Operations Flow]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS S3 icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Lambda icon (if used)
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Bucket Creation
-   - Object Upload
-   - Access Control
-   - Lifecycle Management
-5. Use AWS's standard color scheme for all elements

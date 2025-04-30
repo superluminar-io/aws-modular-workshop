@@ -5,18 +5,22 @@
 Amazon Elastic Container Service (ECS) is a fully managed container orchestration service that makes it easy to run, stop, and manage Docker containers on a cluster. Fargate is a serverless compute engine for containers that works with both ECS and EKS. In this lab, you'll learn how to deploy containers using ECS on Fargate with AWS CDK.
 
 [DIAGRAM: ECS Overview]
-Description: A high-level diagram showing the key components of Amazon ECS and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main ECS components:
-   - Clusters
-   - Services
-   - Task Definitions
-   - Fargate Profiles
-   - Load Balancers
-2. Illustrate the relationships between components
-3. Show how ECS interacts with other AWS services
-4. Include common container patterns
-   Use AWS's standard color scheme with blue for AWS services and green for ECS components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECS icon
+   - AWS Fargate icon
+   - AWS VPC icon
+   - AWS Application Load Balancer icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place ECS cluster at the center
+   - Add services around the cluster
+   - Place task definitions on the right
+   - Show Fargate profiles on the left
+4. Use AWS's standard connector arrows to show relationships
+5. Add container patterns visualization
 
 ## Learning Objectives
 
@@ -191,14 +195,22 @@ In the hands-on section, you'll:
 - Monitor your containers
 
 [DIAGRAM: ECS Workflow]
-Description: A detailed flowchart showing how ECS operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the workflow process:
-   - Task definition creation
-   - Service deployment
-   - Container scheduling
-   - Load balancing
-2. Include different service types
-3. Show the scaling process
-4. Illustrate the deployment patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECS icon
+   - AWS Fargate icon
+   - AWS VPC icon
+   - AWS Application Load Balancer icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Task Definition Creation
+   - Service Deployment
+   - Container Scheduling
+   - Load Balancer Configuration
+5. Use AWS's standard color scheme for all elements

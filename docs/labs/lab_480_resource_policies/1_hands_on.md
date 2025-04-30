@@ -7,18 +7,28 @@
 - Completed IAM lab
 
 [DIAGRAM: Resource Policies Implementation]
-Description: A high-level diagram showing the implementation of the Resource Policies lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the main components being implemented:
-   - S3 Bucket Policy
-   - KMS Key Policy
-   - SNS Topic Policy
-   - SQS Queue Policy
-   - Cross-Account Access
-2. Illustrate the relationships between components
-3. Show the policy evaluation flow
-4. Include the implementation steps
-   Use AWS's standard color scheme with blue for AWS services and green for Resource Policy components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS S3 icon
+   - AWS KMS icon
+   - AWS SNS icon
+   - AWS SQS icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place S3 bucket at the top left
+   - Add KMS key below S3
+   - Place SNS topic at the top right
+   - Add SQS queue below SNS
+   - Show IAM policies connecting all components
+4. Use AWS's standard connector arrows to show relationships
+5. Add policy flow visualization with conditions
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for policy components
+   - Gray for infrastructure elements
 
 ## Lab Steps
 

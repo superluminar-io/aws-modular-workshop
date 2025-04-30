@@ -5,18 +5,22 @@
 Amazon Aurora Serverless is an on-demand, auto-scaling configuration for Amazon Aurora that automatically starts up, shuts down, and scales capacity up or down based on your application's needs. In this lab, you'll learn how to create and manage Aurora Serverless databases using AWS CDK.
 
 [DIAGRAM: Aurora Overview]
-Description: A high-level diagram showing the key components of Amazon Aurora Serverless and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main Aurora components:
-   - Serverless Clusters
-   - Database Instances
-   - Storage Layer
-   - Scaling Configuration
-   - VPC Integration
-2. Illustrate the relationships between components
-3. Show how Aurora interacts with other AWS services
-4. Include common database patterns
-   Use AWS's standard color scheme with blue for AWS services and green for Aurora components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Aurora icon
+   - AWS VPC icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Secrets Manager icon
+3. Layout:
+   - Place Aurora cluster at the center
+   - Add database instances around it
+   - Place storage layer below
+   - Show VPC integration on the left
+4. Use AWS's standard connector arrows to show relationships
+5. Add scaling configuration visualization
 
 ## Learning Objectives
 
@@ -185,9 +189,12 @@ Instructions for draw.io:
    - AWS CloudWatch icon
    - AWS Secrets Manager icon
 3. Layout:
-   - Place Aurora cluster at the center
-   - Add VPC and networking on the left
-   - Place monitoring tools on the right
-   - Show scaling operations in the middle
-4. Use AWS's standard connector arrows to show data flow
-5. Add auto-scaling visualization with capacity states
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Cluster Creation
+   - Capacity Configuration
+   - Security Setup
+   - Network Configuration
+5. Use AWS's standard color scheme for all elements

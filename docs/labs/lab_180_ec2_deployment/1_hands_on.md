@@ -1,6 +1,25 @@
 # EC2 Deployment - Hands-on Lab
 
 [DIAGRAM: EC2 Hands-on Architecture]
+Instructions for draw.io:
+
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS EC2 icon
+   - AWS VPC icon
+   - AWS Security Group icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Systems Manager icon
+3. Layout:
+   - Place VPC at the center
+   - Add EC2 instances inside the VPC
+   - Show security groups around instances
+   - Place IAM roles and policies on the right
+   - Add CloudWatch monitoring at the bottom
+4. Use AWS's standard connector arrows to show relationships
+5. Add network flow visualization with security group rules
+
 Description: A detailed diagram showing the EC2 resources we'll create in this lab. The diagram should:
 
 1. Show the complete architecture:

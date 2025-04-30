@@ -30,7 +30,7 @@ Instructions for draw.io:
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
+2. Use the following AWS symbols from the symbol pack:
    - AWS Aurora icon
    - AWS VPC icon
    - AWS Security Group icon

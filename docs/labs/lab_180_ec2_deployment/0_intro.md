@@ -5,18 +5,22 @@
 Amazon Elastic Compute Cloud (EC2) is a web service that provides resizable compute capacity in the cloud. In this lab, you'll learn how to deploy and manage EC2 instances using AWS CDK.
 
 [DIAGRAM: EC2 Overview]
-Description: A high-level diagram showing the key components of Amazon EC2 and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main EC2 components:
-   - Instances
-   - Instance Types
-   - AMIs
-   - Security Groups
-   - Key Pairs
-2. Illustrate the relationships between components
-3. Show how EC2 interacts with other AWS services
-4. Include common deployment patterns
-   Use AWS's standard color scheme with blue for AWS services and green for EC2 components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS EC2 icon
+   - AWS Systems Manager icon
+   - AWS CloudWatch icon
+   - AWS IAM icon
+   - AWS VPC icon
+3. Layout:
+   - Place EC2 at the center
+   - Add instance types on the left
+   - Place AMIs and storage on the right
+   - Show security groups around instances
+4. Use AWS's standard connector arrows to show relationships
+5. Add instance type visualization with categories
 
 ## Learning Objectives
 
@@ -200,14 +204,22 @@ In the hands-on section, you'll:
 - Learn to troubleshoot common issues
 
 [DIAGRAM: EC2 Deployment Flow]
-Description: A detailed flowchart showing how EC2 instances are deployed and managed. The diagram should:
+Instructions for draw.io:
 
-1. Show the deployment process:
-   - Instance creation
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS EC2 icon
+   - AWS Systems Manager icon
+   - AWS CloudWatch icon
+   - AWS IAM icon
+   - AWS VPC icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Instance Creation
    - Configuration
-   - Network setup
-   - Security configuration
-2. Include different instance types
-3. Show AMI selection process
-4. Illustrate security group and key pair usage
-   Use AWS's standard color scheme and include clear labels for each step.
+   - Network Setup
+   - Security Configuration
+5. Use AWS's standard color scheme for all elements

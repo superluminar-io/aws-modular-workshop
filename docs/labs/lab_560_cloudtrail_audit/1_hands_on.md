@@ -7,18 +7,27 @@
 - Completed IAM lab
 
 [DIAGRAM: CloudTrail Implementation]
-Description: A high-level diagram showing the implementation of the CloudTrail lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the main components being implemented:
-   - CloudTrail Trail
-   - S3 Bucket
-   - KMS Key
-   - CloudWatch Logs
-   - EventBridge Rules
-2. Illustrate the relationships between components
-3. Show the audit flow
-4. Include the implementation steps
-   Use AWS's standard color scheme with blue for AWS services and green for CloudTrail components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS CloudTrail icon
+   - AWS S3 icon
+   - AWS KMS icon
+   - AWS CloudWatch icon
+   - AWS EventBridge icon
+   - AWS SNS icon
+3. Layout:
+   - Place CloudTrail at the center
+   - Add S3 bucket and KMS key on the left
+   - Place CloudWatch Logs and EventBridge on the right
+   - Show SNS notifications at the bottom
+4. Use AWS's standard connector arrows to show relationships
+5. Add audit flow visualization with events
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for CloudTrail components
+   - Gray for infrastructure elements
 
 ## Lab Steps
 

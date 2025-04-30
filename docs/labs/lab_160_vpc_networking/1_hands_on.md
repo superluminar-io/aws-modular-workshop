@@ -1,18 +1,24 @@
 # VPC Networking - Hands-on Lab
 
 [DIAGRAM: VPC Hands-on Architecture]
-Description: A detailed diagram showing the VPC resources we'll create in this lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the complete architecture:
-   - VPC with CIDR block
-   - Public and Private Subnets
-   - Route Tables
-   - Internet Gateway
-   - NAT Gateway
-2. Illustrate the relationships between components
-3. Show the network flow patterns
-4. Include example service integrations
-   Use AWS's standard color scheme with blue for AWS services and green for VPC components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS VPC icon
+   - AWS EC2 icon
+   - AWS Internet Gateway icon
+   - AWS NAT Gateway icon
+   - AWS Security Group icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place VPC at the center
+   - Add public subnets on the left
+   - Add private subnets on the right
+   - Place gateways at the top
+   - Show security groups around instances
+4. Use AWS's standard connector arrows to show network flow
+5. Add CIDR block visualization with IP ranges
 
 ## Prerequisites
 

@@ -16,13 +16,19 @@ Instructions for draw.io:
    - AWS DynamoDB icon
    - AWS X-Ray icon
    - AWS CloudWatch icon
+   - AWS IAM icon
 3. Layout:
    - Place API Gateway at the top
    - Add Lambda functions in the middle
    - Place DynamoDB at the bottom
-   - Add X-Ray service icon on the side
+   - Show X-Ray service on the right
+   - Add CloudWatch for monitoring
 4. Use AWS's standard connector arrows to show request flow
 5. Add tracing visualization with dotted lines
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for X-Ray components
+   - Gray for infrastructure elements
 
 ## Lab Steps
 

@@ -5,18 +5,22 @@
 Amazon Elastic Container Registry (ECR) is a fully managed Docker container registry that makes it easy to store, manage, and deploy Docker container images. In this lab, you'll learn how to work with Docker and ECR using AWS CDK.
 
 [DIAGRAM: ECR Overview]
-Description: A high-level diagram showing the key components of Amazon ECR and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main ECR components:
-   - Repositories
-   - Images
-   - Tags
-   - Lifecycle Policies
-   - IAM Roles
-2. Illustrate the relationships between components
-3. Show how ECR interacts with other AWS services
-4. Include common container patterns
-   Use AWS's standard color scheme with blue for AWS services and green for ECR components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECR icon
+   - AWS IAM icon
+   - AWS KMS icon
+   - AWS CloudWatch icon
+   - AWS ECS icon
+3. Layout:
+   - Place ECR at the center
+   - Add repositories around it
+   - Place security services on the right
+   - Show container services on the left
+4. Use AWS's standard connector arrows to show relationships
+5. Add container visualization with image layers
 
 ## Learning Objectives
 
@@ -168,14 +172,22 @@ In the hands-on section, you'll:
 - Implement security best practices
 
 [DIAGRAM: Container Workflow]
-Description: A detailed flowchart showing how container operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the workflow process:
-   - Image building
-   - Image tagging
-   - Image pushing
-   - Image pulling
-2. Include different container states
-3. Show the registry process
-4. Illustrate the deployment patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECR icon
+   - Docker icon (from Generic symbols)
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS CodeBuild icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Image Building
+   - Image Tagging
+   - Image Pushing
+   - Image Pulling
+5. Use AWS's standard color scheme for all elements

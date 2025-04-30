@@ -5,18 +5,29 @@
 AWS Lambda lets you run code without provisioning or managing servers. This lab introduces Lambda functions and their integration with various AWS event sources, demonstrating how to build event-driven architectures using serverless computing.
 
 [DIAGRAM: Lambda Overview]
-Description: A high-level diagram showing the key components of AWS Lambda and their event trigger relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main Lambda components:
-   - Lambda Functions
-   - Event Sources
-   - IAM Roles
-   - VPC Configuration
-   - CloudWatch Integration
-2. Illustrate the relationships between components
-3. Show how Lambda interacts with other AWS services
-4. Include common event patterns
-   Use AWS's standard color scheme with blue for AWS services and green for Lambda components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Lambda icon
+   - AWS IAM icon
+   - AWS VPC icon
+   - AWS CloudWatch icon
+   - AWS S3 icon
+   - AWS DynamoDB icon
+   - AWS SNS icon
+   - AWS SQS icon
+3. Layout:
+   - Place Lambda function at the center
+   - Add event sources on the left (S3, DynamoDB, SNS, SQS)
+   - Place IAM roles and VPC configuration on the right
+   - Add CloudWatch integration below
+4. Use AWS's standard connector arrows to show relationships
+5. Add event flow visualization with streams
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for Lambda components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -196,14 +207,23 @@ In the hands-on section, you'll:
 - Test different event patterns
 
 [DIAGRAM: Lambda Event Flow]
-Description: A detailed flowchart showing how Lambda event processing works. The diagram should:
+Instructions for draw.io:
 
-1. Show the event flow process:
-   - Event generation
-   - Function invocation
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Lambda icon
+   - AWS EventBridge icon
+   - AWS CloudWatch icon
+   - AWS S3 icon
+   - AWS DynamoDB icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Event Generation
+   - Function Invocation
    - Processing
-   - Response handling
-2. Include different event types
-3. Show the execution process
-4. Illustrate the integration patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+   - Response Handling
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

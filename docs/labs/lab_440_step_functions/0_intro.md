@@ -5,18 +5,28 @@
 AWS Step Functions is a serverless workflow service that lets you coordinate multiple AWS services into serverless workflows. This lab demonstrates how to create, manage, and monitor state machines for orchestrating complex business processes and application workflows.
 
 [DIAGRAM: Step Functions Overview]
-Description: A high-level diagram showing the key components of AWS Step Functions and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main Step Functions components:
-   - State Machines
-   - States
-   - Transitions
-   - Error Handling
-   - Service Integrations
-2. Illustrate the relationships between components
-3. Show how Step Functions interacts with other AWS services
-4. Include common workflow patterns
-   Use AWS's standard color scheme with blue for AWS services and green for Step Functions components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Step Functions icon
+   - AWS Lambda icon
+   - AWS DynamoDB icon
+   - AWS SNS icon
+   - AWS CloudWatch icon
+   - AWS IAM icon
+3. Layout:
+   - Place Step Functions at the center
+   - Add state machines around the center
+   - Place service integrations on the right
+   - Add monitoring tools at the bottom
+   - Show IAM roles and policies on the left
+4. Use AWS's standard connector arrows to show workflow flow
+5. Add state transition visualization
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for workflow components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -196,14 +206,23 @@ In the hands-on section, you'll:
 - Test workflows
 
 [DIAGRAM: Step Functions Flow]
-Description: A detailed flowchart showing how Step Functions operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the workflow process:
-   - State execution
-   - State transitions
-   - Error handling
-   - Service integration
-2. Include different state types
-3. Show the execution process
-4. Illustrate the workflow patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Step Functions icon
+   - AWS Lambda icon
+   - AWS DynamoDB icon
+   - AWS SNS icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - State Execution
+   - State Transitions
+   - Error Handling
+   - Service Integration
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each workflow step

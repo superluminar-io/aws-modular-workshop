@@ -16,13 +16,19 @@ Instructions for draw.io:
    - AWS SNS icon
    - AWS SQS icon
    - AWS CloudWatch icon
+   - AWS IAM icon
 3. Layout:
    - Place EventBridge at the center
    - Add event sources on the left
    - Place targets (Lambda, SNS, SQS) on the right
    - Add CloudWatch monitoring at the bottom
+   - Show IAM roles and policies on the right
 4. Use AWS's standard connector arrows to show event flow
 5. Add event rule visualization with filters
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for event components
+   - Gray for infrastructure elements
 
 ## Lab Steps
 
@@ -270,11 +276,12 @@ aws logs get-log-events \
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
+2. Use the following AWS symbols from the symbol pack:
    - AWS EventBridge icon
    - AWS CloudWatch icon
    - AWS Lambda icon
    - AWS SNS icon
+   - AWS IAM icon
 3. Layout:
    - Create a flowchart using AWS's standard flowchart shapes
    - Use diamond shapes for decision points
@@ -285,6 +292,7 @@ Instructions for draw.io:
    - Alert Handling
    - Archive Management
 5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each monitoring step
 
 ## Validation Steps
 

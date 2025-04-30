@@ -5,18 +5,26 @@
 Amazon Simple Notification Service (SNS) and Amazon Simple Queue Service (SQS) are fully managed messaging services that enable you to decouple and scale microservices, distributed systems, and serverless applications. In this lab, you'll learn how to create and manage messaging systems using SNS and SQS with AWS CDK.
 
 [DIAGRAM: Messaging Overview]
-Description: A high-level diagram showing the key components of AWS messaging services and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main messaging components:
-   - SNS Topics
-   - SQS Queues
-   - Subscriptions
-   - Dead Letter Queues
-   - Message Filters
-2. Illustrate the relationships between components
-3. Show how messaging services interact with other AWS services
-4. Include common messaging patterns
-   Use AWS's standard color scheme with blue for AWS services and green for messaging components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS SNS icon
+   - AWS SQS icon
+   - AWS Lambda icon
+   - AWS CloudWatch icon
+   - AWS IAM icon
+3. Layout:
+   - Place SNS topics at the center
+   - Add SQS queues on the left
+   - Place subscribers on the right
+   - Show DLQ connections below
+4. Use AWS's standard connector arrows to show message flow
+5. Add clear labels for each component
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for messaging components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -205,14 +213,22 @@ In the hands-on section, you'll:
 - Test different messaging patterns
 
 [DIAGRAM: Messaging Flow]
-Description: A detailed flowchart showing how messaging operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the messaging flow process:
-   - Message publishing
-   - Message delivery
-   - Message processing
-   - Error handling
-2. Include different message types
-3. Show the delivery process
-4. Illustrate the messaging patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS SNS icon
+   - AWS SQS icon
+   - AWS Lambda icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Message Publishing
+   - Message Delivery
+   - Message Processing
+   - Error Handling
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

@@ -14,14 +14,19 @@ Instructions for draw.io:
    - AWS SNS icon
    - AWS SQS icon
    - AWS CloudWatch icon
-   - Other AWS service icons as targets
+   - AWS IAM icon
 3. Layout:
    - Place EventBridge at the center
    - Add event sources on the left
    - Place targets on the right
    - Show event bus and rules in the middle
+   - Add IAM roles and policies on the right
 4. Use AWS's standard connector arrows to show event flow
 5. Add event pattern visualization with filters
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for event components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -211,14 +216,24 @@ In the hands-on section, you'll:
 - Test event delivery
 
 [DIAGRAM: EventBridge Flow]
-Description: A detailed flowchart showing how EventBridge operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the event flow process:
-   - Event generation
-   - Pattern matching
-   - Rule evaluation
-   - Target delivery
-2. Include different event types
-3. Show the routing process
-4. Illustrate the event patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS EventBridge icon
+   - AWS Lambda icon
+   - AWS SNS icon
+   - AWS SQS icon
+   - AWS CloudWatch icon
+   - AWS IAM icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Event Generation
+   - Pattern Matching
+   - Rule Evaluation
+   - Target Delivery
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

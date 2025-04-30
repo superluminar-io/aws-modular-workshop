@@ -5,18 +5,27 @@
 Resource-based policies are IAM policies attached directly to AWS resources, controlling who can access the resource and what actions they can perform. This lab focuses on implementing and managing resource policies across various AWS services, understanding the differences between identity-based and resource-based policies, and applying best practices for secure resource access control.
 
 [DIAGRAM: Resource Policies Overview]
-Description: A high-level diagram showing the key components of AWS Resource Policies and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main Resource Policy components:
-   - Identity Policies
-   - Resource Policies
-   - Policy Elements
-   - Cross-Account Access
-   - Security Controls
-2. Illustrate the relationships between components
-3. Show how Resource Policies interact with other AWS services
-4. Include common policy patterns
-   Use AWS's standard color scheme with blue for AWS services and green for Resource Policy components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS IAM icon
+   - AWS S3 icon
+   - AWS KMS icon
+   - AWS SNS icon
+   - AWS SQS icon
+   - AWS Lambda icon
+3. Layout:
+   - Place IAM at the center
+   - Add resource policies on the left (S3, KMS)
+   - Place service policies on the right (SNS, SQS, Lambda)
+   - Show cross-account access at the bottom
+4. Use AWS's standard connector arrows to show relationships
+5. Add policy flow visualization with security controls
+6. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for policy components
+   - Gray for infrastructure elements
 
 ## Learning Objectives
 
@@ -141,14 +150,22 @@ In the hands-on portion of this lab, you will:
 7. Troubleshoot policy issues
 
 [DIAGRAM: Resource Policy Flow]
-Description: A detailed flowchart showing how Resource Policy operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the policy management process:
-   - Policy creation
-   - Policy evaluation
-   - Access control
-   - Cross-account access
-2. Include different policy types
-3. Show the evaluation process
-4. Illustrate the access patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS CloudTrail icon
+   - AWS Organizations icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Policy Creation
+   - Policy Evaluation
+   - Access Control
+   - Cross-Account Access
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

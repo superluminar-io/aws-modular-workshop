@@ -1,18 +1,22 @@
 # ECR and Docker Basics - Hands-on Lab
 
 [DIAGRAM: ECR Hands-on Architecture]
-Description: A detailed diagram showing the ECR resources we'll create in this lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the complete architecture:
-   - ECR Repository
-   - Docker Images
-   - IAM Roles
-   - Lifecycle Policies
-   - Build Pipeline
-2. Illustrate the relationships between components
-3. Show the container patterns
-4. Include example service integrations
-   Use AWS's standard color scheme with blue for AWS services and green for ECR components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECR icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS CodeBuild icon
+   - Docker icon (from Generic symbols)
+3. Layout:
+   - Place ECR repository at the center
+   - Add Docker images around it
+   - Place IAM roles on the right
+   - Show build pipeline on the left
+4. Use AWS's standard connector arrows to show relationships
+5. Add lifecycle policy visualization
 
 ## Prerequisites
 
@@ -221,14 +225,21 @@ cdk destroy EcrStack --profile your-profile-name
 ```
 
 [DIAGRAM: Container Build Flow]
-Description: A sequence diagram showing how the container build and deployment will work in our lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the build flow:
-   - Dockerfile creation
-   - Image building
-   - Image tagging
-   - Image pushing
-2. Include the specific operations we perform in the lab
-3. Show how different components interact
-4. Illustrate the container patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS ECR icon
+   - Docker icon (from Generic symbols)
+   - AWS IAM icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Dockerfile Creation
+   - Image Building
+   - Image Tagging
+   - Image Pushing
+5. Use AWS's standard color scheme for all elements

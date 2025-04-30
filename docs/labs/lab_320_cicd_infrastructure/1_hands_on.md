@@ -342,20 +342,22 @@ Note: You may need to manually delete some resources in target accounts.
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
+2. Use the following AWS symbols from the symbol pack:
    - AWS CodePipeline icon
    - AWS CodeBuild icon
    - AWS CodeCommit icon
    - AWS IAM icon
+   - AWS CloudWatch icon
 3. Layout:
    - Create a flowchart using AWS's standard flowchart shapes
    - Use diamond shapes for decision points
    - Use AWS's standard connector arrows
 4. Add process boxes for:
-   - Repository Creation
-   - Pipeline Configuration
-   - Build Setup
-   - Deployment Configuration
+   - Repository Setup
+   - Pipeline Creation
+   - Testing Configuration
+   - Security Setup
+   - Cross-Account Setup
 5. Use AWS's standard color scheme for all elements
 
 ## Creating CI/CD Resources

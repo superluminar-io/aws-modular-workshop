@@ -1,18 +1,22 @@
 # DynamoDB Basics - Hands-on Lab
 
 [DIAGRAM: DynamoDB Hands-on Architecture]
-Description: A detailed diagram showing the DynamoDB resources we'll create in this lab. The diagram should:
+Instructions for draw.io:
 
-1. Show the complete architecture:
-   - DynamoDB Tables
-   - Global Secondary Indexes
-   - Streams
-   - IAM Roles
-   - Lambda Functions
-2. Illustrate the relationships between components
-3. Show the data patterns
-4. Include example service integrations
-   Use AWS's standard color scheme with blue for AWS services and green for DynamoDB components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS DynamoDB icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Lambda icon
+   - AWS KMS icon
+3. Layout:
+   - Place DynamoDB table at the center
+   - Add GSIs around the table
+   - Place IAM roles on the left
+   - Show Lambda functions on the right
+4. Use AWS's standard connector arrows to show relationships
+5. Add data flow visualization with streams
 
 ## Prerequisites
 
@@ -305,3 +309,23 @@ Remove the stack:
 ```bash
 cdk destroy DynamoDBStack --profile your-profile-name
 ```
+
+[DIAGRAM: DynamoDB Setup Flow]
+Instructions for draw.io:
+
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS DynamoDB icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Lambda icon
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Table Creation
+   - GSI Configuration
+   - Data Population
+   - CRUD Operations
+5. Use AWS's standard color scheme for all elements

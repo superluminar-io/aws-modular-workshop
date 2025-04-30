@@ -5,18 +5,23 @@
 AWS Systems Manager is a collection of capabilities that helps you automate operational tasks across your AWS resources. In this lab, you'll learn how to use Systems Manager to manage your EC2 instances and automate operational tasks.
 
 [DIAGRAM: Systems Manager Overview]
-Description: A high-level diagram showing the key components of AWS Systems Manager and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main Systems Manager components:
-   - Session Manager
-   - Run Command
-   - Parameter Store
-   - State Manager
-   - Patch Manager
-2. Illustrate the relationships between components
-3. Show how Systems Manager interacts with other AWS services
-4. Include common management patterns
-   Use AWS's standard color scheme with blue for AWS services and green for Systems Manager components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Systems Manager icon
+   - AWS EC2 icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Parameter Store icon
+   - AWS CloudTrail icon
+3. Layout:
+   - Place Systems Manager at the center
+   - Add Session Manager, Run Command, Parameter Store, State Manager, and Patch Manager around it
+   - Place AWS services on the right
+   - Show management flows with arrows
+4. Use AWS's standard connector arrows to show relationships
+5. Add management visualization with automation states
 
 ## Learning Objectives
 

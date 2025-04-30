@@ -5,17 +5,25 @@
 AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources. With IAM, you can manage who (identity) or what (role) can access specific resources and how they can access them.
 
 [DIAGRAM: IAM Overview]
-Description: A high-level diagram showing the key components of AWS IAM and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main IAM components:
-   - Users
-   - Groups
-   - Roles
-   - Policies
-2. Illustrate the relationships between components with arrows
-3. Show how these components interact with AWS services
-4. Include examples of common permission flows
-   Use AWS's standard color scheme with blue for AWS services and green for IAM components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS IAM icon
+   - AWS EC2 icon
+   - AWS S3 icon
+   - AWS Lambda icon
+   - AWS CloudWatch icon
+3. Layout:
+   - Place IAM at the center
+   - Add Users, Groups, Roles, and Policies around IAM
+   - Place AWS services on the right
+   - Show permission flows with arrows
+4. Use AWS's standard connector arrows
+5. Color coding:
+   - IAM components: Light blue
+   - AWS services: Standard AWS colors
+   - Permission flows: Blue arrows
 
 ## Learning Objectives
 
@@ -127,17 +135,23 @@ This policy:
 - Explicitly denies deleting objects in `restricted-bucket`
 
 [DIAGRAM: IAM Permission Flow]
-Description: A detailed flowchart showing how IAM permissions are evaluated and applied. The diagram should:
+Instructions for draw.io:
 
-1. Show the permission evaluation process:
-   - Request initiation
-   - Policy evaluation
-   - Permission decision
-   - Action execution
-2. Include decision points and evaluation steps
-3. Show how different policy types interact
-4. Illustrate the principle of least privilege
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following symbols:
+   - AWS IAM icon
+   - AWS CloudWatch icon for logging
+   - AWS CloudTrail icon for auditing
+3. Layout:
+   - Create a flowchart using AWS's standard flowchart shapes
+   - Use diamond shapes for decision points
+   - Use AWS's standard connector arrows
+4. Add process boxes for:
+   - Request Initiation
+   - Policy Evaluation
+   - Permission Decision
+   - Action Execution
+5. Use AWS's standard color scheme for all elements
 
 ## Best Practices
 
