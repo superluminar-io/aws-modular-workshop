@@ -164,14 +164,20 @@ In the hands-on portion of this lab, you will:
 8. Implement cross-account monitoring
 
 [DIAGRAM: CloudWatch Flow]
-Description: A detailed flowchart showing how CloudWatch operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the monitoring process:
-   - Data collection
-   - Metric processing
-   - Alarm evaluation
-   - Action triggering
-2. Include different monitoring types
-3. Show the alerting process
-4. Illustrate the dashboard patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS CloudWatch icon
+   - AWS Lambda icon
+   - AWS SNS icon
+   - AWS EventBridge icon
+   - AWS EC2 icon
+   - AWS RDS icon
+3. Layout:
+   - Place CloudWatch at the center
+   - Add monitored services on the left
+   - Place notification targets on the right
+   - Show metrics and alarms in the middle
+4. Use AWS's standard connector arrows to show data flow
+5. Add monitoring visualization with dashboards

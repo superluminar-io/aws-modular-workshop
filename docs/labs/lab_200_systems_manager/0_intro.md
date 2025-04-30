@@ -184,14 +184,19 @@ In the hands-on section, you'll:
 - Monitor system compliance
 
 [DIAGRAM: Systems Manager Operations Flow]
-Description: A detailed flowchart showing how Systems Manager operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the operations flow:
-   - Instance management
-   - Command execution
-   - Parameter management
-   - State management
-2. Include different operation types
-3. Show the management process
-4. Illustrate the automation patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Systems Manager icon
+   - AWS EC2 icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Parameter Store icon
+3. Layout:
+   - Place Systems Manager at the center
+   - Add EC2 instances on the left
+   - Place management tools on the right
+   - Show automation flows in the middle
+4. Use AWS's standard connector arrows to show operation flow
+5. Add management visualization with automation states

@@ -5,18 +5,23 @@
 Amazon EventBridge is a serverless event bus service that makes it easy to connect applications together using data from your own applications, integrated Software-as-a-Service (SaaS) applications, and AWS services. This lab demonstrates how to use EventBridge to build event-driven architectures.
 
 [DIAGRAM: EventBridge Overview]
-Description: A high-level diagram showing the key components of Amazon EventBridge and their relationships. The diagram should:
+Instructions for draw.io:
 
-1. Show the main EventBridge components:
-   - Event Buses
-   - Event Sources
-   - Event Rules
-   - Event Targets
-   - Event Patterns
-2. Illustrate the relationships between components
-3. Show how EventBridge interacts with other AWS services
-4. Include common event patterns
-   Use AWS's standard color scheme with blue for AWS services and green for EventBridge components.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS EventBridge icon
+   - AWS Lambda icon
+   - AWS SNS icon
+   - AWS SQS icon
+   - AWS CloudWatch icon
+   - Other AWS service icons as targets
+3. Layout:
+   - Place EventBridge at the center
+   - Add event sources on the left
+   - Place targets on the right
+   - Show event bus and rules in the middle
+4. Use AWS's standard connector arrows to show event flow
+5. Add event pattern visualization with filters
 
 ## Learning Objectives
 

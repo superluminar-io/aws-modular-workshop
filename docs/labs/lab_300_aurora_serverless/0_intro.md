@@ -175,14 +175,19 @@ In the hands-on section, you'll:
 - Test scaling behavior
 
 [DIAGRAM: Aurora Operations Flow]
-Description: A detailed flowchart showing how Aurora Serverless operations work. The diagram should:
+Instructions for draw.io:
 
-1. Show the operations flow:
-   - Cluster creation
-   - Capacity scaling
-   - Data access
-   - Backup and restore
-2. Include different scaling states
-3. Show the management process
-4. Illustrate the storage patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS Aurora icon
+   - AWS VPC icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS Secrets Manager icon
+3. Layout:
+   - Place Aurora cluster at the center
+   - Add VPC and networking on the left
+   - Place monitoring tools on the right
+   - Show scaling operations in the middle
+4. Use AWS's standard connector arrows to show data flow
+5. Add auto-scaling visualization with capacity states
