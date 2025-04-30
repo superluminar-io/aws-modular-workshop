@@ -1,0 +1,361 @@
+# AWS Resource Policies - Hands-on Lab
+
+## Prerequisites
+
+- AWS CDK and AWS CLI configured
+- Multiple AWS accounts (recommended for cross-account scenarios)
+- Completed IAM lab
+
+[DIAGRAM: Resource Policies Implementation]
+Description: A high-level diagram showing the implementation of the Resource Policies lab. The diagram should:
+
+1. Show the main components being implemented:
+   - S3 Bucket Policy
+   - KMS Key Policy
+   - SNS Topic Policy
+   - SQS Queue Policy
+   - Cross-Account Access
+2. Illustrate the relationships between components
+3. Show the policy evaluation flow
+4. Include the implementation steps
+   Use AWS's standard color scheme with blue for AWS services and green for Resource Policy components.
+
+## Lab Steps
+
+### 1. Create Infrastructure with Resource Policies
+
+Create a new file `lib/resource-policies-stack.ts`:
+
+```typescript:lib/resource-policies-stack.ts
+import * as cdk from 'aws-cdk-lib';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as kms from 'aws-cdk-lib/aws-kms';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import { Construct } from 'constructs';
+
+export class ResourcePoliciesStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // Create S3 bucket with bucket policy
+    const bucket = new s3.Bucket(this, 'ResourcePolicyBucket', {
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+    });
+
+    // Add bucket policy
+    const bucketPolicy = new s3.BucketPolicy(this, 'BucketPolicy', {
+      bucket: bucket,
+    });
+
+    bucketPolicy.document.addStatements(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        principals: [new iam.AccountPrincipal(this.account)],
+        actions: ['s3:GetObject', 's3:PutObject'],
+        resources: [bucket.arnForObjects('*')],
+        conditions: {
+          'IpAddress': {
+            'aws:SourceIp': ['10.0.0.0/16'] // Example IP range
+          }
+        }
+      })
+    );
+
+    // Create KMS key with key policy
+    const key = new kms.Key(this, 'ResourcePolicyKey', {
+      enableKeyRotation: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
+    key.addToResourcePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        principals: [new iam.AccountPrincipal(this.account)],
+        actions: ['kms:Decrypt', 'kms:Encrypt'],
+        resources: ['*'],
+        conditions: {
+          'StringEquals': {
+            'kms:ViaService': `s3.${this.region}.amazonaws.com`
+          }
+        }
+      })
+    );
+
+    // Create SNS topic with topic policy
+    const topic = new sns.Topic(this, 'ResourcePolicyTopic');
+
+    topic.addToResourcePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        principals: [new iam.AccountPrincipal(this.account)],
+        actions: ['sns:Publish'],
+        resources: [topic.topicArn],
+        conditions: {
+          'ArnLike': {
+            'aws:SourceArn': bucket.bucketArn
+          }
+        }
+      })
+    );
+
+    // Create SQS queue with queue policy
+    const queue = new sqs.Queue(this, 'ResourcePolicyQueue');
+
+    queue.addToResourcePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        principals: [new iam.ServicePrincipal('sns.amazonaws.com')],
+        actions: ['sqs:SendMessage'],
+        resources: [queue.queueArn],
+        conditions: {
+          'ArnEquals': {
+            'aws:SourceArn': topic.topicArn
+          }
+        }
+      })
+    );
+
+    // Subscribe queue to topic
+    new sns.Subscription(this, 'TopicSubscription', {
+      topic: topic,
+      endpoint: queue.queueArn,
+      protocol: sns.SubscriptionProtocol.SQS,
+    });
+
+    // Outputs
+    new cdk.CfnOutput(this, 'BucketName', {
+      value: bucket.bucketName,
+    });
+
+    new cdk.CfnOutput(this, 'KeyId', {
+      value: key.keyId,
+    });
+
+    new cdk.CfnOutput(this, 'TopicArn', {
+      value: topic.topicArn,
+    });
+
+    new cdk.CfnOutput(this, 'QueueUrl', {
+      value: queue.queueUrl,
+    });
+  }
+}
+```
+
+### 2. Create Test Scripts
+
+1. Create a script to test S3 bucket policy:
+
+```typescript:scripts/test-bucket-policy.ts
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({});
+
+async function testBucketPolicy() {
+  const bucketName = process.env.BUCKET_NAME;
+  const testKey = 'test-file.txt';
+
+  try {
+    // Test PutObject
+    await s3.send(new PutObjectCommand({
+      Bucket: bucketName,
+      Key: testKey,
+      Body: 'Test content',
+    }));
+    console.log('Successfully uploaded object');
+
+    // Test GetObject
+    const response = await s3.send(new GetObjectCommand({
+      Bucket: bucketName,
+      Key: testKey,
+    }));
+
+    const body = await response.Body?.transformToString();
+    console.log('Successfully retrieved object:', body);
+  } catch (error) {
+    console.error('Error testing bucket policy:', error);
+  }
+}
+
+testBucketPolicy();
+```
+
+2. Create a script to test SNS/SQS policies:
+
+```typescript:scripts/test-messaging-policies.ts
+import {
+  SNSClient,
+  PublishCommand
+} from '@aws-sdk/client-sns';
+import {
+  SQSClient,
+  ReceiveMessageCommand,
+  DeleteMessageCommand
+} from '@aws-sdk/client-sqs';
+
+const sns = new SNSClient({});
+const sqs = new SQSClient({});
+
+async function testMessagingPolicies() {
+  const topicArn = process.env.TOPIC_ARN;
+  const queueUrl = process.env.QUEUE_URL;
+
+  try {
+    // Publish message to SNS
+    await sns.send(new PublishCommand({
+      TopicArn: topicArn,
+      Message: 'Test message',
+    }));
+    console.log('Successfully published message');
+
+    // Wait for message to propagate
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    // Receive message from SQS
+    const receiveResponse = await sqs.send(new ReceiveMessageCommand({
+      QueueUrl: queueUrl,
+      MaxNumberOfMessages: 1,
+      WaitTimeSeconds: 5,
+    }));
+
+    if (receiveResponse.Messages) {
+      console.log('Received message:', receiveResponse.Messages[0].Body);
+
+      // Delete message
+      await sqs.send(new DeleteMessageCommand({
+        QueueUrl: queueUrl,
+        ReceiptHandle: receiveResponse.Messages[0].ReceiptHandle,
+      }));
+      console.log('Successfully deleted message');
+    }
+  } catch (error) {
+    console.error('Error testing messaging policies:', error);
+  }
+}
+
+testMessagingPolicies();
+```
+
+### 3. Deploy and Test
+
+1. Deploy the stack:
+
+```bash
+cdk deploy ResourcePoliciesStack --profile your-profile-name
+```
+
+2. Set environment variables:
+
+```bash
+export BUCKET_NAME=$(aws cloudformation describe-stacks \
+  --stack-name ResourcePoliciesStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+export TOPIC_ARN=$(aws cloudformation describe-stacks \
+  --stack-name ResourcePoliciesStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`TopicArn`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+export QUEUE_URL=$(aws cloudformation describe-stacks \
+  --stack-name ResourcePoliciesStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`QueueUrl`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+```
+
+3. Run tests:
+
+```bash
+ts-node scripts/test-bucket-policy.ts
+ts-node scripts/test-messaging-policies.ts
+```
+
+### 4. Cross-Account Setup (Optional)
+
+1. Modify the stack to allow cross-account access:
+
+```typescript:lib/resource-policies-stack.ts
+// Add to the bucket policy
+bucketPolicy.document.addStatements(
+  new iam.PolicyStatement({
+    effect: iam.Effect.ALLOW,
+    principals: [new iam.AccountPrincipal('ANOTHER_ACCOUNT_ID')],
+    actions: ['s3:GetObject'],
+    resources: [bucket.arnForObjects('*')]
+  })
+);
+```
+
+2. Test cross-account access using different AWS profiles.
+
+## Validation Steps
+
+1. Resource Creation
+
+   - [ ] S3 bucket with policy created
+   - [ ] KMS key with policy created
+   - [ ] SNS topic with policy created
+   - [ ] SQS queue with policy created
+
+2. Policy Testing
+
+   - [ ] S3 bucket access works
+   - [ ] SNS publishing works
+   - [ ] SQS message reception works
+   - [ ] Cross-account access works (if configured)
+
+3. Security Verification
+   - [ ] IP condition works
+   - [ ] Service principal restrictions work
+   - [ ] Source ARN conditions work
+
+## Troubleshooting
+
+1. Access Denied Issues
+
+   - Check policy syntax
+   - Verify principal ARNs
+   - Review condition keys
+   - Check AWS CLI credentials
+
+2. Policy Evaluation
+
+   - Use IAM Policy Simulator
+   - Check CloudTrail logs
+   - Verify resource ARNs
+   - Review service limits
+
+3. Cross-Account Access
+   - Verify account IDs
+   - Check trust relationships
+   - Review organization policies
+   - Test with assumed roles
+
+## Cleanup
+
+Remove the stack:
+
+```bash
+cdk destroy ResourcePoliciesStack --profile your-profile-name
+```
+
+Note: Ensure all resources are no longer needed before cleanup.
+
+[DIAGRAM: Resource Policies Testing]
+Description: A detailed flowchart showing how to test the Resource Policies implementation. The diagram should:
+
+1. Show the testing process:
+   - Policy evaluation
+   - Access control testing
+   - Cross-account testing
+   - Error handling
+2. Include different policy types
+3. Show the validation process
+4. Illustrate the testing patterns
+   Use AWS's standard color scheme and include clear labels for each step.

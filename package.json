@@ -1,0 +1,25 @@
+{
+  "name": "aws-fundamentals-workshop",
+  "version": "1.0.0",
+  "description": "Hands-on AWS fundamentals workshop for beginners",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "docsify serve ./docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/superluminar-io/TO_BE_DETERMINED.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/superluminar-io/TO_BE_DETERMINED/issues"
+  },
+  "homepage": "https://github.com/superluminar-io/TO_BE_DETERMINED#readme",
+  "devDependencies": {
+    "docsify-cli": "^4.4.4"
+  }
+}
