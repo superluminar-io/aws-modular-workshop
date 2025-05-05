@@ -5,6 +5,7 @@
 AWS Lambda lets you run code without provisioning or managing servers. This lab introduces Lambda functions and their integration with various AWS event sources, demonstrating how to build event-driven architectures using serverless computing.
 
 [DIAGRAM: Lambda Overview]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
@@ -207,23 +208,22 @@ In the hands-on section, you'll:
 - Test different event patterns
 
 [DIAGRAM: Lambda Event Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Lambda icon
-   - AWS EventBridge icon
-   - AWS CloudWatch icon
-   - AWS S3 icon
-   - AWS DynamoDB icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Event Generation
-   - Function Invocation
-   - Processing
-   - Response Handling
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow
+```mermaid
+flowchart TD
+    A[Event Source] --> B{Event Type}
+    B -->|S3| C[Object Created]
+    B -->|DynamoDB| D[Stream Record]
+    B -->|Scheduled| E[Time-based]
+
+    C --> F[Function Invocation]
+    D --> F
+    E --> F
+
+    F --> G{Processing}
+    G -->|Success| H[Response]
+    G -->|Error| I[Retry/DLQ]
+
+    H --> J[EventBridge]
+    I --> K[CloudWatch]
+```

@@ -5,22 +5,39 @@
 This lab demonstrates how to build a continuous integration and continuous deployment (CI/CD) pipeline for containerized applications using AWS services. You'll learn how to automate the building, testing, and deployment of container images to Amazon ECS using AWS CodePipeline, CodeBuild, and ECR.
 
 [DIAGRAM: Container CI/CD Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECR icon
-   - AWS CodePipeline icon
-   - AWS CodeBuild icon
-   - AWS ECS icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place ECR at the center
-   - Add build pipeline on the left
-   - Place container testing in the middle
-   - Add deployment pipeline on the right
-4. Use AWS's standard connector arrows to show pipeline flow
-5. Add container orchestration visualization
+```mermaid
+flowchart TD
+    subgraph SOURCE["Source"]
+        GITHUB[GitHub]
+        CODECOMMIT[CodeCommit]
+    end
+
+    subgraph BUILD["Build"]
+        CB[CodeBuild]
+        ECR[ECR Repository]
+    end
+
+    subgraph TEST["Test"]
+        SECURITY[Security Scan]
+        UNIT[Unit Tests]
+        INTEGRATION[Integration Tests]
+    end
+
+    subgraph DEPLOY["Deploy"]
+        ECS[ECS Service]
+        ALB[Load Balancer]
+    end
+
+    GITHUB --> CB
+    CODECOMMIT --> CB
+    CB --> ECR
+    ECR --> SECURITY
+    SECURITY --> UNIT
+    UNIT --> INTEGRATION
+    INTEGRATION --> ECS
+    ECS --> ALB
+```
 
 ## Learning Objectives
 
@@ -186,22 +203,17 @@ In the hands-on section, you'll:
 - Implement best practices
 
 [DIAGRAM: Container CI/CD Workflow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECR icon
-   - AWS CodePipeline icon
-   - AWS CodeBuild icon
-   - AWS ECS icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Container Build
-   - Image Testing
-   - Registry Push
-   - Deployment
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    A[Source Code] --> B[Build Image]
+    B --> C{Security Scan}
+    C -->|Pass| D[Run Tests]
+    C -->|Fail| E[Fail Pipeline]
+    D -->|Pass| F[Push to ECR]
+    D -->|Fail| E
+    F --> G[Deploy to ECS]
+    G --> H{Health Check}
+    H -->|OK| I[Complete]
+    H -->|Issue| J[Rollback]
+```

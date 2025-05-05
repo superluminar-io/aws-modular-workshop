@@ -1,22 +1,38 @@
 # CI/CD for Containers - Hands-on Lab
 
 [DIAGRAM: Container CI/CD Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECR icon
-   - AWS CodePipeline icon
-   - AWS CodeBuild icon
-   - AWS ECS icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place GitHub icon on the left
-   - Add CodePipeline in the middle
-   - Place ECR and CodeBuild below
-   - Add ECS on the right
-4. Use AWS's standard connector arrows to show pipeline flow
-5. Add build and test stages visualization
+```mermaid
+flowchart TD
+    subgraph SOURCE["Source"]
+        GITHUB[GitHub]
+    end
+
+    subgraph PIPELINE["Pipeline"]
+        CP[CodePipeline]
+        CB[CodeBuild]
+    end
+
+    subgraph REGISTRY["Registry"]
+        ECR[ECR Repository]
+    end
+
+    subgraph DEPLOY["Deployment"]
+        ECS[ECS Service]
+        ALB[Load Balancer]
+    end
+
+    subgraph MONITOR["Monitoring"]
+        CW[CloudWatch]
+    end
+
+    GITHUB --> CP
+    CP --> CB
+    CB --> ECR
+    ECR --> ECS
+    ECS --> ALB
+    ECS --> CW
+```
 
 ## Prerequisites
 

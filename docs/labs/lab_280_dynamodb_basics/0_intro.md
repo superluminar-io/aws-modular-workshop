@@ -5,22 +5,43 @@
 Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability. In this lab, you'll learn how to create and manage DynamoDB tables using AWS CDK.
 
 [DIAGRAM: DynamoDB Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS DynamoDB icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-   - AWS KMS icon
-3. Layout:
-   - Place DynamoDB table at the center
-   - Add indexes around the table
-   - Place IAM roles on the left
-   - Show monitoring on the right
-4. Use AWS's standard connector arrows to show relationships
-5. Add data flow visualization with streams
+```mermaid
+flowchart TD
+    subgraph DYNAMO["DynamoDB Table"]
+        TABLE[Table]
+        GSI[Global Secondary Indexes]
+        LSI[Local Secondary Indexes]
+    end
+
+    subgraph SECURITY["Security"]
+        IAM[IAM Roles]
+        KMS[KMS Encryption]
+        VPC[VPC Endpoints]
+    end
+
+    subgraph MONITOR["Monitoring"]
+        CW[CloudWatch]
+        CT[CloudTrail]
+        STREAMS[Streams]
+    end
+
+    subgraph INTEGRATION["Integration"]
+        LAMBDA[Lambda Functions]
+        APPS[Applications]
+        SERVICES[AWS Services]
+    end
+
+    IAM --> TABLE
+    KMS --> TABLE
+    VPC --> TABLE
+    CW --> TABLE
+    CT --> TABLE
+    STREAMS --> TABLE
+    LAMBDA --> TABLE
+    APPS --> TABLE
+    SERVICES --> TABLE
+```
 
 ## Learning Objectives
 
@@ -217,21 +238,27 @@ In the hands-on section, you'll:
 - Implement best practices
 
 [DIAGRAM: DynamoDB Operations Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS DynamoDB icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Table Creation
-   - Data Modeling
-   - Query Operations
-   - Index Management
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    A[Create Table] --> B[Define Schema]
+    B --> C[Configure Indexes]
+    C --> D[Set Up Access]
+    D --> E[Implement Operations]
+    E --> F[Monitor Performance]
+
+    subgraph DESIGN["Design Phase"]
+        A
+        B
+        C
+    end
+
+    subgraph SECURITY["Security Setup"]
+        D
+    end
+
+    subgraph OPERATIONS["Operations"]
+        E
+        F
+    end
+```

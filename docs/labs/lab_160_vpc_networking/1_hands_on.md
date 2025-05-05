@@ -1,24 +1,55 @@
 # VPC Networking - Hands-on Lab
 
 [DIAGRAM: VPC Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS VPC icon
-   - AWS EC2 icon
-   - AWS Internet Gateway icon
-   - AWS NAT Gateway icon
-   - AWS Security Group icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place VPC at the center
-   - Add public subnets on the left
-   - Add private subnets on the right
-   - Place gateways at the top
-   - Show security groups around instances
-4. Use AWS's standard connector arrows to show network flow
-5. Add CIDR block visualization with IP ranges
+```mermaid
+flowchart TD
+    subgraph VPC["VPC (10.0.0.0/16)"]
+        subgraph Public["Public Subnets"]
+            PS1["Public Subnet 1\n(10.0.1.0/24)"]
+            PS2["Public Subnet 2\n(10.0.2.0/24)"]
+        end
+
+        subgraph Private["Private Subnets"]
+            PR1["Private Subnet 1\n(10.0.3.0/24)"]
+            PR2["Private Subnet 2\n(10.0.4.0/24)"]
+        end
+
+        IGW[Internet Gateway]
+        NAT[NAT Gateway]
+
+        subgraph EC2["EC2 Instances"]
+            PI[Public Instance]
+            PRI[Private Instance]
+        end
+
+        subgraph SG["Security Groups"]
+            PSG[Public SG]
+            PRSG[Private SG]
+        end
+
+        CW[CloudWatch]
+    end
+
+    Internet((Internet)) <--> IGW
+    IGW --> PS1
+    IGW --> PS2
+    PS1 --> NAT
+    PS2 --> NAT
+    NAT --> PR1
+    NAT --> PR2
+
+    PS1 --> PI
+    PS2 --> PI
+    PR1 --> PRI
+    PR2 --> PRI
+
+    PI --> PSG
+    PRI --> PRSG
+
+    PSG --> CW
+    PRSG --> CW
+```
 
 ## Prerequisites
 

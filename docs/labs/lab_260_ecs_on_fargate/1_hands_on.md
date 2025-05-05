@@ -1,22 +1,39 @@
 # ECS on Fargate - Hands-on Lab
 
 [DIAGRAM: ECS Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECS icon
-   - AWS Fargate icon
-   - AWS VPC icon
-   - AWS Application Load Balancer icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place ECS cluster at the center
-   - Add Fargate service around it
-   - Place task definition on the right
-   - Show load balancer on the left
-4. Use AWS's standard connector arrows to show relationships
-5. Add VPC configuration visualization
+```mermaid
+flowchart TD
+    subgraph ECS["ECS Cluster"]
+        CLUSTER[Cluster]
+        SERVICE[Fargate Service]
+        TASK[Tasks]
+    end
+
+    subgraph VPC["VPC Configuration"]
+        SUBNET[Subnets]
+        SG[Security Groups]
+        RT[Route Tables]
+    end
+
+    subgraph LOAD["Load Balancing"]
+        ALB[Application Load Balancer]
+        TG[Target Groups]
+    end
+
+    subgraph MONITOR["Monitoring"]
+        CW[CloudWatch]
+        XRAY[X-Ray]
+    end
+
+    SUBNET --> CLUSTER
+    SG --> TASK
+    RT --> SUBNET
+    ALB --> SERVICE
+    TG --> TASK
+    CW --> CLUSTER
+    XRAY --> TASK
+```
 
 ## Prerequisites
 

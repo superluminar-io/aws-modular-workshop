@@ -5,22 +5,50 @@
 Amazon Elastic Compute Cloud (EC2) is a web service that provides resizable compute capacity in the cloud. In this lab, you'll learn how to deploy and manage EC2 instances using AWS CDK.
 
 [DIAGRAM: EC2 Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS EC2 icon
-   - AWS Systems Manager icon
-   - AWS CloudWatch icon
-   - AWS IAM icon
-   - AWS VPC icon
-3. Layout:
-   - Place EC2 at the center
-   - Add instance types on the left
-   - Place AMIs and storage on the right
-   - Show security groups around instances
-4. Use AWS's standard connector arrows to show relationships
-5. Add instance type visualization with categories
+```mermaid
+flowchart TD
+    subgraph EC2["EC2 Service"]
+        subgraph Instances["EC2 Instances"]
+            I1[Instance 1]
+            I2[Instance 2]
+        end
+
+        subgraph Types["Instance Types"]
+            GP[General Purpose]
+            CO[Compute Optimized]
+            MO[Memory Optimized]
+            SO[Storage Optimized]
+        end
+
+        subgraph Storage["Storage Options"]
+            EBS[EBS Volumes]
+            IS[Instance Store]
+        end
+
+        subgraph AMI["Amazon Machine Images"]
+            AL[Amazon Linux]
+            UB[Ubuntu]
+            WS[Windows Server]
+        end
+    end
+
+    subgraph Services["AWS Services"]
+        SSM[Systems Manager]
+        CW[CloudWatch]
+        IAM[IAM]
+        VPC[VPC]
+    end
+
+    Types --> Instances
+    Storage --> Instances
+    AMI --> Instances
+
+    Instances --> SSM
+    Instances --> CW
+    Instances --> IAM
+    Instances --> VPC
+```
 
 ## Learning Objectives
 
@@ -204,22 +232,37 @@ In the hands-on section, you'll:
 - Learn to troubleshoot common issues
 
 [DIAGRAM: EC2 Deployment Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS EC2 icon
-   - AWS Systems Manager icon
-   - AWS CloudWatch icon
-   - AWS IAM icon
-   - AWS VPC icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Instance Creation
-   - Configuration
-   - Network Setup
-   - Security Configuration
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    Start[Start Deployment] --> Config[Instance Configuration]
+    Config --> Type{Instance Type?}
+
+    Type -->|General Purpose| GP[Configure GP Instance]
+    Type -->|Compute Optimized| CO[Configure CO Instance]
+    Type -->|Memory Optimized| MO[Configure MO Instance]
+    Type -->|Storage Optimized| SO[Configure SO Instance]
+
+    GP --> Network[Network Setup]
+    CO --> Network
+    MO --> Network
+    SO --> Network
+
+    Network --> Security[Security Configuration]
+    Security -->|Configure| SG[Security Groups]
+    Security -->|Setup| IAM[IAM Roles]
+
+    SG --> Monitoring[Monitoring Setup]
+    IAM --> Monitoring
+
+    Monitoring -->|Configure| CW[CloudWatch]
+    Monitoring -->|Setup| SSM[Systems Manager]
+
+    CW --> Deploy[Deploy Instance]
+    SSM --> Deploy
+
+    Deploy --> Validate[Validate Deployment]
+    Validate -->|Success| End[Deployment Complete]
+    Validate -->|Failure| Troubleshoot[Troubleshoot Issues]
+    Troubleshoot --> Config
+```

@@ -5,22 +5,35 @@
 Amazon Elastic Container Registry (ECR) is a fully managed Docker container registry that makes it easy to store, manage, and deploy Docker container images. In this lab, you'll learn how to work with Docker and ECR using AWS CDK.
 
 [DIAGRAM: ECR Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECR icon
-   - AWS IAM icon
-   - AWS KMS icon
-   - AWS CloudWatch icon
-   - AWS ECS icon
-3. Layout:
-   - Place ECR at the center
-   - Add repositories around it
-   - Place security services on the right
-   - Show container services on the left
-4. Use AWS's standard connector arrows to show relationships
-5. Add container visualization with image layers
+```mermaid
+flowchart TD
+    subgraph ECR["ECR Service"]
+        REPO[Repositories]
+        IMG[Images]
+        SCAN[Image Scanning]
+    end
+
+    subgraph Security["Security"]
+        IAM[IAM]
+        KMS[KMS]
+        CW[CloudWatch]
+    end
+
+    subgraph Services["Container Services"]
+        ECS[ECS]
+        EKS[EKS]
+        LAMBDA[Lambda]
+    end
+
+    IAM --> REPO
+    KMS --> IMG
+    CW --> SCAN
+
+    REPO --> ECS
+    REPO --> EKS
+    REPO --> LAMBDA
+```
 
 ## Learning Objectives
 
@@ -172,22 +185,23 @@ In the hands-on section, you'll:
 - Implement security best practices
 
 [DIAGRAM: Container Workflow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECR icon
-   - Docker icon (from Generic symbols)
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS CodeBuild icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Image Building
-   - Image Tagging
-   - Image Pushing
-   - Image Pulling
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    A[Local Development] --> B[Build Image]
+    B --> C[Test Locally]
+    C --> D[Tag Image]
+    D --> E[Push to ECR]
+    E --> F[Scan Image]
+    F --> G[Pull Image]
+    G --> H[Deploy Container]
+
+    subgraph Security["Security Steps"]
+        F
+    end
+
+    subgraph ECR["ECR Steps"]
+        E
+        G
+    end
+```

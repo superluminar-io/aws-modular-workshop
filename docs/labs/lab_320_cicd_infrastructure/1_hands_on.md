@@ -1,22 +1,41 @@
 # CI/CD Infrastructure - Hands-on Lab
 
 [DIAGRAM: CI/CD Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS CodePipeline icon
-   - AWS CodeBuild icon
-   - AWS CodeCommit icon
-   - AWS S3 icon
-   - AWS IAM icon
-3. Layout:
-   - Place CodePipeline at the center
-   - Add source repositories on the left
-   - Place build and test stages in the middle
-   - Add deployment targets on the right
-4. Use AWS's standard connector arrows to show pipeline flow
-5. Add cross-account deployment visualization
+```mermaid
+flowchart TD
+    subgraph SOURCE["Source"]
+        GITHUB[GitHub]
+        CODECOMMIT[CodeCommit]
+    end
+
+    subgraph PIPELINE["Pipeline"]
+        CP[CodePipeline]
+        CB[CodeBuild]
+        CD[CodeDeploy]
+    end
+
+    subgraph SECURITY["Security"]
+        IAM[IAM Roles]
+        S3[S3 Bucket]
+    end
+
+    subgraph DEPLOY["Deployment"]
+        DEV[Dev Account]
+        PROD[Prod Account]
+    end
+
+    GITHUB --> CP
+    CODECOMMIT --> CP
+    CP --> CB
+    CB --> S3
+    S3 --> CD
+    CD --> DEV
+    CD --> PROD
+    IAM --> CP
+    IAM --> CB
+    IAM --> CD
+```
 
 ## Prerequisites
 

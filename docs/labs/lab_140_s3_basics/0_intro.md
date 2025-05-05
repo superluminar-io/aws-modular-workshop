@@ -5,6 +5,7 @@
 Amazon Simple Storage Service (Amazon S3) is an object storage service offering industry-leading scalability, data availability, security, and performance. Organizations of all sizes can use S3 to store and protect any amount of data for various use cases, including websites, mobile applications, backup and restore, archive, enterprise applications, IoT devices, and big data analytics.
 
 [DIAGRAM: S3 Overview]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
@@ -16,14 +17,20 @@ Instructions for draw.io:
    - AWS CloudFront icon
 3. Layout:
    - Place S3 bucket at the center
-   - Add IAM roles and policies on the left
-   - Place CloudWatch monitoring on the right
-   - Show lifecycle rules at the bottom
-4. Use AWS's standard connector arrows
-5. Color coding:
-   - S3 components: Light blue
-   - AWS services: Standard AWS colors
-   - Data flows: Blue arrows
+   - Add IAM for access control
+   - Add CloudWatch for monitoring
+   - Add KMS for encryption
+   - Add CloudFront for distribution
+4. Use AWS's standard connector arrows to show:
+   - Access control relationships
+   - Monitoring flow
+   - Encryption relationships
+   - Distribution paths
+5. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for storage components
+   - Gray for infrastructure elements
+6. Add clear labels for each component and relationship
 
 ## Learning Objectives
 
@@ -180,21 +187,29 @@ In the hands-on section, you'll:
 - Learn to work with S3 programmatically
 
 [DIAGRAM: S3 Data Flow]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
 2. Use the following AWS symbols from the symbol pack:
    - AWS S3 icon
-   - AWS IAM icon
+   - AWS S3 Standard icon
+   - AWS S3 Standard-IA icon
+   - AWS S3 Glacier icon
    - AWS CloudWatch icon
-   - AWS KMS icon
+   - AWS IAM icon
 3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Upload Process
-   - Storage Options
-   - Access Patterns
-   - Lifecycle Management
-5. Use AWS's standard color scheme for all elements
+   - Place S3 bucket at the center
+   - Add storage classes on the right (Standard, Standard-IA, Glacier)
+   - Add access patterns on the left (Console, CLI, SDK)
+   - Add lifecycle management flow below
+4. Use AWS's standard connector arrows to show:
+   - Upload process
+   - Storage transitions
+   - Access patterns
+   - Monitoring flow
+5. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for storage classes
+   - Gray for access patterns
+6. Add clear labels for each component and flow

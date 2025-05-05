@@ -5,22 +5,42 @@
 Amazon Elastic Container Service (ECS) is a fully managed container orchestration service that makes it easy to run, stop, and manage Docker containers on a cluster. Fargate is a serverless compute engine for containers that works with both ECS and EKS. In this lab, you'll learn how to deploy containers using ECS on Fargate with AWS CDK.
 
 [DIAGRAM: ECS Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECS icon
-   - AWS Fargate icon
-   - AWS VPC icon
-   - AWS Application Load Balancer icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place ECS cluster at the center
-   - Add services around the cluster
-   - Place task definitions on the right
-   - Show Fargate profiles on the left
-4. Use AWS's standard connector arrows to show relationships
-5. Add container patterns visualization
+```mermaid
+flowchart TD
+    subgraph ECS["ECS Cluster"]
+        CLUSTER[Cluster]
+        SERVICE[Services]
+        TASK[Tasks]
+    end
+
+    subgraph FARGATE["Fargate"]
+        PROFILE[Fargate Profile]
+        TASK_DEF[Task Definition]
+    end
+
+    subgraph NETWORK["Networking"]
+        VPC[VPC]
+        ALB[Load Balancer]
+        SG[Security Groups]
+    end
+
+    subgraph MONITOR["Monitoring"]
+        CW[CloudWatch]
+        LOGS[Logs]
+        METRICS[Metrics]
+    end
+
+    CLUSTER --> SERVICE
+    SERVICE --> TASK
+    FARGATE --> TASK
+    VPC --> FARGATE
+    ALB --> SERVICE
+    SG --> TASK
+    CW --> CLUSTER
+    LOGS --> TASK
+    METRICS --> SERVICE
+```
 
 ## Learning Objectives
 
@@ -195,22 +215,28 @@ In the hands-on section, you'll:
 - Monitor your containers
 
 [DIAGRAM: ECS Workflow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECS icon
-   - AWS Fargate icon
-   - AWS VPC icon
-   - AWS Application Load Balancer icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Task Definition Creation
-   - Service Deployment
-   - Container Scheduling
-   - Load Balancer Configuration
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    A[Create Task Definition] --> B[Configure Container]
+    B --> C[Create Service]
+    C --> D[Deploy to Fargate]
+    D --> E[Configure Load Balancer]
+    E --> F[Monitor Service]
+
+    subgraph DEPLOY["Deployment Steps"]
+        A
+        B
+        C
+    end
+
+    subgraph RUNTIME["Runtime Steps"]
+        D
+        E
+        F
+    end
+
+    subgraph MONITOR["Monitoring"]
+        F
+    end
+```

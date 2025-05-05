@@ -5,22 +5,32 @@
 Amazon Virtual Private Cloud (VPC) is a service that lets you launch AWS resources in a logically isolated virtual network that you define. In this lab, you'll learn how to create and manage VPCs using AWS CDK.
 
 [DIAGRAM: VPC Overview]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
 2. Use the following AWS symbols from the symbol pack:
    - AWS VPC icon
-   - AWS EC2 icon
-   - AWS Route 53 icon
-   - AWS Direct Connect icon
-   - AWS VPN icon
+   - AWS Subnet icon
+   - AWS Route Table icon
+   - AWS Internet Gateway icon
+   - AWS NAT Gateway icon
+   - AWS Security Group icon
+   - AWS Network ACL icon
 3. Layout:
    - Place VPC at the center
-   - Add subnets on the left and right
-   - Place gateways at the top
-   - Show route tables in the middle
-4. Use AWS's standard connector arrows to show network flow
-5. Add CIDR block visualization with IP ranges
+   - Add public and private subnets
+   - Show route tables and gateways
+   - Include security groups and NACLs
+4. Use AWS's standard connector arrows to show:
+   - Network flow
+   - Security boundaries
+   - Routing paths
+5. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for public components
+   - Red for private components
+6. Add clear labels for each component
 
 ## Learning Objectives
 
@@ -194,22 +204,52 @@ In the hands-on section, you'll:
 - Learn to troubleshoot common networking issues
 
 [DIAGRAM: VPC Network Flow]
+
+```mermaid
+flowchart TD
+    Traffic[Network Traffic] --> Ingress{Ingress/Egress?}
+
+    Ingress -->|Ingress| SG[Security Group Check]
+    Ingress -->|Egress| NACL[NACL Check]
+
+    SG -->|Allow| NACL
+    SG -->|Deny| Block1[Block Traffic]
+
+    NACL -->|Allow| RT[Route Table Check]
+    NACL -->|Deny| Block2[Block Traffic]
+
+    RT -->|Local| Local[Local VPC Traffic]
+    RT -->|Internet| IGW[Internet Gateway]
+    RT -->|NAT| NAT[NAT Gateway]
+
+    Local --> Success1[Traffic Delivered]
+    IGW --> Success2[Internet Access]
+    NAT --> Success3[Outbound Access]
+
+    Block1 --> End[Traffic Blocked]
+    Block2 --> End
+```
+
+[DIAGRAM: VPC Components]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
 2. Use the following AWS symbols from the symbol pack:
    - AWS VPC icon
+   - AWS Subnet icon
+   - AWS Route Table icon
    - AWS Internet Gateway icon
    - AWS NAT Gateway icon
    - AWS Security Group icon
    - AWS Network ACL icon
 3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for security checks
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Traffic ingress/egress
-   - Security group evaluation
-   - NACL evaluation
-   - Routing decisions
+   - Create a detailed component diagram
+   - Show relationships between components
+   - Include all networking elements
+4. Use AWS's standard connector arrows to show:
+   - Component relationships
+   - Network flow
+   - Security boundaries
 5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each component and relationship

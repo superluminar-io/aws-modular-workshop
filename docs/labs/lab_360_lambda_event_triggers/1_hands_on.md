@@ -1,6 +1,7 @@
 # Lambda Event Triggers - Hands-on Lab
 
 [DIAGRAM: Lambda Hands-on Architecture]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
@@ -305,6 +306,7 @@ cdk destroy LambdaStack --profile your-profile-name
 ```
 
 [DIAGRAM: Lambda Event Processing Flow]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
@@ -313,6 +315,7 @@ Instructions for draw.io:
    - AWS S3 icon
    - AWS DynamoDB icon
    - AWS CloudWatch icon
+   - AWS EventBridge icon
 3. Layout:
    - Create a flowchart using AWS's standard flowchart shapes
    - Use diamond shapes for decision points

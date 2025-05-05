@@ -1,22 +1,33 @@
 # RDS Basics - Hands-on Lab
 
 [DIAGRAM: RDS Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS RDS icon
-   - AWS VPC icon
-   - AWS Security Group icon
-   - AWS CloudWatch icon
-   - AWS Secrets Manager icon
-3. Layout:
-   - Place RDS instance at the center
-   - Add VPC and networking components on the left
-   - Place security and monitoring on the right
-   - Show database patterns in the middle
-4. Use AWS's standard connector arrows to show relationships
-5. Add database visualization with security groups
+```mermaid
+flowchart TD
+    subgraph RDS["RDS Instance"]
+        DB[Database]
+        RR[Read Replica]
+    end
+
+    subgraph VPC["VPC Configuration"]
+        SG[Security Groups]
+        RT[Route Tables]
+    end
+
+    subgraph Monitoring["Monitoring"]
+        CW[CloudWatch]
+        SM[Secrets Manager]
+    end
+
+    SG --> DB
+    SG --> RR
+    RT --> DB
+    RT --> RR
+
+    CW --> DB
+    CW --> RR
+    SM --> DB
+```
 
 ## Prerequisites
 
@@ -202,22 +213,19 @@ cdk destroy RdsStack --profile your-profile-name
    - Review error logs
 
 [DIAGRAM: RDS Setup Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS RDS icon
-   - AWS VPC icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Secrets Manager icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Instance Creation
-   - Security Setup
-   - Network Configuration
-   - Database Setup
-5. Use AWS's standard color scheme for all elements
+```mermaid
+sequenceDiagram
+    participant User
+    participant VPC
+    participant RDS
+    participant SM
+    participant CW
+
+    User->>VPC: Configure VPC
+    VPC->>RDS: Create Instance
+    User->>SM: Store Credentials
+    SM->>RDS: Configure Access
+    User->>CW: Setup Monitoring
+    CW->>RDS: Monitor Instance
+```

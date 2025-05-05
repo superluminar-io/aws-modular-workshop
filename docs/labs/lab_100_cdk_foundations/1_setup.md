@@ -1,24 +1,23 @@
 # Setting Up Your Development Environment
 
 [DIAGRAM: Development Environment Setup]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
-   - Local development icons (IDE, Node.js, AWS CLI) from Generic shapes
-   - AWS CDK icon
-   - AWS IAM icon
-   - AWS CloudFormation icon
-   - AWS S3 icon
-3. Layout:
-   - Left side: Local development environment components
-   - Right side: AWS services
-   - Middle: Connection arrows showing workflow
-4. Use AWS's standard connector arrows
-5. Color coding:
-   - Local components: Light gray
-   - AWS services: Standard AWS colors
-   - Connections: Blue arrows
+```mermaid
+flowchart LR
+    subgraph Local["Local Development"]
+        A[IDE] --> B[Node.js]
+        B --> C[AWS CLI]
+    end
+
+    subgraph AWS["AWS Services"]
+        D[CDK] --> E[CloudFormation]
+        E --> F[S3]
+        G[IAM]
+    end
+
+    C -->|Configure| G
+    C -->|Deploy| D
+```
 
 ## Prerequisites
 
@@ -216,22 +215,16 @@ Now that you've created and deployed your first CDK application, you're ready to
 In the next lab, we'll build on these foundations to create more sophisticated infrastructure components.
 
 [DIAGRAM: CDK Development Workflow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
-   - AWS CDK icon
-   - AWS CloudFormation icon
-   - AWS S3 icon
-   - AWS IAM icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Code Writing
-   - Local Testing
-   - CDK Synthesis
-   - Deployment
-   - Verification
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    A[Write Code] --> B[Local Testing]
+    B --> C[CDK Synthesis]
+    C --> D[Deployment]
+    D --> E[Verification]
+
+    B -->|Fail| A
+    C -->|Fail| A
+    D -->|Fail| A
+    E -->|Fail| A
+```

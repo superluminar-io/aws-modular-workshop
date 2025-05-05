@@ -5,25 +5,28 @@
 AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources. With IAM, you can manage who (identity) or what (role) can access specific resources and how they can access them.
 
 [DIAGRAM: IAM Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS IAM icon
-   - AWS EC2 icon
-   - AWS S3 icon
-   - AWS Lambda icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place IAM at the center
-   - Add Users, Groups, Roles, and Policies around IAM
-   - Place AWS services on the right
-   - Show permission flows with arrows
-4. Use AWS's standard connector arrows
-5. Color coding:
-   - IAM components: Light blue
-   - AWS services: Standard AWS colors
-   - Permission flows: Blue arrows
+```mermaid
+flowchart TD
+    subgraph IAM["IAM Service"]
+        A[Users] --> D[IAM]
+        B[Groups] --> D
+        C[Roles] --> D
+        D --> E[Policies]
+    end
+
+    subgraph AWS["AWS Services"]
+        F[EC2]
+        G[S3]
+        H[Lambda]
+        I[CloudWatch]
+    end
+
+    E -->|Permissions| F
+    E -->|Permissions| G
+    E -->|Permissions| H
+    E -->|Permissions| I
+```
 
 ## Learning Objectives
 
@@ -135,23 +138,25 @@ This policy:
 - Explicitly denies deleting objects in `restricted-bucket`
 
 [DIAGRAM: IAM Permission Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
-   - AWS IAM icon
-   - AWS CloudWatch icon for logging
-   - AWS CloudTrail icon for auditing
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Request Initiation
-   - Policy Evaluation
-   - Permission Decision
-   - Action Execution
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    A[Request Initiation] --> B{Policy Evaluation}
+    B -->|Allow| C[Permission Granted]
+    B -->|Deny| D[Permission Denied]
+    C --> E[Action Execution]
+    D --> F[Request Blocked]
+
+    subgraph Monitoring
+        G[CloudWatch Logs]
+        H[CloudTrail Audit]
+    end
+
+    E --> G
+    E --> H
+    F --> G
+    F --> H
+```
 
 ## Best Practices
 

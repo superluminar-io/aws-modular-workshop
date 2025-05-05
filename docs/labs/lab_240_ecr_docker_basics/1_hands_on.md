@@ -1,22 +1,36 @@
 # ECR and Docker Basics - Hands-on Lab
 
 [DIAGRAM: ECR Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECR icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS CodeBuild icon
-   - Docker icon (from Generic symbols)
-3. Layout:
-   - Place ECR repository at the center
-   - Add Docker images around it
-   - Place IAM roles on the right
-   - Show build pipeline on the left
-4. Use AWS's standard connector arrows to show relationships
-5. Add lifecycle policy visualization
+```mermaid
+flowchart TD
+    subgraph ECR["ECR Repository"]
+        IMG[Container Images]
+        SCAN[Image Scanning]
+        POLICY[Lifecycle Policy]
+    end
+
+    subgraph IAM["IAM Roles"]
+        PUSH[Push Role]
+        PULL[Pull Role]
+        SCAN_ROLE[Scan Role]
+    end
+
+    subgraph Pipeline["Build Pipeline"]
+        BUILD[Build Process]
+        TEST[Test Process]
+        DEPLOY[Deploy Process]
+    end
+
+    PUSH --> IMG
+    PULL --> IMG
+    SCAN_ROLE --> SCAN
+    POLICY --> IMG
+
+    BUILD --> IMG
+    TEST --> IMG
+    DEPLOY --> IMG
+```
 
 ## Prerequisites
 
@@ -225,21 +239,31 @@ cdk destroy EcrStack --profile your-profile-name
 ```
 
 [DIAGRAM: Container Build Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECR icon
-   - Docker icon (from Generic symbols)
-   - AWS IAM icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Dockerfile Creation
-   - Image Building
-   - Image Tagging
-   - Image Pushing
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    A[Create Dockerfile] --> B[Build Image]
+    B --> C[Test Container]
+    C --> D[Tag Image]
+    D --> E[Authenticate to ECR]
+    E --> F[Push to ECR]
+    F --> G[Scan Image]
+    G --> H[Pull Image]
+    H --> I[Deploy Container]
+
+    subgraph Security["Security Steps"]
+        E
+        G
+    end
+
+    subgraph Build["Build Steps"]
+        A
+        B
+        C
+    end
+
+    subgraph ECR["ECR Steps"]
+        F
+        H
+    end
+```

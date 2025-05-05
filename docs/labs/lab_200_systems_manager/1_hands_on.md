@@ -1,23 +1,46 @@
 # Systems Manager - Hands-on Lab
 
 [DIAGRAM: Systems Manager Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Systems Manager icon
-   - AWS EC2 icon
-   - AWS IAM icon
-   - AWS VPC icon
-   - AWS Parameter Store icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place Systems Manager at the center
-   - Add EC2 instances on the left
-   - Place IAM roles and policies on the right
-   - Show VPC configuration at the bottom
-4. Use AWS's standard connector arrows to show relationships
-5. Add management visualization with automation states
+```mermaid
+flowchart TD
+    subgraph SSM["Systems Manager"]
+        SM[Session Manager]
+        RC[Run Command]
+        PS[Parameter Store]
+    end
+
+    subgraph EC2["EC2 Instances"]
+        I1[Instance 1]
+        I2[Instance 2]
+    end
+
+    subgraph IAM["IAM Roles & Policies"]
+        R1[Instance Role]
+        R2[SSM Role]
+    end
+
+    subgraph VPC["VPC Configuration"]
+        SG[Security Groups]
+        RT[Route Tables]
+    end
+
+    SM --> I1
+    SM --> I2
+    RC --> I1
+    RC --> I2
+    PS --> I1
+    PS --> I2
+
+    R1 --> I1
+    R1 --> I2
+    R2 --> SSM
+
+    SG --> I1
+    SG --> I2
+    RT --> I1
+    RT --> I2
+```
 
 Description: A detailed diagram showing the Systems Manager resources we'll create in this lab. The diagram should:
 
@@ -236,17 +259,24 @@ After completing this lab, you can:
 - Implement advanced monitoring
 
 [DIAGRAM: Systems Manager Setup Flow]
-Description: A sequence diagram showing how the Systems Manager setup will work in our lab. The diagram should:
 
-1. Show the setup flow:
-   - Instance configuration
-   - IAM role setup
-   - Systems Manager agent installation
-   - Parameter store configuration
-2. Include the specific operations we perform in the lab
-3. Show how different components interact
-4. Illustrate the management patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+```mermaid
+sequenceDiagram
+    participant User
+    participant IAM
+    participant SSM
+    participant EC2
+    participant PS
+
+    User->>IAM: Create IAM Role
+    IAM->>EC2: Attach Role to Instance
+    User->>SSM: Install SSM Agent
+    SSM->>EC2: Register Instance
+    User->>PS: Configure Parameters
+    PS->>EC2: Access Parameters
+    User->>SSM: Start Session
+    SSM->>EC2: Connect to Instance
+```
 
 ## Setting Up Systems Manager
 

@@ -5,23 +5,35 @@
 AWS Systems Manager is a collection of capabilities that helps you automate operational tasks across your AWS resources. In this lab, you'll learn how to use Systems Manager to manage your EC2 instances and automate operational tasks.
 
 [DIAGRAM: Systems Manager Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Systems Manager icon
-   - AWS EC2 icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Parameter Store icon
-   - AWS CloudTrail icon
-3. Layout:
-   - Place Systems Manager at the center
-   - Add Session Manager, Run Command, Parameter Store, State Manager, and Patch Manager around it
-   - Place AWS services on the right
-   - Show management flows with arrows
-4. Use AWS's standard connector arrows to show relationships
-5. Add management visualization with automation states
+```mermaid
+flowchart TD
+    subgraph SSM["Systems Manager"]
+        SM[Session Manager]
+        RC[Run Command]
+        PS[Parameter Store]
+        STM[State Manager]
+        PM[Patch Manager]
+    end
+
+    subgraph AWS["AWS Services"]
+        EC2[EC2]
+        IAM[IAM]
+        CW[CloudWatch]
+        PS2[Parameter Store]
+        CT[CloudTrail]
+    end
+
+    SM --> EC2
+    RC --> EC2
+    PS --> PS2
+    STM --> EC2
+    PM --> EC2
+
+    IAM --> SSM
+    CW --> SSM
+    CT --> SSM
+```
 
 ## Learning Objectives
 
@@ -209,19 +221,32 @@ In the hands-on section, you'll:
 - Monitor system compliance
 
 [DIAGRAM: Systems Manager Operations Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Systems Manager icon
-   - AWS EC2 icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Parameter Store icon
-3. Layout:
-   - Place Systems Manager at the center
-   - Add EC2 instances on the left
-   - Place management tools on the right
-   - Show automation flows in the middle
-4. Use AWS's standard connector arrows to show operation flow
-5. Add management visualization with automation states
+```mermaid
+flowchart TD
+    subgraph SSM["Systems Manager"]
+        SM[Session Manager]
+        RC[Run Command]
+        PS[Parameter Store]
+    end
+
+    subgraph EC2["EC2 Instances"]
+        I1[Instance 1]
+        I2[Instance 2]
+    end
+
+    subgraph Tools["Management Tools"]
+        CW[CloudWatch]
+        IAM[IAM]
+    end
+
+    SM --> I1
+    SM --> I2
+    RC --> I1
+    RC --> I2
+    PS --> I1
+    PS --> I2
+
+    CW --> SSM
+    IAM --> SSM
+```

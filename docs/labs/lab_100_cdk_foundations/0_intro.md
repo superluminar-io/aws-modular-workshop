@@ -35,40 +35,45 @@ Understanding the core concepts of AWS CDK is crucial to effectively using the f
    - An app is instantiated in your main entry point file (e.g., `app.ts` or `app.py`), and you can define multiple stacks within the app to organize your resources logically and manage dependencies between them
 
 [DIAGRAM: CDK Architecture Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Cloud Development Kit (CDK) icon for the top section
-   - AWS CloudFormation icon for the middle section
-   - Various AWS service icons (S3, EC2, Lambda, etc.) for the bottom section
-3. Layout:
-   - Top section: Place CDK icon with code snippets (use draw.io's code shape)
-   - Middle section: CloudFormation icon with template visualization
-   - Bottom section: AWS service icons representing deployed resources
-4. Use AWS's standard connector arrows to show deployment flow
-5. Add a light blue background for the CDK section and white for AWS resources
+```mermaid
+flowchart TD
+    A[CDK Code] -->|Synthesizes| B[CloudFormation Template]
+    B -->|Deploys| C[AWS Resources]
+
+    subgraph CDK
+        A
+    end
+
+    subgraph CloudFormation
+        B
+    end
+
+    subgraph AWS
+        C
+    end
+```
 
 [DIAGRAM: Stack and Construct Hierarchy]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
-   - AWS CDK icon for the root node
-   - AWS CloudFormation stack icon for stack nodes
-   - AWS service icons for leaf nodes
-3. Layout:
-   - Start with CDK App as the root (top)
-   - Create three main branches for Network, Compute, and Database stacks
-   - Under each stack, add relevant AWS service icons
-4. Use AWS's standard connector lines
-5. Color coding:
-   - CDK App: Light blue
-   - Stacks: Light green
-   - Services: Standard AWS colors
+```mermaid
+flowchart TD
+    A[CDK App] --> B[Network Stack]
+    A --> C[Compute Stack]
+    A --> D[Database Stack]
+
+    B --> B1[S3 Bucket]
+    B --> B2[VPC]
+
+    C --> C1[EC2 Instance]
+    C --> C2[Lambda Function]
+
+    D --> D1[RDS Instance]
+    D --> D2[DynamoDB Table]
+```
 
 [DIAGRAM: State Management Flow]
-Instructions for draw.io:
+This diagram requires AWS service icons and complex flow representation, so it will be created using draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
 2. Use the following symbols:
@@ -86,25 +91,6 @@ Instructions for draw.io:
    - Resource Update
    - Rollback Process
 5. Use AWS's standard color scheme for all elements
-
-[DIAGRAM: Deployment Methods Comparison]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
-   - AWS CDK icon
-   - AWS Management Console icon
-   - AWS CLI icon
-   - AWS SDK icon
-   - AWS CloudFormation icon
-3. Layout:
-   - Create a matrix using draw.io's table shape
-   - 5 columns for each deployment method
-   - 5 rows for characteristics
-4. For each cell:
-   - Use AWS's standard icons for strengths
-   - Use color coding (green for strong, yellow for moderate, red for weak)
-5. Add a legend for the color coding
 
 ## Understanding AWS CloudFormation
 
@@ -180,19 +166,15 @@ There are many options for deploying resources in AWS. Let's compare the main ap
 - Can be complex for large deployments
 - CDK simplifies template creation
 
-[DIAGRAM: Deployment Methods Comparison]
-Description: A comparison matrix diagram showing different AWS deployment methods. The diagram should:
+## Deployment Methods Comparison
 
-1. Show five columns: CDK, Console, CLI, SDK, and CloudFormation
-2. Include rows for key characteristics:
-   - Development approach (Code vs UI vs Template)
-   - Learning curve
-   - Reusability
-   - Automation capabilities
-   - State management
-3. Use color coding to indicate strengths and limitations
-4. Include icons for each deployment method
-   Use AWS's standard color scheme and maintain a clean, modern style.
+| Characteristic          | AWS CDK                      | AWS Console | AWS CLI      | AWS SDK    | CloudFormation       |
+| ----------------------- | ---------------------------- | ----------- | ------------ | ---------- | -------------------- |
+| Development Approach    | Code (TypeScript/Python/etc) | UI          | CLI Commands | Code (SDK) | Template (YAML/JSON) |
+| Learning Curve          | Very High                    | Very Low    | Very High    | Very High  | Moderate             |
+| Reusability             | Very High                    | Low         | Moderate     | High       | High                 |
+| Automation Capabilities | Very High                    | Low         | High         | High       | Very High            |
+| State Management        | Excellent                    | Manual      | Manual       | Manual     | Excellent            |
 
 ## What's Next?
 

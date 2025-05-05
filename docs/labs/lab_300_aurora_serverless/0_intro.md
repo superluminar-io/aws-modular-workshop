@@ -5,22 +5,32 @@
 Amazon Aurora Serverless is an on-demand, auto-scaling configuration for Amazon Aurora that automatically starts up, shuts down, and scales capacity up or down based on your application's needs. In this lab, you'll learn how to create and manage Aurora Serverless databases using AWS CDK.
 
 [DIAGRAM: Aurora Overview]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
 2. Use the following AWS symbols from the symbol pack:
    - AWS Aurora icon
    - AWS VPC icon
-   - AWS IAM icon
    - AWS CloudWatch icon
+   - AWS KMS icon
    - AWS Secrets Manager icon
+   - AWS IAM icon
 3. Layout:
    - Place Aurora cluster at the center
-   - Add database instances around it
-   - Place storage layer below
-   - Show VPC integration on the left
-4. Use AWS's standard connector arrows to show relationships
-5. Add scaling configuration visualization
+   - Add VPC and security groups
+   - Show monitoring and encryption
+   - Include scaling components
+4. Use AWS's standard connector arrows to show:
+   - Network connections
+   - Security relationships
+   - Monitoring flow
+   - Scaling triggers
+5. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for database components
+   - Gray for infrastructure elements
+6. Add clear labels for each component
 
 ## Learning Objectives
 
@@ -194,22 +204,24 @@ In the hands-on section, you'll:
 - Test scaling behavior
 
 [DIAGRAM: Aurora Operations Flow]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
 2. Use the following AWS symbols from the symbol pack:
    - AWS Aurora icon
-   - AWS VPC icon
-   - AWS IAM icon
    - AWS CloudWatch icon
+   - AWS KMS icon
    - AWS Secrets Manager icon
+   - AWS IAM icon
 3. Layout:
    - Create a flowchart using AWS's standard flowchart shapes
    - Use diamond shapes for decision points
    - Use AWS's standard connector arrows
 4. Add process boxes for:
    - Cluster Creation
-   - Capacity Configuration
    - Security Setup
-   - Network Configuration
+   - Scaling Configuration
+   - Monitoring Setup
 5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow

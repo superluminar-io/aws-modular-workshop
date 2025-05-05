@@ -1,22 +1,45 @@
 # DynamoDB Basics - Hands-on Lab
 
 [DIAGRAM: DynamoDB Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS DynamoDB icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-   - AWS KMS icon
-3. Layout:
-   - Place DynamoDB table at the center
-   - Add GSIs around the table
-   - Place IAM roles on the left
-   - Show Lambda functions on the right
-4. Use AWS's standard connector arrows to show relationships
-5. Add data flow visualization with streams
+```mermaid
+flowchart TD
+    subgraph DYNAMO["DynamoDB Table"]
+        TABLE[Users Table]
+        GSI[Email Index]
+        STREAMS[Streams]
+    end
+
+    subgraph SECURITY["Security"]
+        IAM[IAM Roles]
+        KMS[KMS]
+        VPC[VPC Endpoints]
+    end
+
+    subgraph MONITOR["Monitoring"]
+        CW[CloudWatch]
+        CT[CloudTrail]
+        INSIGHTS[Contributor Insights]
+    end
+
+    subgraph APPS["Applications"]
+        LAMBDA[Lambda Functions]
+        CLI[AWS CLI]
+        SDK[AWS SDK]
+    end
+
+    IAM --> TABLE
+    KMS --> TABLE
+    VPC --> TABLE
+    CW --> TABLE
+    CT --> TABLE
+    INSIGHTS --> TABLE
+    LAMBDA --> TABLE
+    CLI --> TABLE
+    SDK --> TABLE
+    TABLE --> GSI
+    TABLE --> STREAMS
+```
 
 ## Prerequisites
 

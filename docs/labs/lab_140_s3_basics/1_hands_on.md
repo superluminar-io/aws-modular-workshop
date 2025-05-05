@@ -1,33 +1,27 @@
 # S3 Basics - Hands-on Lab
 
 [DIAGRAM: S3 Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS S3 icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Lambda icon (if used)
-3. Layout:
-   - Place S3 bucket at the center
-   - Add IAM roles and policies on the left
-   - Place CloudWatch monitoring on the right
-   - Add lifecycle rules visualization
-4. Use AWS's standard connector arrows to show relationships
-5. Add bucket policy and versioning visualization
+```mermaid
+flowchart TD
+    subgraph AWS["AWS Cloud"]
+        S3[S3 Bucket] --> |"Bucket Policy"| IAM[IAM Roles & Policies]
+        S3 --> |"Monitoring"| CW[CloudWatch]
+        S3 --> |"Lifecycle Rules"| LR[Lifecycle Management]
+        S3 --> |"Versioning"| V[Version Control]
 
-Description: A detailed diagram showing the S3 resources we'll create in this lab. The diagram should:
+        subgraph S3["S3 Components"]
+            BP[Bucket Policy]
+            AP[Access Points]
+            V[Versioning]
+            LR[Lifecycle Rules]
+        end
+    end
 
-1. Show the complete architecture:
-   - S3 Buckets
-   - Bucket Policies
-   - Lifecycle Rules
-   - Access Points
-2. Illustrate the relationships between components
-3. Show the data flow patterns
-4. Include example service integrations
-   Use AWS's standard color scheme with blue for AWS services and green for S3 components.
+    User[User] --> |"Upload/Download"| S3
+    User --> |"Configure"| IAM
+    User --> |"Monitor"| CW
+```
 
 ## Prerequisites
 

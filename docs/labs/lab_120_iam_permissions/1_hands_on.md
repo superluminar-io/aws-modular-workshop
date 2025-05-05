@@ -1,24 +1,20 @@
 # IAM Permissions - Hands-on Lab
 
 [DIAGRAM: IAM Hands-on Architecture]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS IAM icon
-   - AWS Lambda icon
-   - AWS S3 icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place IAM at the center
-   - Add Lambda function on the left
-   - Place S3 bucket on the right
-   - Show CloudWatch logs at the bottom
-4. Use AWS's standard connector arrows
-5. Color coding:
-   - IAM components: Light blue
-   - AWS services: Standard AWS colors
-   - Permission flows: Blue arrows
+```mermaid
+flowchart LR
+    A[Lambda Function] -->|Write| B[S3 Bucket]
+    A -->|Logs| C[CloudWatch]
+
+    subgraph IAM["IAM Service"]
+        D[Role]
+        E[Policy]
+    end
+
+    D -->|Assumes| A
+    E -->|Grants| D
+```
 
 ## Prerequisites
 
@@ -245,23 +241,29 @@ Now that you understand IAM permissions:
 - Investigate AWS Organizations and SCPs
 
 [DIAGRAM: Policy Evaluation Process]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following symbols:
-   - AWS IAM icon
-   - AWS Lambda icon
-   - AWS S3 icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Request Initiation
-   - Policy Evaluation
-   - Permission Check
-   - Action Execution
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    A[Request] --> B{Policy Evaluation}
+    B -->|Explicit Deny| C[Denied]
+    B -->|No Match| D[Denied]
+    B -->|Explicit Allow| E[Allowed]
+
+    subgraph Logging
+        F[CloudWatch Logs]
+        G[CloudTrail Events]
+    end
+
+    C --> F
+    C --> G
+    D --> F
+    D --> G
+    E --> F
+    E --> G
+```
 
 ## Creating IAM Resources
+
+```
+
+```

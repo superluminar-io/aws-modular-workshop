@@ -5,6 +5,7 @@
 Amazon Relational Database Service (RDS) is a managed database service that makes it easy to set up, operate, and scale relational databases in the cloud. In this lab, you'll learn how to create and manage RDS instances using AWS CDK.
 
 [DIAGRAM: RDS Overview]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
@@ -14,13 +15,21 @@ Instructions for draw.io:
    - AWS CloudWatch icon
    - AWS KMS icon
    - AWS Secrets Manager icon
+   - AWS IAM icon
 3. Layout:
-   - Place RDS at the center
-   - Add database instances around it
-   - Place supporting services on the right
-   - Show security and monitoring on the left
-4. Use AWS's standard connector arrows to show relationships
-5. Add database visualization with replication flows
+   - Place RDS instance at the center
+   - Add VPC and security groups
+   - Show monitoring and encryption
+   - Include backup and restore
+4. Use AWS's standard connector arrows to show:
+   - Network connections
+   - Security relationships
+   - Monitoring flow
+5. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for database components
+   - Gray for infrastructure elements
+6. Add clear labels for each component
 
 ## Learning Objectives
 
@@ -205,14 +214,15 @@ In the hands-on section, you'll:
 - Implement high availability features
 
 [DIAGRAM: RDS Operations Flow]
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
 2. Use the following AWS symbols from the symbol pack:
    - AWS RDS icon
    - AWS CloudWatch icon
-   - AWS Backup icon
-   - AWS VPC icon
+   - AWS KMS icon
+   - AWS Secrets Manager icon
    - AWS IAM icon
 3. Layout:
    - Create a flowchart using AWS's standard flowchart shapes
@@ -220,7 +230,9 @@ Instructions for draw.io:
    - Use AWS's standard connector arrows
 4. Add process boxes for:
    - Instance Creation
-   - Database Configuration
-   - Backup and Restore
-   - Monitoring and Maintenance
+   - Configuration
+   - Database Setup
+   - Backup Setup
+   - Maintenance
 5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each step in the flow
