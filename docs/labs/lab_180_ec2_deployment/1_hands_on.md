@@ -80,6 +80,7 @@ import {
   SecurityGroup,
   Peer,
   Port,
+  SubnetType,
   BlockDeviceVolume,
   EbsDeviceVolumeType,
   UserData,
@@ -91,12 +92,28 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // Use existing VPC
-    const vpc = Vpc.fromLookup(this, "ExistingVPC", {
-      isDefault: false,
-      // Add your VPC ID from the previous lab
-      vpcId: "vpc-xxxxxxxxxxxxxxxxx",
+    // Create a new VPC for this lab (or import existing one)
+    const vpc = new Vpc(this, "EC2LabVPC", {
+      maxAzs: 2,
+      natGateways: 1,
+      subnetConfiguration: [
+        {
+          name: "Public",
+          subnetType: SubnetType.PUBLIC,
+          cidrMask: 24,
+        },
+        {
+          name: "Private",
+          subnetType: SubnetType.PRIVATE_WITH_EGRESS,
+          cidrMask: 24,
+        },
+      ],
     });
+
+    // Alternative: Use existing VPC (uncomment and replace with your VPC ID)
+    // const vpc = Vpc.fromLookup(this, "ExistingVPC", {
+    //   vpcId: "vpc-your-vpc-id-here",
+    // });
 
     // Create security group
     const webServerSG = new SecurityGroup(this, "WebServerSG", {
@@ -342,15 +359,30 @@ After completing this lab, you can:
 - Implement more complex monitoring
 - Create multi-instance architectures
 
-[DIAGRAM: EC2 Operations Flow]
-Description: A sequence diagram showing how the EC2 operations will work in our lab. The diagram should:
+## EC2 Operations Flow
 
-1. Show the operation flow:
-   - Instance creation
-   - Configuration setup
-   - Security group configuration
-   - Network setup
-2. Include the specific operations we perform in the lab
-3. Show how different components interact
-4. Illustrate the deployment patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+```mermaid
+sequenceDiagram
+    participant User
+    participant CDK
+    participant CloudFormation
+    participant EC2
+    participant SSM
+    participant CloudWatch
+
+    User->>CDK: cdk deploy
+    CDK->>CloudFormation: Synthesize template
+    CloudFormation->>EC2: Create instance
+    EC2->>EC2: Execute user data
+    EC2->>SSM: Register with Systems Manager
+    EC2->>CloudWatch: Send metrics
+    CloudFormation->>User: Deployment complete
+
+    User->>SSM: Start session
+    SSM->>EC2: Establish connection
+    EC2->>User: Terminal access
+
+    User->>EC2: Test web server
+    EC2->>User: HTTP response
+    EC2->>CloudWatch: Log access
+```

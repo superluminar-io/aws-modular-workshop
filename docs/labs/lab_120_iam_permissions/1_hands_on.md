@@ -79,7 +79,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
 
     // Create a Lambda function with inline code
     const lambdaFunction = new Function(this, "MyLambda", {
-      runtime: Runtime.NODEJS_LATEST,
+      runtime: Runtime.NODEJS_20_X,
       handler: "index.handler",
       code: Code.fromInline(`
         const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
@@ -264,6 +264,31 @@ flowchart TD
 
 ## Creating IAM Resources
 
+Now that we've configured IAM infrastructure, let's verify our setup:
+
+```bash
+# Deploy the IAM stack
+cdk deploy IamStack --profile your-profile-name
+
+# Test the IAM policies
+aws sts get-caller-identity --profile your-profile-name
+
+# List created IAM roles
+aws iam list-roles --query 'Roles[?contains(RoleName, `Lambda`) || contains(RoleName, `EC2`)]' --profile your-profile-name
 ```
 
+## Validation Steps
+
+After completing this lab, verify that:
+
+1. ✅ IAM roles created successfully
+2. ✅ Policies attached to roles
+3. ✅ Service principals configured correctly
+4. ✅ Permissions working as expected
+5. ✅ No excessive permissions granted
+
+## Clean Up
+
+```bash
+cdk destroy IamStack --profile your-profile-name
 ```

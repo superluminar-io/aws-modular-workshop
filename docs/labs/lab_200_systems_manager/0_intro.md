@@ -4,7 +4,7 @@
 
 AWS Systems Manager is a collection of capabilities that helps you automate operational tasks across your AWS resources. In this lab, you'll learn how to use Systems Manager to manage your EC2 instances and automate operational tasks.
 
-[DIAGRAM: Systems Manager Overview]
+[DIAGRAM: Systems Manager Architecture Overview]
 
 ```mermaid
 flowchart TD

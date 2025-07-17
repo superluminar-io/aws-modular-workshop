@@ -273,9 +273,11 @@ export LAKE_STORE_ARN=$(aws cloudformation describe-stacks \
   --query 'Stacks[0].Outputs[?OutputKey==`LakeStoreArn`].OutputValue' \
   --output text \
   --profile your-profile-name)
+```
 
 [DIAGRAM: CloudTrail Testing]
 Instructions for draw.io:
+
 1. Create a new diagram using the AWS Architecture 2023 template
 2. Use the following AWS symbols from the symbol pack:
    - AWS CloudTrail icon
@@ -292,4 +294,60 @@ Instructions for draw.io:
    - Lake Queries
    - Alert Monitoring
 5. Use AWS's standard color scheme for all elements
+
+## Validation Steps
+
+After completing this lab, verify that:
+
+1. ✅ CloudTrail created successfully
+2. ✅ S3 bucket receiving logs
+3. ✅ CloudWatch insights queries working
+4. ✅ Athena tables created
+5. ✅ Event monitoring configured
+6. ✅ Security alerts functioning
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **CloudTrail Issues**
+
+   - Check trail status
+   - Verify S3 bucket permissions
+   - Check CloudWatch configuration
+   - Review data events settings
+
+2. **Query Issues**
+
+   - Verify log group names
+   - Check query syntax
+   - Ensure sufficient permissions
+   - Allow time for log ingestion
+
+3. **Athena Issues**
+   - Check table schema
+   - Verify S3 permissions
+   - Review partition setup
+   - Check query results location
+
+## Cleanup
+
+When you're finished with this lab:
+
+```bash
+# Stop CloudTrail logging
+aws cloudtrail stop-logging \
+  --name MyCloudTrail \
+  --profile your-profile-name
+
+# Delete CloudWatch log groups (optional)
+aws logs delete-log-group \
+  --log-group-name CloudTrail/MyCloudTrail \
+  --profile your-profile-name
+
+# Empty S3 bucket
+aws s3 rm s3://cloudtrail-logs-bucket --recursive --profile your-profile-name
+
+# Destroy the CDK stack
+cdk destroy CloudTrailStack --profile your-profile-name
 ```

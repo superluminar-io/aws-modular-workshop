@@ -6,6 +6,61 @@
 - Node.js installed
 - Completed Lambda and Event Triggers lab
 
+## Lab Overview
+
+This lab demonstrates building serverless workflows using AWS Step Functions. You'll create state machines that orchestrate Lambda functions, handle errors, and implement complex business logic with parallel and sequential processing.
+
+[DIAGRAM: Step Functions Workflow]
+
+```mermaid
+flowchart TD
+    subgraph Input["Workflow Input"]
+        START[Start Execution]
+        DATA[Input Data]
+    end
+
+    subgraph States["State Machine"]
+        VALIDATE[Validate Input]
+        PARALLEL[Parallel Processing]
+        PROCESS1[Process Order]
+        PROCESS2[Update Inventory]
+        PROCESS3[Send Notifications]
+        WAIT[Wait State]
+        CHOICE[Choice State]
+        SUCCESS[Success State]
+        FAIL[Fail State]
+    end
+
+    subgraph Services["AWS Services"]
+        LAMBDA1[Lambda Function 1]
+        LAMBDA2[Lambda Function 2]
+        LAMBDA3[Lambda Function 3]
+        DDB[DynamoDB]
+        SNS[SNS Topic]
+    end
+
+    START --> VALIDATE
+    DATA --> VALIDATE
+    VALIDATE --> PARALLEL
+
+    PARALLEL --> PROCESS1
+    PARALLEL --> PROCESS2
+    PARALLEL --> PROCESS3
+
+    PROCESS1 --> LAMBDA1
+    PROCESS2 --> LAMBDA2
+    PROCESS3 --> LAMBDA3
+
+    LAMBDA1 --> DDB
+    LAMBDA2 --> DDB
+    LAMBDA3 --> SNS
+
+    PARALLEL --> WAIT
+    WAIT --> CHOICE
+    CHOICE -->|Success| SUCCESS
+    CHOICE -->|Error| FAIL
+```
+
 [DIAGRAM: Step Functions Implementation]
 Instructions for draw.io:
 

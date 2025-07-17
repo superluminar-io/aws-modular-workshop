@@ -6,6 +6,62 @@
 - Node.js installed
 - Basic understanding of distributed tracing
 
+## Lab Overview
+
+This lab demonstrates distributed tracing using AWS X-Ray. You'll instrument applications to trace requests across multiple services, analyze performance bottlenecks, and monitor service dependencies in distributed architectures.
+
+[DIAGRAM: X-Ray Tracing Flow]
+
+```mermaid
+flowchart TD
+    subgraph Request["Client Request"]
+        CLIENT[Client Application]
+        TRACE[Trace Header]
+    end
+
+    subgraph Services["Microservices"]
+        API[API Gateway]
+        LAMBDA1[Lambda Function 1]
+        LAMBDA2[Lambda Function 2]
+        DDB[DynamoDB]
+        S3[S3 Storage]
+    end
+
+    subgraph Tracing["X-Ray Tracing"]
+        XRAY[X-Ray Service]
+        SEGMENTS[Trace Segments]
+        SUBSEG[Subsegments]
+    end
+
+    subgraph Analysis["Analysis & Monitoring"]
+        MAP[Service Map]
+        TRACES[Trace Timeline]
+        ERRORS[Error Analysis]
+        PERF[Performance Insights]
+    end
+
+    CLIENT --> TRACE
+    TRACE --> API
+    API --> LAMBDA1
+    LAMBDA1 --> LAMBDA2
+    LAMBDA1 --> DDB
+    LAMBDA2 --> S3
+
+    API --> SEGMENTS
+    LAMBDA1 --> SEGMENTS
+    LAMBDA2 --> SEGMENTS
+    DDB --> SUBSEG
+    S3 --> SUBSEG
+
+    SEGMENTS --> XRAY
+    SUBSEG --> XRAY
+
+    XRAY --> MAP
+    XRAY --> TRACES
+    XRAY --> ERRORS
+    XRAY --> PERF
+```
+
 [DIAGRAM: X-Ray Implementation]
 Instructions for draw.io:
 

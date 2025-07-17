@@ -4,35 +4,36 @@
 
 Amazon Elastic Container Registry (ECR) is a fully managed Docker container registry that makes it easy to store, manage, and deploy Docker container images. In this lab, you'll learn how to work with Docker and ECR using AWS CDK.
 
-[DIAGRAM: ECR Overview]
+[DIAGRAM: ECR Docker Workflow]
 
 ```mermaid
-flowchart TD
-    subgraph ECR["ECR Service"]
-        REPO[Repositories]
-        IMG[Images]
-        SCAN[Image Scanning]
+flowchart LR
+    subgraph Local["Local Development"]
+        Code[Source Code]
+        Dockerfile[Dockerfile]
+        Image[Docker Image]
     end
 
-    subgraph Security["Security"]
-        IAM[IAM]
-        KMS[KMS]
-        CW[CloudWatch]
+    subgraph ECR["Amazon ECR"]
+        Repo[ECR Repository]
+        Registry[Container Registry]
     end
 
-    subgraph Services["Container Services"]
-        ECS[ECS]
-        EKS[EKS]
-        LAMBDA[Lambda]
+    subgraph Deploy["Deployment Targets"]
+        ECS[Amazon ECS]
+        Lambda[Lambda Functions]
+        EC2[EC2 Instances]
     end
 
-    IAM --> REPO
-    KMS --> IMG
-    CW --> SCAN
+    Code --> Dockerfile
+    Dockerfile -->|docker build| Image
+    Image -->|docker push| Repo
+    Repo --> Registry
+    Registry -->|docker pull| Deploy
 
-    REPO --> ECS
-    REPO --> EKS
-    REPO --> LAMBDA
+    style Local fill:#e1f5fe
+    style ECR fill:#ff9900,color:#fff
+    style Deploy fill:#e8f5e8
 ```
 
 ## Learning Objectives
@@ -185,23 +186,3 @@ In the hands-on section, you'll:
 - Implement security best practices
 
 [DIAGRAM: Container Workflow]
-
-```mermaid
-flowchart TD
-    A[Local Development] --> B[Build Image]
-    B --> C[Test Locally]
-    C --> D[Tag Image]
-    D --> E[Push to ECR]
-    E --> F[Scan Image]
-    F --> G[Pull Image]
-    G --> H[Deploy Container]
-
-    subgraph Security["Security Steps"]
-        F
-    end
-
-    subgraph ECR["ECR Steps"]
-        E
-        G
-    end
-```

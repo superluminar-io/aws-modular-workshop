@@ -4,44 +4,34 @@
 
 Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability. In this lab, you'll learn how to create and manage DynamoDB tables using AWS CDK.
 
-[DIAGRAM: DynamoDB Overview]
+[DIAGRAM: DynamoDB Architecture Overview]
 
-```mermaid
-flowchart TD
-    subgraph DYNAMO["DynamoDB Table"]
-        TABLE[Table]
-        GSI[Global Secondary Indexes]
-        LSI[Local Secondary Indexes]
-    end
+Instructions for draw.io:
 
-    subgraph SECURITY["Security"]
-        IAM[IAM Roles]
-        KMS[KMS Encryption]
-        VPC[VPC Endpoints]
-    end
-
-    subgraph MONITOR["Monitoring"]
-        CW[CloudWatch]
-        CT[CloudTrail]
-        STREAMS[Streams]
-    end
-
-    subgraph INTEGRATION["Integration"]
-        LAMBDA[Lambda Functions]
-        APPS[Applications]
-        SERVICES[AWS Services]
-    end
-
-    IAM --> TABLE
-    KMS --> TABLE
-    VPC --> TABLE
-    CW --> TABLE
-    CT --> TABLE
-    STREAMS --> TABLE
-    LAMBDA --> TABLE
-    APPS --> TABLE
-    SERVICES --> TABLE
-```
+1. Create a new diagram using the AWS Architecture 2023 template
+2. Use the following AWS symbols from the symbol pack:
+   - AWS DynamoDB icon
+   - AWS Lambda icon
+   - AWS API Gateway icon
+   - AWS IAM icon
+   - AWS CloudWatch icon
+   - AWS KMS icon
+3. Layout:
+   - Place DynamoDB table at the center
+   - Add applications and Lambda functions on the left
+   - Show Global Secondary Indexes on the right
+   - Include monitoring and security below
+4. Use AWS's standard connector arrows to show:
+   - Read/write access patterns
+   - Index query flows
+   - Scaling operations
+   - Monitoring and logging
+5. Use AWS's standard color scheme:
+   - Blue for AWS services
+   - Green for database components
+   - Purple for serverless components
+   - Gray for infrastructure elements
+6. Add clear labels for each component and access pattern
 
 ## Learning Objectives
 

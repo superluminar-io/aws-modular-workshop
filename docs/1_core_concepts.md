@@ -51,7 +51,7 @@ Amazon Web Services (AWS) operates its cloud infrastructure globally, organized 
 
 Each AZ has independent power, cooling, and physical security, and they are interconnected through low-latency links. This setup allows businesses to architect highly available and fault-tolerant applications. For example, by deploying applications across multiple AZs within a region, you can ensure that if one AZ experiences an issue, the application can continue to operate from the other AZs without interruption. This multi-AZ deployment strategy is crucial for maintaining business continuity and delivering reliable user experiences.
 
-AWS regions are strategically placed around the world to provide low-latency access to customers and to meet data residency requirements. As of now, AWS has dozens of regions globally, each with multiple AZs, ensuring that users can deploy applications close to their end-users, which improves performance and reduces latency.
+AWS regions are strategically placed around the world to provide low-latency access to customers and to meet data residency requirements. As of 2024, AWS has 37 regions globally with 117 Availability Zones, plus over 700 CloudFront edge locations and 13 regional edge caches. This extensive infrastructure ensures that users can deploy applications close to their end-users, which improves performance and reduces latency.
 
 In addition to Regions and Availability Zones, AWS also offers Local Zones and Wavelength Zones:
 

@@ -4,31 +4,41 @@
 
 AWS Lambda lets you run code without provisioning or managing servers. This lab introduces Lambda functions and their integration with various AWS event sources, demonstrating how to build event-driven architectures using serverless computing.
 
-[DIAGRAM: Lambda Overview]
+[DIAGRAM: Lambda Event Triggers Overview]
 
-Instructions for draw.io:
+```mermaid
+flowchart TD
+    subgraph Sources["Event Sources"]
+        S3[S3 Events]
+        DDB[DynamoDB Streams]
+        SNS[SNS Topics]
+        SQS[SQS Queues]
+        API[API Gateway]
+        Schedule[EventBridge Rules]
+    end
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Lambda icon
-   - AWS IAM icon
-   - AWS VPC icon
-   - AWS CloudWatch icon
-   - AWS S3 icon
-   - AWS DynamoDB icon
-   - AWS SNS icon
-   - AWS SQS icon
-3. Layout:
-   - Place Lambda function at the center
-   - Add event sources on the left (S3, DynamoDB, SNS, SQS)
-   - Place IAM roles and VPC configuration on the right
-   - Add CloudWatch integration below
-4. Use AWS's standard connector arrows to show relationships
-5. Add event flow visualization with streams
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for Lambda components
-   - Gray for infrastructure elements
+    subgraph Lambda["AWS Lambda"]
+        Function[Lambda Function]
+        Runtime[Runtime Environment]
+        Handler[Event Handler]
+    end
+
+    subgraph Targets["Processing Targets"]
+        DynamoDB[DynamoDB]
+        S3Out[S3 Output]
+        SQSOut[SQS Messages]
+        SNSOut[SNS Notifications]
+    end
+
+    Sources --> Function
+    Function --> Runtime
+    Runtime --> Handler
+    Handler --> Targets
+
+    style Sources fill:#e1f5fe
+    style Lambda fill:#ff9900,color:#fff
+    style Targets fill:#e8f5e8
+```
 
 ## Learning Objectives
 
@@ -208,22 +218,3 @@ In the hands-on section, you'll:
 - Test different event patterns
 
 [DIAGRAM: Lambda Event Flow]
-
-```mermaid
-flowchart TD
-    A[Event Source] --> B{Event Type}
-    B -->|S3| C[Object Created]
-    B -->|DynamoDB| D[Stream Record]
-    B -->|Scheduled| E[Time-based]
-
-    C --> F[Function Invocation]
-    D --> F
-    E --> F
-
-    F --> G{Processing}
-    G -->|Success| H[Response]
-    G -->|Error| I[Retry/DLQ]
-
-    H --> J[EventBridge]
-    I --> K[CloudWatch]
-```

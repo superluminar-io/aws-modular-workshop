@@ -4,33 +4,44 @@
 
 Amazon Simple Storage Service (Amazon S3) is an object storage service offering industry-leading scalability, data availability, security, and performance. Organizations of all sizes can use S3 to store and protect any amount of data for various use cases, including websites, mobile applications, backup and restore, archive, enterprise applications, IoT devices, and big data analytics.
 
-[DIAGRAM: S3 Overview]
+[DIAGRAM: S3 Architecture Overview]
 
-Instructions for draw.io:
+```mermaid
+flowchart TD
+    subgraph S3["Amazon S3"]
+        Bucket[S3 Bucket]
+        Objects[Objects]
+    end
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS S3 icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS KMS icon
-   - AWS CloudFront icon
-3. Layout:
-   - Place S3 bucket at the center
-   - Add IAM for access control
-   - Add CloudWatch for monitoring
-   - Add KMS for encryption
-   - Add CloudFront for distribution
-4. Use AWS's standard connector arrows to show:
-   - Access control relationships
-   - Monitoring flow
-   - Encryption relationships
-   - Distribution paths
-5. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for storage components
-   - Gray for infrastructure elements
-6. Add clear labels for each component and relationship
+    subgraph Features["S3 Features"]
+        Versioning[Versioning]
+        Encryption[Encryption]
+        Lifecycle[Lifecycle Rules]
+        CORS[CORS Policy]
+    end
+
+    subgraph Access["Access Control"]
+        IAM[IAM Policies]
+        BucketPolicy[Bucket Policies]
+        ACL[Access Control Lists]
+    end
+
+    subgraph Integration["AWS Integration"]
+        CloudWatch[CloudWatch]
+        CloudFront[CloudFront]
+        Lambda[Lambda Triggers]
+    end
+
+    Bucket --> Objects
+    Bucket --> Features
+    Bucket --> Access
+    Bucket --> Integration
+
+    style S3 fill:#569A31,color:#fff
+    style Features fill:#e8f5e8
+    style Access fill:#fff3e0
+    style Integration fill:#e1f5fe
+```
 
 ## Learning Objectives
 

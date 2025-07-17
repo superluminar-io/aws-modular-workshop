@@ -267,3 +267,71 @@ flowchart TD
         H
     end
 ```
+
+## Validation Steps
+
+After completing this lab, verify that:
+
+1. ✅ ECR repository created successfully
+2. ✅ Docker image built and tagged locally
+3. ✅ Authentication to ECR working
+4. ✅ Image pushed to repository successfully
+5. ✅ Image scan completed (if enabled)
+6. ✅ Image pulled from ECR successfully
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **Docker Build Issues**
+
+   - Check Dockerfile syntax and formatting
+   - Verify base image is accessible
+   - Ensure Docker daemon is running
+   - Check for sufficient disk space
+
+2. **ECR Authentication Problems**
+
+   - Verify AWS CLI credentials are configured
+   - Check IAM permissions for ECR actions
+   - Ensure correct region is specified
+   - Try refreshing authentication token
+
+3. **Push/Pull Failures**
+
+   - Verify repository URI is correct
+   - Check image tags match exactly
+   - Ensure network connectivity to ECR
+   - Review IAM permissions for ECR operations
+
+4. **Image Scanning Issues**
+   - Check if scanning is enabled for repository
+   - Allow time for scan to complete
+   - Review scan results in ECR console
+   - Check for known vulnerabilities
+
+## Cleanup
+
+When you're finished with this lab:
+
+```bash
+# Remove local Docker images
+docker rmi workshop-app:latest
+docker rmi your-account-id.dkr.ecr.your-region.amazonaws.com/my-app-repo:latest
+
+# Remove all images from ECR repository (optional)
+aws ecr list-images \
+  --repository-name my-app-repo \
+  --query 'imageIds[*]' \
+  --output json \
+  --profile your-profile-name | \
+jq '.[] | "--image-ids imageDigest=" + .imageDigest' -r | \
+xargs -I {} aws ecr batch-delete-image \
+  --repository-name my-app-repo \
+  --profile your-profile-name {}
+
+# Destroy the CDK stack
+cdk destroy EcrStack --profile your-profile-name
+```
+
+Note: Deleting images from ECR is irreversible. Ensure you no longer need the images before cleanup.

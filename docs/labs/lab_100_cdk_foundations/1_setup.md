@@ -24,7 +24,7 @@ flowchart LR
 Before starting this lab, ensure you have:
 
 - An AWS account with appropriate permissions
-- Node.js (version 14.x or later) installed
+- Node.js (version 18.x or later, 20.x LTS recommended) installed
 - AWS CLI version 2 installed
 - A code editor (VS Code recommended)
 

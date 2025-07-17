@@ -6,6 +6,56 @@
 - Node.js installed
 - Resources to monitor (EC2, Lambda, etc.)
 
+## Lab Overview
+
+This lab demonstrates comprehensive monitoring using Amazon CloudWatch. You'll create custom dashboards, set up alarms, configure log aggregation, and implement automated responses to system events.
+
+[DIAGRAM: CloudWatch Monitoring Flow]
+
+```mermaid
+flowchart TD
+    subgraph Sources["Data Sources"]
+        EC2[EC2 Instances]
+        LAMBDA[Lambda Functions]
+        RDS[RDS Database]
+        CUSTOM[Custom Applications]
+    end
+
+    subgraph Collection["Data Collection"]
+        AGENT[CloudWatch Agent]
+        LOGS[Log Groups]
+        METRICS[Custom Metrics]
+    end
+
+    subgraph Processing["Processing & Analysis"]
+        INSIGHTS[CloudWatch Insights]
+        FILTERS[Log Filters]
+        DASHBOARD[Dashboards]
+    end
+
+    subgraph Alerting["Monitoring & Alerting"]
+        ALARMS[CloudWatch Alarms]
+        SNS[SNS Notifications]
+        AUTO[Auto Scaling]
+    end
+
+    EC2 --> AGENT
+    LAMBDA --> LOGS
+    RDS --> METRICS
+    CUSTOM --> METRICS
+
+    AGENT --> LOGS
+    LOGS --> INSIGHTS
+    METRICS --> DASHBOARD
+
+    INSIGHTS --> FILTERS
+    FILTERS --> ALARMS
+    DASHBOARD --> ALARMS
+
+    ALARMS --> SNS
+    ALARMS --> AUTO
+```
+
 [DIAGRAM: CloudWatch Implementation]
 Instructions for draw.io:
 

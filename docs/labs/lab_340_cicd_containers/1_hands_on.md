@@ -364,3 +364,81 @@ Instructions for draw.io:
 5. Use AWS's standard color scheme for all elements
 
 ## Creating Container CI/CD Resources
+
+Deploy the container CI/CD infrastructure:
+
+```bash
+# Deploy the container pipeline stack
+cdk deploy ContainerPipelineStack --profile your-profile-name
+
+# Check pipeline status
+aws codepipeline get-pipeline-state \
+  --name ContainerPipeline \
+  --profile your-profile-name
+
+# Monitor first build
+aws codebuild list-builds-for-project \
+  --project-name ContainerBuild \
+  --profile your-profile-name
+
+# Check ECS service deployment
+aws ecs describe-services \
+  --cluster MyCluster \
+  --services MyService \
+  --profile your-profile-name
+```
+
+## Validation Steps
+
+After completing this lab, verify that:
+
+1. ✅ Container pipeline created successfully
+2. ✅ ECR repository configured
+3. ✅ CodeBuild project building images
+4. ✅ ECS service deploying containers
+5. ✅ Load balancer health checks passing
+6. ✅ Blue/green deployments working
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **Build Failures**
+
+   - Check Dockerfile syntax
+   - Verify base image availability
+   - Check build logs in CodeBuild
+   - Ensure proper IAM permissions
+
+2. **Deployment Issues**
+
+   - Check ECS service events
+   - Verify task definition
+   - Check ALB target group health
+   - Review security group rules
+
+3. **Container Issues**
+   - Check container logs
+   - Verify port configurations
+   - Test health check endpoints
+   - Monitor resource usage
+
+## Cleanup
+
+```bash
+# Scale down ECS service
+aws ecs update-service \
+  --cluster MyCluster \
+  --service MyService \
+  --desired-count 0 \
+  --profile your-profile-name
+
+# Wait for tasks to stop
+aws ecs wait services-stable \
+  --cluster MyCluster \
+  --services MyService \
+  --profile your-profile-name
+
+# Destroy the CDK stack
+cdk destroy ContainerPipelineStack --profile your-profile-name
+```

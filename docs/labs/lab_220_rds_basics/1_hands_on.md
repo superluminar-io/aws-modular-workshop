@@ -1,40 +1,63 @@
 # RDS Basics - Hands-on Lab
 
-[DIAGRAM: RDS Hands-on Architecture]
-
-```mermaid
-flowchart TD
-    subgraph RDS["RDS Instance"]
-        DB[Database]
-        RR[Read Replica]
-    end
-
-    subgraph VPC["VPC Configuration"]
-        SG[Security Groups]
-        RT[Route Tables]
-    end
-
-    subgraph Monitoring["Monitoring"]
-        CW[CloudWatch]
-        SM[Secrets Manager]
-    end
-
-    SG --> DB
-    SG --> RR
-    RT --> DB
-    RT --> RR
-
-    CW --> DB
-    CW --> RR
-    SM --> DB
-```
-
 ## Prerequisites
 
 - Completion of VPC Networking lab
 - AWS CDK and AWS CLI configured
 - Basic understanding of SQL
 - MySQL client installed locally (for testing connections)
+
+## Lab Overview
+
+This lab demonstrates creating and managing relational databases using Amazon RDS. You'll deploy a MySQL database instance, configure security and networking, implement backup strategies, and connect applications securely.
+
+[DIAGRAM: RDS Database Flow]
+
+```mermaid
+flowchart TD
+    subgraph Setup["Database Setup"]
+        VPC[VPC Configuration]
+        SG[Security Groups]
+        SUBNET[Database Subnets]
+    end
+
+    subgraph RDS["RDS Instance"]
+        DB[MySQL Database]
+        BACKUP[Automated Backups]
+        REPLICA[Read Replicas]
+        MONITOR[Performance Monitoring]
+    end
+
+    subgraph Security["Security & Access"]
+        SM[Secrets Manager]
+        ENCRYPT[Encryption at Rest]
+        IAM[IAM Authentication]
+        NETWORK[Network Isolation]
+    end
+
+    subgraph Applications["Application Access"]
+        APP[Applications]
+        CONNECT[Connection Pooling]
+        CACHE[Query Caching]
+    end
+
+    VPC --> DB
+    SG --> DB
+    SUBNET --> DB
+
+    DB --> BACKUP
+    DB --> REPLICA
+    DB --> MONITOR
+
+    SM --> APP
+    ENCRYPT --> DB
+    IAM --> DB
+    NETWORK --> DB
+
+    APP --> CONNECT
+    CONNECT --> DB
+    CACHE --> APP
+```
 
 ## Starting Point
 
@@ -50,6 +73,16 @@ npm install
 ## Lab Steps
 
 ### 1. Create RDS Database
+
+Add the required imports to your CDK stack:
+
+```typescript
+import * as cdk from "aws-cdk-lib";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as rds from "aws-cdk-lib/aws-rds";
+import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
+import { Construct } from "constructs";
+```
 
 Using our existing VPC infrastructure, let's create an RDS database:
 

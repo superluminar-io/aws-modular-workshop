@@ -6,6 +6,56 @@
 - Basic understanding of secrets management
 - Completed IAM lab
 
+## Lab Overview
+
+This lab demonstrates secure secrets management using AWS Secrets Manager. You'll create secrets, implement automatic rotation, and show how applications can securely retrieve secrets without hardcoding sensitive information.
+
+[DIAGRAM: Secrets Management Flow]
+
+```mermaid
+flowchart TD
+    subgraph Creation["Secret Creation"]
+        ADMIN[Administrator]
+        SECRET[Create Secret]
+        KMS[KMS Encryption]
+    end
+
+    subgraph Storage["Secure Storage"]
+        SM[Secrets Manager]
+        ENCRYPT[Encrypted Storage]
+        VERSION[Version Management]
+    end
+
+    subgraph Access["Secret Access"]
+        APP[Application]
+        LAMBDA[Lambda Function]
+        RDS[RDS Instance]
+    end
+
+    subgraph Rotation["Automatic Rotation"]
+        SCHEDULE[Rotation Schedule]
+        ROTATE[Rotation Lambda]
+        UPDATE[Update Secret]
+    end
+
+    ADMIN --> SECRET
+    SECRET --> KMS
+    KMS --> ENCRYPT
+    ENCRYPT --> SM
+    SM --> VERSION
+
+    APP --> SM
+    LAMBDA --> SM
+    RDS --> SM
+
+    SCHEDULE --> ROTATE
+    ROTATE --> UPDATE
+    UPDATE --> SM
+
+    SM -.->|Audit| CloudTrail[CloudTrail]
+    SM -.->|Monitor| CloudWatch[CloudWatch]
+```
+
 [DIAGRAM: Secrets Manager Implementation]
 Instructions for draw.io:
 

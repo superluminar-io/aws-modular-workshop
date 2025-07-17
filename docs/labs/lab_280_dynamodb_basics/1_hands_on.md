@@ -287,68 +287,51 @@ ts-node scripts/batch-operations.ts
 
 ## Validation Steps
 
-1. Table Creation
+After completing this lab, verify that:
 
-   - [ ] Table exists in DynamoDB console
-   - [ ] GSI is properly configured
-   - [ ] On-demand billing mode is active
-
-2. Data Operations
-
-   - [ ] Test data successfully loaded
-   - [ ] CRUD operations working
-   - [ ] Batch operations successful
-   - [ ] GSI queries returning expected results
-
-3. Performance
-   - [ ] Check CloudWatch metrics
-   - [ ] Verify capacity consumption
-   - [ ] Monitor throttling events
+1. ✅ DynamoDB table created successfully
+2. ✅ Global Secondary Index working
+3. ✅ Data populated in table
+4. ✅ CRUD operations working via CLI
+5. ✅ Performance monitoring enabled
+6. ✅ Backup configuration applied
 
 ## Troubleshooting
 
-1. Deployment Issues
+Common issues and solutions:
 
-   - Check CDK deployment logs
-   - Verify IAM permissions
-   - Check CloudFormation events
+1. **Table Access Issues**
 
-2. Operation Failures
+   - Check IAM permissions
+   - Verify table exists
+   - Confirm correct region
 
-   - Check error messages
-   - Verify table name
-   - Check key schema
-   - Monitor capacity
+2. **GSI Problems**
 
-3. Performance Issues
-   - Check CloudWatch metrics
-   - Review capacity mode
-   - Analyze access patterns
+   - Check index status
+   - Verify key schema
+   - Allow time for creation
+
+3. **Performance Issues**
+   - Monitor consumed capacity
+   - Check hot partitions
+   - Review query patterns
 
 ## Cleanup
 
-Remove the stack:
+When you're finished with this lab:
 
 ```bash
+# Empty the table (if needed)
+aws dynamodb scan --table-name UsersTable --projection-expression "userId,email" --profile your-profile-name | \
+  jq -r '.Items[] | [.userId.S, .email.S] | @tsv' | \
+  while read userId email; do
+    aws dynamodb delete-item \
+      --table-name UsersTable \
+      --key "{\"userId\":{\"S\":\"$userId\"},\"email\":{\"S\":\"$email\"}}" \
+      --profile your-profile-name
+  done
+
+# Destroy the CDK stack
 cdk destroy DynamoDBStack --profile your-profile-name
 ```
-
-[DIAGRAM: DynamoDB Setup Flow]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS DynamoDB icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Table Creation
-   - GSI Configuration
-   - Data Population
-   - CRUD Operations
-5. Use AWS's standard color scheme for all elements

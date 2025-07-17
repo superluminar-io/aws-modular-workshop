@@ -303,59 +303,75 @@ export class PipelineMonitoring extends Construct {
 }
 ```
 
+## Creating CI/CD Resources
+
+Deploy the CI/CD infrastructure:
+
+```bash
+# Deploy the pipeline stack
+cdk deploy PipelineStack --profile your-profile-name
+
+# Check pipeline status
+aws codepipeline get-pipeline-state \
+  --name WorkshopPipeline \
+  --profile your-profile-name
+
+# Monitor first execution
+aws codepipeline get-pipeline-execution \
+  --pipeline-name WorkshopPipeline \
+  --pipeline-execution-id $(aws codepipeline list-pipeline-executions \
+    --pipeline-name WorkshopPipeline \
+    --max-items 1 \
+    --query 'pipelineExecutionSummaries[0].pipelineExecutionId' \
+    --output text \
+    --profile your-profile-name) \
+  --profile your-profile-name
+```
+
 ## Validation Steps
 
-1. Pipeline Creation
+After completing this lab, verify that:
 
-   - [ ] Pipeline created successfully
-   - [ ] Source connection working
-   - [ ] Synth stage completing
-   - [ ] Stages deploying correctly
-
-2. Testing
-
-   - [ ] Unit tests running
-   - [ ] Integration tests passing
-   - [ ] Security scans completing
-   - [ ] Manual approvals working
-
-3. Cross-Account
-   - [ ] IAM roles created
-   - [ ] Permissions working
-   - [ ] Deployments successful
-   - [ ] Monitoring configured
+1. ✅ CodePipeline created successfully
+2. ✅ GitHub connection working
+3. ✅ CodeBuild project configured
+4. ✅ IAM roles and permissions set up
+5. ✅ S3 artifacts bucket created
+6. ✅ Pipeline execution triggered by commits
 
 ## Troubleshooting
 
-1. Pipeline Issues
+Common issues and solutions:
+
+1. **GitHub Connection Issues**
+
+   - Verify connection status in console
+   - Check GitHub permissions
+   - Ensure repository exists
+
+2. **Build Failures**
 
    - Check CodeBuild logs
-   - Verify IAM permissions
-   - Check source connection
-   - Review synth output
+   - Verify buildspec.yml syntax
+   - Check IAM permissions
 
-2. Deployment Failures
-
-   - Check CloudFormation events
-   - Verify account permissions
-   - Review deployment logs
-   - Check resource limits
-
-3. Testing Problems
-   - Review test logs
-   - Check environment variables
-   - Verify test configuration
-   - Check resource access
+3. **Deployment Issues**
+   - Review CloudFormation events
+   - Check target account permissions
+   - Verify cross-account roles
 
 ## Cleanup
 
-Remove the stacks:
-
 ```bash
-cdk destroy --all --profile your-profile-name
-```
+# Stop any running pipeline executions
+aws codepipeline stop-pipeline-execution \
+  --pipeline-name WorkshopPipeline \
+  --abandon \
+  --profile your-profile-name
 
-Note: You may need to manually delete some resources in target accounts.
+# Destroy the CDK stack
+cdk destroy PipelineStack --profile your-profile-name
+```
 
 [DIAGRAM: CI/CD Setup Flow]
 Instructions for draw.io:

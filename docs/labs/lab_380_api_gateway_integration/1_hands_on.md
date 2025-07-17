@@ -349,3 +349,52 @@ Instructions for draw.io:
 6. Add clear labels for each step in the flow
 
 ## Creating API Gateway Resources
+
+The API Gateway infrastructure is now complete. Let's verify our setup:
+
+```bash
+# Get the API Gateway ID
+export API_ID=$(aws cloudformation describe-stacks \
+  --stack-name ApiStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`ApiUrl`].OutputValue' \
+  --output text \
+  --profile your-profile-name | cut -d'/' -f3)
+
+# Check API Gateway configuration
+aws apigateway get-rest-api --rest-api-id $API_ID --profile your-profile-name
+
+# List all methods
+aws apigateway get-resources --rest-api-id $API_ID --profile your-profile-name
+
+# Monitor API usage
+aws apigateway get-usage \
+  --usage-plan-id $(aws apigateway get-usage-plans \
+    --query 'items[0].id' \
+    --output text \
+    --profile your-profile-name) \
+  --key-id $(aws cloudformation describe-stacks \
+    --stack-name ApiStack \
+    --query 'Stacks[0].Outputs[?OutputKey==`ApiKey`].OutputValue' \
+    --output text \
+    --profile your-profile-name) \
+  --profile your-profile-name
+```
+
+[DIAGRAM: API Gateway Request Flow]
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant Lambda
+    participant DynamoDB
+
+    Client->>API: HTTP Request + API Key
+    API->>API: Validate API Key
+    API->>API: Check Rate Limits
+    API->>Lambda: Invoke Function
+    Lambda->>DynamoDB: Query/Update
+    DynamoDB->>Lambda: Response
+    Lambda->>API: Return Result
+    API->>Client: HTTP Response
+```

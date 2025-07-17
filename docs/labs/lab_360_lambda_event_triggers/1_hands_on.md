@@ -40,6 +40,7 @@ Create a new file `lib/lambda-stack.ts`:
 import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
@@ -107,7 +108,7 @@ export class LambdaStack extends cdk.Stack {
     // Add event triggers
     bucket.addEventNotification(
       s3.EventType.OBJECT_CREATED,
-      new s3.LambdaDestination(s3Handler)
+      new s3n.LambdaDestination(s3Handler)
     );
 
     streamHandler.addEventSourceMapping('StreamHandlerMapping', {
@@ -255,75 +256,57 @@ aws logs get-log-events \
 
 ## Validation Steps
 
-1. Function Deployment
+After completing this lab, verify that:
 
-   - [ ] All functions deployed successfully
-   - [ ] IAM roles configured correctly
-   - [ ] Environment variables set
-   - [ ] DLQ configured
-
-2. Event Triggers
-
-   - [ ] S3 events triggering function
-   - [ ] DynamoDB Stream processing
-   - [ ] Schedule executing on time
-   - [ ] Events logged correctly
-
-3. Error Handling
-   - [ ] DLQ catching failed events
-   - [ ] Retries working
-   - [ ] Error logging working
-   - [ ] Monitoring configured
+1. ✅ Lambda functions created successfully
+2. ✅ S3 event triggers working
+3. ✅ DynamoDB table updating correctly
+4. ✅ CloudWatch logs available
+5. ✅ Error handling working
+6. ✅ Event filtering working correctly
 
 ## Troubleshooting
 
-1. Function Issues
+Common issues and solutions:
+
+1. **Lambda Function Issues**
 
    - Check CloudWatch logs
-   - Verify IAM permissions
+   - Verify runtime version
    - Check environment variables
-   - Review function timeout
+   - Review IAM permissions
 
-2. Event Trigger Issues
+2. **S3 Event Issues**
 
-   - Verify event source mapping
-   - Check trigger configuration
-   - Review event structure
-   - Check service quotas
+   - Verify event configuration
+   - Check S3 bucket notifications
+   - Ensure Lambda permissions
+   - Test with sample files
 
-3. Permission Issues
-   - Review IAM roles
-   - Check resource policies
-   - Verify VPC configuration
-   - Check encryption settings
+3. **DynamoDB Issues**
+   - Check table exists
+   - Verify write permissions
+   - Monitor capacity units
+   - Check item format
 
 ## Cleanup
 
-Remove the stack:
+When you're finished with this lab:
 
 ```bash
+# Empty S3 bucket
+aws s3 rm s3://your-bucket-name --recursive --profile your-profile-name
+
+# Remove all items from DynamoDB table (optional)
+aws dynamodb scan --table-name YourTableName --profile your-profile-name | \
+  jq -r '.Items[].id.S' | \
+  while read id; do
+    aws dynamodb delete-item \
+      --table-name YourTableName \
+      --key "{\"id\":{\"S\":\"$id\"}}" \
+      --profile your-profile-name
+  done
+
+# Destroy the CDK stack
 cdk destroy LambdaStack --profile your-profile-name
 ```
-
-[DIAGRAM: Lambda Event Processing Flow]
-
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Lambda icon
-   - AWS S3 icon
-   - AWS DynamoDB icon
-   - AWS CloudWatch icon
-   - AWS EventBridge icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - S3 Event Trigger
-   - Lambda Function Execution
-   - DynamoDB Operations
-   - CloudWatch Logging
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow

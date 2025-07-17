@@ -192,107 +192,75 @@ const sessionPolicy = new iam.PolicyDocument({
 
 ## Validation Steps
 
-After completing the lab, verify that:
+After completing this lab, verify that:
 
-1. ✅ Instance is registered with Systems Manager
-2. ✅ Session Manager connection works
-3. ✅ Parameters are accessible
-4. ✅ Run Command executes successfully
-5. ✅ Session logging is working
+1. ✅ EC2 instance appears in Systems Manager console
+2. ✅ Session Manager connection works without SSH keys
+3. ✅ Parameter Store parameters are accessible
+4. ✅ Run Command executes successfully on target instances
+5. ✅ CloudWatch logs capture session activity
+6. ✅ IAM permissions are working correctly
 
 ## Troubleshooting
 
 Common issues and solutions:
 
-1. **Session Manager Connection Issues**
+1. **Session Manager Connection Failed**
 
-   - Check IAM role permissions
+   - Check IAM role is attached to EC2 instance
    - Verify Systems Manager agent is running
-   - Ensure VPC endpoints are configured
-   - Check instance has internet access
+   - Ensure VPC endpoints are configured (for private subnets)
+   - Check security group allows outbound HTTPS (port 443)
 
-2. **Parameter Store Access Issues**
+2. **Parameter Store Access Denied**
 
-   - Verify IAM permissions
-   - Check parameter names and paths
-   - Ensure region is correct
-   - Validate parameter exists
+   - Verify IAM permissions for parameter actions
+   - Check parameter path and naming
+   - Ensure correct region is specified
+   - Validate parameter hierarchy permissions
 
-3. **Run Command Failures**
-   - Check command syntax
-   - Verify instance status
-   - Review command output
-   - Check instance permissions
+3. **Run Command Not Working**
+   - Check instance is showing as managed in SSM console
+   - Verify command document exists and is valid
+   - Check command syntax and parameters
+   - Review CloudWatch Logs for error details
 
-## Best Practices Demonstrated
+## Cleanup
 
-This lab has implemented several Systems Manager best practices:
+When you're finished with this lab:
 
-1. **Security**
+```bash
+# Stop any running sessions (optional)
+aws ssm describe-sessions \
+  --state "Active" \
+  --profile your-profile-name
 
-   - Use of Session Manager instead of SSH
-   - IAM roles for service access
-   - Private subnet placement
-   - Session logging enabled
+# Remove any test parameters
+aws ssm delete-parameter \
+  --name "/myapp/dev/test-parameter" \
+  --profile your-profile-name
 
-2. **Operations**
+# Destroy the CDK stack
+cdk destroy SystemsManagerStack --profile your-profile-name
+```
 
-   - Organized parameter hierarchy
-   - Consistent naming conventions
-   - Proper error handling
-   - Logging and monitoring
-
-3. **Maintenance**
-   - Regular system updates
-   - Agent health monitoring
-   - Automated command execution
-   - Configuration management
-
-## Next Steps
-
-After completing this lab, you can:
-
-- Implement more complex automation
-- Configure patch management
-- Set up maintenance windows
-- Create custom automation documents
-- Implement advanced monitoring
-
-[DIAGRAM: Systems Manager Setup Flow]
+[DIAGRAM: Systems Manager Operations]
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant IAM
+    participant Admin
     participant SSM
     participant EC2
-    participant PS
+    participant CloudWatch
 
-    User->>IAM: Create IAM Role
-    IAM->>EC2: Attach Role to Instance
-    User->>SSM: Install SSM Agent
-    SSM->>EC2: Register Instance
-    User->>PS: Configure Parameters
-    PS->>EC2: Access Parameters
-    User->>SSM: Start Session
+    Admin->>SSM: Start Session
     SSM->>EC2: Connect to Instance
-```
+    EC2->>SSM: Session Established
+    SSM->>Admin: Terminal Access
 
-## Setting Up Systems Manager
-
-Now we'll add Systems Manager access to our existing EC2 instance:
-
-```typescript
-// Create role for Systems Manager
-const role = new iam.Role(this, "SSMInstanceRole", {
-  assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
-  managedPolicies: [
-    iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"),
-  ],
-});
-
-// Update the existing EC2 instance with SSM role
-instance.role.addManagedPolicy(
-  iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")
-);
+    Admin->>SSM: Execute Command
+    SSM->>EC2: Run Command
+    EC2->>CloudWatch: Log Output
+    EC2->>SSM: Command Result
+    SSM->>Admin: Command Response
 ```

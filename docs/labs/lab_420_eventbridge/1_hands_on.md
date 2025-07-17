@@ -6,6 +6,54 @@
 - Node.js installed
 - Completed SNS and SQS lab
 
+## Lab Overview
+
+This lab demonstrates building event-driven architectures using Amazon EventBridge. You'll create custom event buses, rules, and integrate with various AWS services for event routing and processing.
+
+[DIAGRAM: EventBridge Flow]
+
+```mermaid
+flowchart TD
+    subgraph Sources["Event Sources"]
+        APP[Application Events]
+        S3[S3 Events]
+        CUSTOM[Custom Events]
+    end
+
+    subgraph EventBridge["EventBridge"]
+        BUS[Custom Event Bus]
+        RULES[Event Rules]
+        PATTERN[Event Patterns]
+    end
+
+    subgraph Targets["Event Targets"]
+        LAMBDA[Lambda Functions]
+        SNS[SNS Topics]
+        SQS[SQS Queues]
+        STEP[Step Functions]
+    end
+
+    subgraph Monitoring["Monitoring"]
+        CW[CloudWatch Logs]
+        METRICS[CloudWatch Metrics]
+    end
+
+    APP --> BUS
+    S3 --> BUS
+    CUSTOM --> BUS
+
+    BUS --> RULES
+    RULES --> PATTERN
+
+    PATTERN --> LAMBDA
+    PATTERN --> SNS
+    PATTERN --> SQS
+    PATTERN --> STEP
+
+    BUS --> CW
+    RULES --> METRICS
+```
+
 [DIAGRAM: EventBridge Implementation]
 Instructions for draw.io:
 

@@ -203,25 +203,42 @@ In the hands-on section, you'll:
 - Monitor performance
 - Test scaling behavior
 
-[DIAGRAM: Aurora Operations Flow]
+## Aurora Serverless Operations Flow
 
-Instructions for draw.io:
+```mermaid
+flowchart TD
+    A[Create Aurora Cluster] --> B[Configure Scaling]
+    B --> C[Setup Security]
+    C --> D[Configure Monitoring]
+    D --> E[Test Connectivity]
+    E --> F{Load Test}
+    F -->|High Load| G[Scale Up]
+    F -->|Low Load| H[Scale Down]
+    F -->|No Load| I[Auto Pause]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Aurora icon
-   - AWS CloudWatch icon
-   - AWS KMS icon
-   - AWS Secrets Manager icon
-   - AWS IAM icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Cluster Creation
-   - Security Setup
-   - Scaling Configuration
-   - Monitoring Setup
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow
+    G --> J[Monitor Performance]
+    H --> J
+    I --> K[Resume on Access]
+
+    J --> L{Performance OK?}
+    L -->|Yes| M[Continue Operation]
+    L -->|No| N[Adjust Configuration]
+
+    K --> E
+    N --> B
+    M --> F
+
+    subgraph Scaling["Auto-Scaling Actions"]
+        G
+        H
+        I
+        K
+    end
+
+    subgraph Monitoring["Monitoring Loop"]
+        J
+        L
+        M
+        N
+    end
+```

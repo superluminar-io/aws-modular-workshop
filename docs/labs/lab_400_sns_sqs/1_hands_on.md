@@ -1,5 +1,62 @@
 # SNS and SQS - Hands-on Lab
 
+## Prerequisites
+
+- AWS CDK and AWS CLI configured
+- Node.js installed
+- Basic understanding of messaging patterns
+- Completed IAM lab
+
+## Lab Overview
+
+This lab demonstrates building a messaging architecture using Amazon SNS (Simple Notification Service) and SQS (Simple Queue Service). You'll create topics, queues, implement message filtering, and handle dead letter queues.
+
+[DIAGRAM: Messaging Flow]
+
+```mermaid
+flowchart TD
+    subgraph Source["Event Sources"]
+        APP[Application]
+        API[API Calls]
+        LAMBDA[Lambda Function]
+    end
+
+    subgraph SNS["SNS Topic"]
+        TOPIC[Order Events Topic]
+        FILTER[Message Filters]
+    end
+
+    subgraph SQS["SQS Queues"]
+        Q1[Order Processing Queue]
+        Q2[Inventory Queue]
+        Q3[Notification Queue]
+        DLQ[Dead Letter Queue]
+    end
+
+    subgraph Consumers["Message Consumers"]
+        L1[Process Order Lambda]
+        L2[Update Inventory Lambda]
+        L3[Send Notification Lambda]
+    end
+
+    APP --> TOPIC
+    API --> TOPIC
+    LAMBDA --> TOPIC
+
+    TOPIC --> FILTER
+    FILTER --> Q1
+    FILTER --> Q2
+    FILTER --> Q3
+
+    Q1 --> L1
+    Q2 --> L2
+    Q3 --> L3
+
+    Q1 -.->|Failed Messages| DLQ
+    Q2 -.->|Failed Messages| DLQ
+    Q3 -.->|Failed Messages| DLQ
+```
+
 [DIAGRAM: Messaging Hands-on Architecture]
 Instructions for draw.io:
 
@@ -36,12 +93,6 @@ Description: A detailed diagram showing the messaging resources we'll create in 
 3. Show the messaging patterns
 4. Include example service integrations
    Use AWS's standard color scheme with blue for AWS services and green for messaging components.
-
-## Prerequisites
-
-- AWS CDK and AWS CLI configured
-- Node.js installed
-- Basic understanding of messaging patterns
 
 [DIAGRAM: Messaging Setup Flow]
 Instructions for draw.io:

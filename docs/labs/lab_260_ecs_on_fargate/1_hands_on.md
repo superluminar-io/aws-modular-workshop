@@ -180,92 +180,102 @@ aws cloudformation describe-stacks \
 Test scaling:
 
 ```bash
-# Generate load
+# Generate load to test auto scaling
 for i in {1..100}; do
   curl http://your-load-balancer-dns/
   sleep 1
 done
-```
 
-### 8. View Logs and Metrics
+# Monitor scaling activity
+aws ecs describe-services \
+  --cluster your-cluster-name \
+  --services your-service-name \
+  --profile your-profile-name
 
-Check CloudWatch logs:
-
-```bash
-aws logs get-log-events \
-  --log-group-name /ecs/workshop-app \
-  --log-stream-name your-log-stream \
+# Check CloudWatch metrics
+aws cloudwatch get-metric-statistics \
+  --namespace AWS/ECS \
+  --metric-name CPUUtilization \
+  --dimensions Name=ServiceName,Value=your-service-name Name=ClusterName,Value=your-cluster-name \
+  --start-time $(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S) \
+  --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
+  --period 300 \
+  --statistics Average \
   --profile your-profile-name
 ```
-
-View Container Insights:
-
-1. Open CloudWatch console
-2. Navigate to Container Insights
-3. Select your ECS cluster
-4. View performance metrics
 
 ## Validation Steps
 
-1. Deployment
+After completing this lab, verify that:
 
-   - [ ] Services running with desired task count
-   - [ ] Load balancer health checks passing
-   - [ ] Application accessible via load balancer
-
-2. Monitoring
-
-   - [ ] CloudWatch logs visible
-   - [ ] Container Insights showing metrics
-   - [ ] X-Ray traces available
-
-3. Scaling
-   - [ ] Auto scaling responds to load
-   - [ ] Tasks distributed across AZs
-   - [ ] Service recovery works
+1. ✅ ECS cluster created successfully
+2. ✅ Fargate service running with desired task count
+3. ✅ Load balancer health checks passing
+4. ✅ Application accessible via load balancer URL
+5. ✅ Auto scaling policies configured and working
+6. ✅ CloudWatch logs showing container output
+7. ✅ Service discovery working (if configured)
 
 ## Troubleshooting
 
-1. Task Launch Issues
+Common issues and solutions:
 
-   - Check task definition
-   - Verify ECR permissions
-   - Review CloudWatch logs
-   - Check security groups
+1. **Service Deployment Issues**
 
-2. Load Balancer Issues
+   - Check task definition for correct image URI
+   - Verify IAM roles have required permissions
+   - Check security group rules allow traffic
+   - Review CloudWatch logs for container errors
 
-   - Verify target group health
-   - Check security group rules
-   - Review access logs
+2. **Load Balancer Issues**
 
-3. Service Discovery
-   - Verify namespace creation
-   - Check DNS resolution
-   - Review service registry
+   - Verify target group health check configuration
+   - Check security groups allow load balancer traffic
+   - Ensure health check path returns 200 status
+   - Review load balancer target group targets
+
+3. **Auto Scaling Problems**
+
+   - Check CloudWatch metrics are being published
+   - Verify scaling policies are correctly configured
+   - Ensure sufficient capacity in service limits
+   - Monitor scaling activities in console
+
+4. **Network Connectivity Issues**
+   - Check VPC configuration and routing
+   - Verify security group inbound/outbound rules
+   - Ensure subnet has internet access (if needed)
+   - Check service discovery configuration
 
 ## Cleanup
 
-Remove the stack:
+When you're finished with this lab:
 
 ```bash
+# Scale down service to 0 tasks
+aws ecs update-service \
+  --cluster your-cluster-name \
+  --service your-service-name \
+  --desired-count 0 \
+  --profile your-profile-name
+
+# Wait for tasks to stop
+aws ecs wait services-stable \
+  --cluster your-cluster-name \
+  --services your-service-name \
+  --profile your-profile-name
+
+# Delete the service
+aws ecs delete-service \
+  --cluster your-cluster-name \
+  --service your-service-name \
+  --profile your-profile-name
+
+# Destroy the CDK stack
 cdk destroy EcsStack --profile your-profile-name
 ```
 
-Additional cleanup:
-
-```bash
-# Delete CloudWatch log groups
-aws logs delete-log-group \
-  --log-group-name /ecs/workshop-app \
-  --profile your-profile-name
-
-# Delete ECR images (if no longer needed)
-aws ecr delete-repository \
-  --repository-name workshop-app \
-  --force \
-  --profile your-profile-name
-```
+Note: Ensure all tasks are stopped before deleting the service to avoid lingering resources.
 
 [DIAGRAM: ECS Deployment Flow]
 Instructions for draw.io:

@@ -306,66 +306,49 @@ bucketPolicy.document.addStatements(
 
 ## Validation Steps
 
-1. Resource Creation
+After completing this lab, verify that:
 
-   - [ ] S3 bucket with policy created
-   - [ ] KMS key with policy created
-   - [ ] SNS topic with policy created
-   - [ ] SQS queue with policy created
-
-2. Policy Testing
-
-   - [ ] S3 bucket access works
-   - [ ] SNS publishing works
-   - [ ] SQS message reception works
-   - [ ] Cross-account access works (if configured)
-
-3. Security Verification
-   - [ ] IP condition works
-   - [ ] Service principal restrictions work
-   - [ ] Source ARN conditions work
+1. ✅ Resource policies created successfully
+2. ✅ S3 bucket policies working correctly
+3. ✅ Lambda resource policies effective
+4. ✅ Cross-account access configured
+5. ✅ Policy conditions working as expected
+6. ✅ Least privilege principle followed
 
 ## Troubleshooting
 
-1. Access Denied Issues
+Common issues and solutions:
+
+1. **Policy Issues**
 
    - Check policy syntax
-   - Verify principal ARNs
-   - Review condition keys
-   - Check AWS CLI credentials
+   - Verify principal formats
+   - Review resource ARNs
+   - Test policy conditions
 
-2. Policy Evaluation
+2. **Access Issues**
 
-   - Use IAM Policy Simulator
-   - Check CloudTrail logs
-   - Verify resource ARNs
-   - Review service limits
+   - Check IAM permissions
+   - Verify resource policies
+   - Review cross-account trust
+   - Test with different principals
 
-3. Cross-Account Access
-   - Verify account IDs
-   - Check trust relationships
-   - Review organization policies
-   - Test with assumed roles
+3. **Security Issues**
+   - Review policy conditions
+   - Check for overly broad permissions
+   - Verify encryption settings
+   - Monitor access patterns
 
 ## Cleanup
 
-Remove the stack:
+When you're finished with this lab:
 
 ```bash
+# Remove test objects from S3
+aws s3 rm s3://your-bucket-name --recursive --profile your-profile-name
+
+# Destroy the CDK stack
 cdk destroy ResourcePoliciesStack --profile your-profile-name
 ```
 
-Note: Ensure all resources are no longer needed before cleanup.
-
-[DIAGRAM: Resource Policies Testing]
-Description: A detailed flowchart showing how to test the Resource Policies implementation. The diagram should:
-
-1. Show the testing process:
-   - Policy evaluation
-   - Access control testing
-   - Cross-account testing
-   - Error handling
-2. Include different policy types
-3. Show the validation process
-4. Illustrate the testing patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+Note: Ensure all cross-account access is no longer needed before cleanup.

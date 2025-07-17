@@ -10,15 +10,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/superluminar-io/TO_BE_DETERMINED.git"
+    "url": "git+https://github.com/superluminar-io/aws_fundamentals_workshop_labs.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "aws",
+    "cloud",
+    "workshop",
+    "cdk",
+    "infrastructure",
+    "devops"
+  ],
+  "author": "Superluminar",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/superluminar-io/TO_BE_DETERMINED/issues"
+    "url": "https://github.com/superluminar-io/aws_fundamentals_workshop_labs/issues"
   },
-  "homepage": "https://github.com/superluminar-io/TO_BE_DETERMINED#readme",
+  "homepage": "https://github.com/superluminar-io/aws_fundamentals_workshop_labs#readme",
   "devDependencies": {
     "docsify-cli": "^4.4.4"
   }

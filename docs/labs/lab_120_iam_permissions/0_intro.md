@@ -4,28 +4,40 @@
 
 AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources. With IAM, you can manage who (identity) or what (role) can access specific resources and how they can access them.
 
-[DIAGRAM: IAM Overview]
+[DIAGRAM: IAM Architecture Overview]
 
 ```mermaid
 flowchart TD
-    subgraph IAM["IAM Service"]
-        A[Users] --> D[IAM]
-        B[Groups] --> D
-        C[Roles] --> D
-        D --> E[Policies]
+    subgraph Identity["Identity Management"]
+        User[IAM User]
+        Role[IAM Role]
+        Group[IAM Group]
     end
 
-    subgraph AWS["AWS Services"]
-        F[EC2]
-        G[S3]
-        H[Lambda]
-        I[CloudWatch]
+    subgraph Policies["Permission Policies"]
+        UP[User Policy]
+        RP[Role Policy]
+        GP[Group Policy]
     end
 
-    E -->|Permissions| F
-    E -->|Permissions| G
-    E -->|Permissions| H
-    E -->|Permissions| I
+    subgraph Resources["AWS Resources"]
+        S3[S3 Bucket]
+        EC2[EC2 Instance]
+        Lambda[Lambda Function]
+    end
+
+    User --> UP
+    Role --> RP
+    Group --> GP
+    User --> Group
+
+    UP --> Resources
+    RP --> Resources
+    GP --> Resources
+
+    style Identity fill:#e8f5e8
+    style Policies fill:#fff3e0
+    style Resources fill:#e1f5fe
 ```
 
 ## Learning Objectives

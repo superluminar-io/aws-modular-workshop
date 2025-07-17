@@ -4,28 +4,46 @@
 
 AWS Backup is a fully managed service that makes it easy to centralize and automate data protection across AWS services. This lab will guide you through implementing AWS Backup to protect various AWS resources, configure backup policies, implement backup plans, and manage recovery points.
 
-[DIAGRAM: AWS Backup Overview]
-Instructions for draw.io:
+## AWS Backup Overview
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Backup icon
-   - AWS EC2 icon
-   - AWS RDS icon
-   - AWS S3 icon
-   - AWS KMS icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place AWS Backup at the center
-   - Add supported resources around it (EC2, RDS, S3)
-   - Show KMS for encryption
-   - Place CloudWatch for monitoring
-4. Use AWS's standard connector arrows to show relationships
-5. Add backup flow visualization with regions
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for backup components
-   - Gray for infrastructure elements
+```mermaid
+flowchart TD
+    subgraph AWS["AWS Resources"]
+        EC2[EC2 Instances]
+        RDS[RDS Databases]
+        S3[S3 Buckets]
+        EFS[EFS File Systems]
+    end
+
+    subgraph Backup["AWS Backup"]
+        BP[Backup Plans]
+        BV[Backup Vaults]
+        BR[Backup Rules]
+    end
+
+    subgraph Security["Security & Monitoring"]
+        KMS[KMS Encryption]
+        CW[CloudWatch]
+        IAM[IAM Roles]
+    end
+
+    AWS --> Backup
+    Backup --> Security
+
+    EC2 --> BP
+    RDS --> BP
+    S3 --> BP
+    EFS --> BP
+
+    BP --> BR
+    BR --> BV
+
+    KMS --> BV
+    CW --> Backup
+    IAM --> Backup
+```
+
+**Note**: For detailed architecture diagrams with AWS-specific icons, you can recreate this using draw.io with the AWS Architecture 2023 template.
 
 ## Learning Objectives
 
