@@ -371,3 +371,141 @@ sequenceDiagram
     CloudFormation->>CDK: Deployment complete
     CDK->>User: Stack deployed successfully
 ```
+
+## VPC Implementation
+
+<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_160_vpc_detailed_networking_relationships.drawio.svg -->
+
+```mermaid
+flowchart TD
+    subgraph "VPC Network Implementation Details"
+        subgraph "VPC_MAIN [workshop-vpc: 10.0.0.0/16]"
+            subgraph "Subnet Architecture"
+                subgraph "AZ-1a Subnets"
+                    PUB_1A[Public Subnet 1A<br/>10.0.1.0/24<br/>Route: 0.0.0.0/0 → IGW]
+                    PRIV_1A[Private Subnet 1A<br/>10.0.11.0/24<br/>Route: 0.0.0.0/0 → NAT-1A]
+                    DB_1A[DB Subnet 1A<br/>10.0.21.0/24<br/>Route: Local Only]
+                end
+
+                subgraph "AZ-1b Subnets"
+                    PUB_1B[Public Subnet 1B<br/>10.0.2.0/24<br/>Route: 0.0.0.0/0 → IGW]
+                    PRIV_1B[Private Subnet 1B<br/>10.0.12.0/24<br/>Route: 0.0.0.0/0 → NAT-1B]
+                    DB_1B[DB Subnet 1B<br/>10.0.22.0/24<br/>Route: Local Only]
+                end
+            end
+
+            subgraph "Gateway Components"
+                IGW_MAIN[Internet Gateway<br/>workshop-igw]
+                NAT_1A_DETAIL[NAT Gateway 1A<br/>EIP: 203.0.113.1<br/>Subnet: Public-1A]
+                NAT_1B_DETAIL[NAT Gateway 1B<br/>EIP: 203.0.113.2<br/>Subnet: Public-1B]
+            end
+        end
+
+        subgraph "Security Layer Implementation"
+            subgraph "Security Groups"
+                SG_ALB_DETAIL[ALB Security Group<br/>sg-alb-workshop<br/>Inbound: 80,443 from 0.0.0.0/0<br/>Outbound: All to App SG]
+
+                SG_APP_DETAIL[Application Security Group<br/>sg-app-workshop<br/>Inbound: 8080 from ALB SG<br/>Inbound: 22 from Bastion SG<br/>Outbound: 3306 to DB SG]
+
+                SG_DB_DETAIL[Database Security Group<br/>sg-db-workshop<br/>Inbound: 3306 from App SG<br/>Outbound: None]
+
+                SG_BASTION_DETAIL[Bastion Security Group<br/>sg-bastion-workshop<br/>Inbound: 22 from Corporate<br/>Outbound: 22 to App SG]
+            end
+
+            subgraph "Network ACLs"
+                NACL_PUB_DETAIL[Public NACL<br/>nacl-public-workshop<br/>100: Allow HTTP In<br/>110: Allow HTTPS In<br/>120: Allow SSH In<br/>*: Deny All]
+
+                NACL_PRIV_DETAIL[Private NACL<br/>nacl-private-workshop<br/>100: Allow App Port In<br/>110: Allow SSH In<br/>120: Allow DB Out<br/>*: Deny All]
+
+                NACL_DB_DETAIL[Database NACL<br/>nacl-database-workshop<br/>100: Allow MySQL In<br/>*: Deny All]
+            end
+        end
+
+        subgraph "Route Table Details"
+            RT_PUB_DETAIL[Public Route Table<br/>rt-public-workshop<br/>10.0.0.0/16 → Local<br/>0.0.0.0/0 → IGW]
+
+            RT_PRIV_1A_DETAIL[Private Route Table 1A<br/>rt-private-1a-workshop<br/>10.0.0.0/16 → Local<br/>0.0.0.0/0 → NAT-1A]
+
+            RT_PRIV_1B_DETAIL[Private Route Table 1B<br/>rt-private-1b-workshop<br/>10.0.0.0/16 → Local<br/>0.0.0.0/0 → NAT-1B]
+
+            RT_DB_DETAIL[Database Route Table<br/>rt-database-workshop<br/>10.0.0.0/16 → Local<br/>No Internet Route]
+        end
+    end
+
+    subgraph "Resource Deployment"
+        subgraph "Compute Resources"
+            ALB_INSTANCE[Application Load Balancer<br/>workshop-alb<br/>Public Subnets<br/>Target: App Instances]
+
+            APP_1A[App Instance 1A<br/>i-app1a<br/>Private Subnet 1A<br/>10.0.11.10]
+
+            APP_1B[App Instance 1B<br/>i-app1b<br/>Private Subnet 1B<br/>10.0.12.10]
+
+            BASTION_INSTANCE[Bastion Host<br/>i-bastion<br/>Public Subnet 1A<br/>10.0.1.10]
+        end
+
+        subgraph "Database Resources"
+            RDS_PRIMARY[RDS Primary<br/>workshop-db-primary<br/>DB Subnet 1A<br/>10.0.21.10]
+
+            RDS_REPLICA[RDS Read Replica<br/>workshop-db-replica<br/>DB Subnet 1B<br/>10.0.22.10]
+        end
+    end
+
+    %% Network Flow Relationships
+    IGW_MAIN -.->|Internet Access| PUB_1A
+    IGW_MAIN -.->|Internet Access| PUB_1B
+
+    NAT_1A_DETAIL -.->|Outbound Internet| PRIV_1A
+    NAT_1B_DETAIL -.->|Outbound Internet| PRIV_1B
+
+    %% Route Table Associations
+    RT_PUB_DETAIL -.->|Associated| PUB_1A
+    RT_PUB_DETAIL -.->|Associated| PUB_1B
+    RT_PRIV_1A_DETAIL -.->|Associated| PRIV_1A
+    RT_PRIV_1B_DETAIL -.->|Associated| PRIV_1B
+    RT_DB_DETAIL -.->|Associated| DB_1A
+    RT_DB_DETAIL -.->|Associated| DB_1B
+
+    %% Security Group Assignments
+    SG_ALB_DETAIL -.->|Applied to| ALB_INSTANCE
+    SG_APP_DETAIL -.->|Applied to| APP_1A
+    SG_APP_DETAIL -.->|Applied to| APP_1B
+    SG_DB_DETAIL -.->|Applied to| RDS_PRIMARY
+    SG_DB_DETAIL -.->|Applied to| RDS_REPLICA
+    SG_BASTION_DETAIL -.->|Applied to| BASTION_INSTANCE
+
+    %% NACL Associations
+    NACL_PUB_DETAIL -.->|Applied to| PUB_1A
+    NACL_PUB_DETAIL -.->|Applied to| PUB_1B
+    NACL_PRIV_DETAIL -.->|Applied to| PRIV_1A
+    NACL_PRIV_DETAIL -.->|Applied to| PRIV_1B
+    NACL_DB_DETAIL -.->|Applied to| DB_1A
+    NACL_DB_DETAIL -.->|Applied to| DB_1B
+
+    %% Traffic Flow
+    ALB_INSTANCE -->|Port 8080| APP_1A
+    ALB_INSTANCE -->|Port 8080| APP_1B
+    APP_1A -->|Port 3306| RDS_PRIMARY
+    APP_1B -->|Port 3306| RDS_REPLICA
+    BASTION_INSTANCE -->|SSH Port 22| APP_1A
+    BASTION_INSTANCE -->|SSH Port 22| APP_1B
+
+    %% Database Replication
+    RDS_PRIMARY -.->|Async Replication| RDS_REPLICA
+
+    %% Styling
+    classDef subnet fill:#569a31,stroke:#232F3E,stroke-width:2px,color:white
+    classDef gateway fill:#4B9CD3,stroke:#232F3E,stroke-width:2px,color:white
+    classDef security fill:#dd344c,stroke:#232F3E,stroke-width:2px,color:white
+    classDef routing fill:#8C4FFF,stroke:#232F3E,stroke-width:2px,color:white
+    classDef compute fill:#ff9900,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef database fill:#F39C12,stroke:#232F3E,stroke-width:2px,color:#232F3E
+
+    class PUB_1A,PUB_1B,PRIV_1A,PRIV_1B,DB_1A,DB_1B subnet
+    class IGW_MAIN,NAT_1A_DETAIL,NAT_1B_DETAIL gateway
+    class SG_ALB_DETAIL,SG_APP_DETAIL,SG_DB_DETAIL,SG_BASTION_DETAIL,NACL_PUB_DETAIL,NACL_PRIV_DETAIL,NACL_DB_DETAIL security
+    class RT_PUB_DETAIL,RT_PRIV_1A_DETAIL,RT_PRIV_1B_DETAIL,RT_DB_DETAIL routing
+    class ALB_INSTANCE,APP_1A,APP_1B,BASTION_INSTANCE compute
+    class RDS_PRIMARY,RDS_REPLICA database
+```
+
+<!-- 🔄 END TEMPORARY DIAGRAM -->

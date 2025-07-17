@@ -4,33 +4,49 @@
 
 Amazon Aurora Serverless is an on-demand, auto-scaling configuration for Amazon Aurora that automatically starts up, shuts down, and scales capacity up or down based on your application's needs. In this lab, you'll learn how to create and manage Aurora Serverless databases using AWS CDK.
 
-[DIAGRAM: Aurora Overview]
+[DIAGRAM: Aurora Serverless Architecture]
 
-Instructions for draw.io:
+```mermaid
+flowchart TD
+    subgraph Apps["Applications"]
+        Lambda[Lambda Functions]
+        App[Web Applications]
+        API[API Gateway]
+    end
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Aurora icon
-   - AWS VPC icon
-   - AWS CloudWatch icon
-   - AWS KMS icon
-   - AWS Secrets Manager icon
-   - AWS IAM icon
-3. Layout:
-   - Place Aurora cluster at the center
-   - Add VPC and security groups
-   - Show monitoring and encryption
-   - Include scaling components
-4. Use AWS's standard connector arrows to show:
-   - Network connections
-   - Security relationships
-   - Monitoring flow
-   - Scaling triggers
-5. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for database components
-   - Gray for infrastructure elements
-6. Add clear labels for each component
+    subgraph Aurora["Aurora Serverless"]
+        Cluster[Aurora Cluster]
+        Writer[Writer Instance]
+        Reader[Reader Instance]
+        Proxy[Aurora Proxy]
+    end
+
+    subgraph Features["Serverless Features"]
+        AutoScale[Auto Scaling]
+        Pause[Auto Pause/Resume]
+        DataAPI[Data API]
+        Backup[Automatic Backup]
+    end
+
+    subgraph Security["Security & Access"]
+        IAM[IAM Database Auth]
+        SM[Secrets Manager]
+        KMS[KMS Encryption]
+        VPC[VPC Security]
+    end
+
+    Apps --> Proxy
+    Proxy --> Cluster
+    Cluster --> Writer
+    Cluster --> Reader
+    Aurora --> Features
+    Security --> Aurora
+
+    style Apps fill:#e1f5fe
+    style Aurora fill:#ff9900,color:#fff
+    style Features fill:#e8f5e8
+    style Security fill:#dd344c,color:#fff
+```
 
 ## Learning Objectives
 

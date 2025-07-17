@@ -43,7 +43,7 @@ flowchart TD
     IAM --> Backup
 ```
 
-**Note**: For detailed architecture diagrams with AWS-specific icons, you can recreate this using draw.io with the AWS Architecture 2023 template.
+[DIAGRAM: AWS Backup Architecture]
 
 ## Learning Objectives
 
@@ -192,24 +192,3 @@ In the hands-on portion of this lab, you will:
 5. Perform a test restore
 6. Monitor backup activities
 7. Use AWS Backup Audit Manager
-
-[DIAGRAM: AWS Backup Flow]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Backup icon
-   - AWS CloudWatch icon
-   - AWS SNS icon
-   - AWS KMS icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Resource Selection
-   - Backup Creation
-   - Recovery Point Management
-   - Restore Operations
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow

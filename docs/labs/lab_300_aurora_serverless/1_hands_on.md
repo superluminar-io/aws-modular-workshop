@@ -1,64 +1,13 @@
 # Aurora Serverless - Hands-on Lab
 
-[DIAGRAM: Aurora Hands-on Architecture]
-
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Aurora icon
-   - AWS VPC icon
-   - AWS Lambda icon
-   - AWS IAM icon
-   - AWS KMS icon
-   - AWS CloudWatch icon
-   - AWS Performance Insights icon
-3. Layout:
-   - Place VPC at the center
-   - Add public subnet with bastion host
-   - Add private subnet with Aurora and Lambda
-   - Show security components
-   - Include monitoring services
-4. Use AWS's standard connector arrows to show:
-   - Network connections
-   - Security relationships
-   - Monitoring flow
-5. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for public components
-   - Red for private components
-6. Add clear labels for each component
-
 ## Prerequisites
+
+Before starting this lab, ensure you have:
 
 - AWS CDK and AWS CLI configured
 - MySQL client installed
 - Basic SQL knowledge
 - Completed VPC Networking lab
-
-[DIAGRAM: Aurora Setup Flow]
-
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS VPC icon
-   - AWS Aurora icon
-   - AWS Lambda icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - VPC Creation
-   - Security Configuration
-   - Aurora Setup
-   - Lambda Integration
-   - Connection Testing
-   - Performance Monitoring
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow
 
 ## Lab Steps
 

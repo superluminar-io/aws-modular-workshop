@@ -4,28 +4,48 @@
 
 Resource-based policies are IAM policies attached directly to AWS resources, controlling who can access the resource and what actions they can perform. This lab focuses on implementing and managing resource policies across various AWS services, understanding the differences between identity-based and resource-based policies, and applying best practices for secure resource access control.
 
-[DIAGRAM: Resource Policies Overview]
-Instructions for draw.io:
+[DIAGRAM: Resource Policies Architecture]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS IAM icon
-   - AWS S3 icon
-   - AWS KMS icon
-   - AWS SNS icon
-   - AWS SQS icon
-   - AWS Lambda icon
-3. Layout:
-   - Place IAM at the center
-   - Add resource policies on the left (S3, KMS)
-   - Place service policies on the right (SNS, SQS, Lambda)
-   - Show cross-account access at the bottom
-4. Use AWS's standard connector arrows to show relationships
-5. Add policy flow visualization with security controls
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for policy components
-   - Gray for infrastructure elements
+```mermaid
+flowchart TD
+    subgraph Identity["Identity Policies"]
+        User[IAM User]
+        Role[IAM Role]
+        Group[IAM Group]
+        IP[Identity Policies]
+    end
+
+    subgraph Resources["AWS Resources"]
+        S3[S3 Bucket Policy]
+        KMS[KMS Key Policy]
+        SNS[SNS Topic Policy]
+        SQS[SQS Queue Policy]
+        Lambda[Lambda Resource Policy]
+    end
+
+    subgraph Access["Access Control"]
+        Effect[Allow/Deny Effects]
+        Principal[Principal Evaluation]
+        Condition[Condition Blocks]
+        CrossAccount[Cross-Account Access]
+    end
+
+    subgraph Evaluation["Policy Evaluation"]
+        Combine[Policy Combination]
+        Precedence[Explicit Deny > Allow]
+        Result[Final Decision]
+    end
+
+    Identity --> Access
+    Resources --> Access
+    Access --> Evaluation
+    CrossAccount --> Resources
+
+    style Identity fill:#e8f5e8
+    style Resources fill:#e1f5fe
+    style Access fill:#fff3e0
+    style Evaluation fill:#dd344c,color:#fff
+```
 
 ## Learning Objectives
 
@@ -148,24 +168,3 @@ In the hands-on portion of this lab, you will:
 5. Use policy conditions for access control
 6. Monitor and audit policy changes
 7. Troubleshoot policy issues
-
-[DIAGRAM: Resource Policy Flow]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS CloudTrail icon
-   - AWS Organizations icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Policy Creation
-   - Policy Evaluation
-   - Access Control
-   - Cross-Account Access
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow

@@ -6,33 +6,7 @@
 - Multiple AWS accounts (recommended for cross-account scenarios)
 - Completed IAM lab
 
-[DIAGRAM: Resource Policies Implementation]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS S3 icon
-   - AWS KMS icon
-   - AWS SNS icon
-   - AWS SQS icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place S3 bucket at the top left
-   - Add KMS key below S3
-   - Place SNS topic at the top right
-   - Add SQS queue below SNS
-   - Show IAM policies connecting all components
-4. Use AWS's standard connector arrows to show relationships
-5. Add policy flow visualization with conditions
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for policy components
-   - Gray for infrastructure elements
-
-## Lab Steps
-
-### 1. Create Infrastructure with Resource Policies
+## Step 1: Create the Lab Infrastructure
 
 Create a new file `lib/resource-policies-stack.ts`:
 

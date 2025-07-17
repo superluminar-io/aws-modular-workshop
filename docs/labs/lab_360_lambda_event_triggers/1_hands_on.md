@@ -1,29 +1,5 @@
 # Lambda Event Triggers - Hands-on Lab
 
-[DIAGRAM: Lambda Hands-on Architecture]
-
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Lambda icon
-   - AWS S3 icon
-   - AWS DynamoDB icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS VPC icon
-3. Layout:
-   - Place Lambda functions at the center
-   - Add S3 bucket and DynamoDB table on the left
-   - Place IAM roles and VPC configuration on the right
-   - Add CloudWatch integration below
-4. Use AWS's standard connector arrows to show event flows
-5. Add clear labels for each component
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for Lambda components
-   - Gray for infrastructure elements
-
 ## Prerequisites
 
 - AWS CDK and AWS CLI configured

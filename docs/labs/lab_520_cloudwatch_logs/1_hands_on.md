@@ -2,6 +2,8 @@
 
 ## Prerequisites
 
+Before starting this lab, ensure you have:
+
 - AWS CDK and AWS CLI configured
 - Node.js installed
 - Resources to monitor (EC2, Lambda, etc.)
@@ -55,29 +57,6 @@ flowchart TD
     ALARMS --> SNS
     ALARMS --> AUTO
 ```
-
-[DIAGRAM: CloudWatch Implementation]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-   - AWS SNS icon
-   - AWS EventBridge icon
-   - AWS EC2 icon
-   - AWS CloudWatch Logs icon
-3. Layout:
-   - Place CloudWatch Dashboard at the center
-   - Add alarms and metrics on the left
-   - Place log groups and filters on the right
-   - Show custom metrics at the bottom
-4. Use AWS's standard connector arrows to show relationships
-5. Add monitoring flow visualization with data collection
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for CloudWatch components
-   - Gray for infrastructure elements
 
 ## Lab Steps
 
@@ -322,26 +301,6 @@ async function publishLogs() {
 
 publishLogs();
 ```
-
-[DIAGRAM: CloudWatch Testing]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-   - AWS SNS icon
-   - AWS EventBridge icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Log Publishing
-   - Metric Collection
-   - Alarm Triggering
-   - Dashboard Monitoring
-5. Use AWS's standard color scheme for all elements
 
 ### 4. Deploy and Test
 

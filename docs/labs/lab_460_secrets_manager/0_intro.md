@@ -4,28 +4,46 @@
 
 AWS Secrets Manager helps you protect secrets needed to access your applications, services, and IT resources. The service enables you to easily rotate, manage, and retrieve database credentials, API keys, and other secrets throughout their lifecycle. Using Secrets Manager, you can secure and manage secrets centrally, control access to secrets using fine-grained IAM policies, and automatically rotate secrets according to your security requirements.
 
-[DIAGRAM: Secrets Manager Overview]
-Instructions for draw.io:
+[DIAGRAM: Secrets Manager Architecture]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Secrets Manager icon
-   - AWS KMS icon
-   - AWS IAM icon
-   - AWS Lambda icon
-   - AWS VPC icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place Secrets Manager at the center
-   - Add KMS and IAM on the left
-   - Place Lambda functions and VPC on the right
-   - Show CloudWatch monitoring below
-4. Use AWS's standard connector arrows to show relationships
-5. Add secret flow visualization with encryption
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for Secrets Manager components
-   - Gray for infrastructure elements
+```mermaid
+flowchart TD
+    subgraph SM["AWS Secrets Manager"]
+        Secret[Secret]
+        Version[Secret Versions]
+        Rotation[Automatic Rotation]
+    end
+
+    subgraph Security["Security & Encryption"]
+        KMS[KMS Encryption]
+        IAM[IAM Policies]
+        VPC[VPC Endpoints]
+    end
+
+    subgraph Access["Access Methods"]
+        SDK[AWS SDK]
+        CLI[AWS CLI]
+        Console[AWS Console]
+        Lambda[Lambda Functions]
+    end
+
+    subgraph Integration["Integration"]
+        RDS[RDS Databases]
+        App[Applications]
+        CloudWatch[CloudWatch Logs]
+    end
+
+    Secret --> Version
+    Secret --> Rotation
+    Security --> SM
+    SM --> Access
+    Access --> Integration
+
+    style SM fill:#ff9900,color:#fff
+    style Security fill:#dd344c,color:#fff
+    style Access fill:#e8f5e8
+    style Integration fill:#e1f5fe
+```
 
 ## Learning Objectives
 
@@ -114,25 +132,3 @@ In the hands-on portion of this lab, you will:
 4. Set up cross-account secret access
 5. Monitor secret usage using CloudWatch and CloudTrail
 6. Implement best practices for secret management
-
-[DIAGRAM: Secrets Manager Flow]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Secrets Manager icon
-   - AWS Lambda icon
-   - AWS KMS icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Secret Creation
-   - Secret Rotation
-   - Secret Retrieval
-   - Access Control
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow

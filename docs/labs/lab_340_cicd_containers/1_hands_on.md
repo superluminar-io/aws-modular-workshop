@@ -342,26 +342,40 @@ cdk destroy ContainerPipelineStack --profile your-profile-name
 ```
 
 [DIAGRAM: Container CI/CD Setup Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECR icon
-   - AWS CodePipeline icon
-   - AWS CodeBuild icon
-   - AWS ECS icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Repository Setup
-   - Pipeline Creation
-   - Build Configuration
-   - Security Setup
-   - Deployment Setup
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    START[Start Container CI/CD] --> ECR[Create ECR Repository]
+    ECR --> PIPELINE[Create CodePipeline]
+    PIPELINE --> SOURCE[Configure Source Stage]
+
+    SOURCE --> BUILD[Setup Build Stage]
+    BUILD --> DOCKER[Configure Docker Build]
+    DOCKER --> PUSH[Push to ECR]
+
+    PUSH --> DEPLOY[Setup Deploy Stage]
+    DEPLOY --> TARGET{Deploy Target}
+
+    TARGET -->|ECS| ECS_DEPLOY[Deploy to ECS]
+    TARGET -->|EKS| EKS_DEPLOY[Deploy to EKS]
+    TARGET -->|Lambda| LAMBDA_DEPLOY[Deploy to Lambda]
+
+    ECS_DEPLOY --> MONITOR[Setup Monitoring]
+    EKS_DEPLOY --> MONITOR
+    LAMBDA_DEPLOY --> MONITOR
+
+    MONITOR --> SECURITY[Configure Security Scanning]
+    SECURITY --> TEST{Test Pipeline}
+
+    TEST -->|Success| COMPLETE[Setup Complete]
+    TEST -->|Failed| DEBUG[Debug Issues]
+    DEBUG --> BUILD
+
+    style START fill:#569a31,color:#fff
+    style COMPLETE fill:#569a31,color:#fff
+    style DEBUG fill:#dd344c,color:#fff
+    style TARGET fill:#ff9900,color:#fff
+```
 
 ## Creating Container CI/CD Resources
 

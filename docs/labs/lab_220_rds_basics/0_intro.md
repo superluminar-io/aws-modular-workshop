@@ -4,32 +4,49 @@
 
 Amazon Relational Database Service (RDS) is a managed database service that makes it easy to set up, operate, and scale relational databases in the cloud. In this lab, you'll learn how to create and manage RDS instances using AWS CDK.
 
-[DIAGRAM: RDS Overview]
+[DIAGRAM: RDS Architecture Overview]
 
-Instructions for draw.io:
+```mermaid
+flowchart TD
+    subgraph VPC["Virtual Private Cloud"]
+        subgraph AZ1["Availability Zone A"]
+            Primary[RDS Primary Instance]
+        end
+        subgraph AZ2["Availability Zone B"]
+            Standby[RDS Standby Instance]
+        end
+        SG[Security Groups]
+    end
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS RDS icon
-   - AWS VPC icon
-   - AWS CloudWatch icon
-   - AWS KMS icon
-   - AWS Secrets Manager icon
-   - AWS IAM icon
-3. Layout:
-   - Place RDS instance at the center
-   - Add VPC and security groups
-   - Show monitoring and encryption
-   - Include backup and restore
-4. Use AWS's standard connector arrows to show:
-   - Network connections
-   - Security relationships
-   - Monitoring flow
-5. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for database components
-   - Gray for infrastructure elements
-6. Add clear labels for each component
+    subgraph Storage["Storage & Backup"]
+        EBS[EBS Storage]
+        Backup[Automated Backups]
+        Snapshot[Manual Snapshots]
+    end
+
+    subgraph Security["Security & Monitoring"]
+        IAM[IAM Roles]
+        SM[Secrets Manager]
+        KMS[KMS Encryption]
+        CW[CloudWatch Metrics]
+    end
+
+    subgraph Apps["Applications"]
+        App[Application Layer]
+        Lambda[Lambda Functions]
+    end
+
+    Apps --> SG
+    SG --> Primary
+    Primary --> Standby
+    Primary --> Storage
+    Security --> VPC
+
+    style VPC fill:#e1f5fe
+    style Storage fill:#569a31,color:#fff
+    style Security fill:#dd344c,color:#fff
+    style Apps fill:#e8f5e8
+```
 
 ## Learning Objectives
 
@@ -212,27 +229,3 @@ In the hands-on section, you'll:
 - Set up monitoring and backups
 - Connect to your database
 - Implement high availability features
-
-[DIAGRAM: RDS Operations Flow]
-
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS RDS icon
-   - AWS CloudWatch icon
-   - AWS KMS icon
-   - AWS Secrets Manager icon
-   - AWS IAM icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Instance Creation
-   - Configuration
-   - Database Setup
-   - Backup Setup
-   - Maintenance
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow

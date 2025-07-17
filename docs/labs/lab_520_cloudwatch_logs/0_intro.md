@@ -4,28 +4,44 @@
 
 Amazon CloudWatch is a monitoring and observability service that provides data and actionable insights for AWS, hybrid, and on-premises applications and infrastructure resources. This lab will guide you through implementing comprehensive monitoring, logging, and alerting using CloudWatch's various features.
 
-[DIAGRAM: CloudWatch Overview]
-Instructions for draw.io:
+[DIAGRAM: CloudWatch Monitoring Architecture]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-   - AWS SNS icon
-   - AWS EventBridge icon
-   - AWS EC2 icon
-   - AWS RDS icon
-3. Layout:
-   - Place CloudWatch at the center
-   - Add metrics and logs on the left
-   - Place alarms and dashboards on the right
-   - Show events and rules at the bottom
-4. Use AWS's standard connector arrows to show relationships
-5. Add monitoring flow visualization with data collection
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for CloudWatch components
-   - Gray for infrastructure elements
+```mermaid
+flowchart TD
+    subgraph Sources["Data Sources"]
+        EC2[EC2 Instances]
+        Lambda[Lambda Functions]
+        RDS[RDS Databases]
+        App[Applications]
+        Custom[Custom Metrics]
+    end
+
+    subgraph CW["CloudWatch"]
+        Metrics[Metrics]
+        Logs[Logs]
+        Alarms[Alarms]
+        Dashboards[Dashboards]
+        Insights[Log Insights]
+    end
+
+    subgraph Actions["Alarm Actions"]
+        SNS[SNS Notifications]
+        ASG[Auto Scaling]
+        Lambda2[Lambda Functions]
+        EB[EventBridge Rules]
+    end
+
+    Sources --> Metrics
+    Sources --> Logs
+    Metrics --> Alarms
+    Metrics --> Dashboards
+    Logs --> Insights
+    Alarms --> Actions
+
+    style Sources fill:#e1f5fe
+    style CW fill:#ff9900,color:#fff
+    style Actions fill:#e8f5e8
+```
 
 ## Learning Objectives
 
@@ -171,26 +187,3 @@ In the hands-on portion of this lab, you will:
 6. Configure Container Insights
 7. Set up synthetic monitoring
 8. Implement cross-account monitoring
-
-[DIAGRAM: CloudWatch Flow]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-   - AWS SNS icon
-   - AWS EventBridge icon
-   - AWS EC2 icon
-   - AWS RDS icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Data Collection
-   - Metric Processing
-   - Alarm Evaluation
-   - Action Execution
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow

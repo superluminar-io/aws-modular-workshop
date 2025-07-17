@@ -78,6 +78,108 @@ Instructions for draw.io:
    - Green for event components
    - Gray for infrastructure elements
 
+## EventBridge Implementation
+
+<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_420_eventbridge_event_bus_implementation.drawio.svg -->
+
+```mermaid
+flowchart TB
+    subgraph "Event Producer Applications"
+        ORDER[Order Service]
+        INVENTORY[Inventory Service]
+        PAYMENT[Payment Service]
+        SHIPPING[Shipping Service]
+    end
+
+    subgraph "EventBridge Event Bus Architecture"
+        subgraph "Custom Event Bus"
+            BUS[E-Commerce Event Bus]
+        end
+
+        subgraph "Event Rules & Patterns"
+            RULE1[Order Created Rule<br/>source: order.service<br/>detail-type: Order Created]
+            RULE2[Payment Processed Rule<br/>source: payment.service<br/>detail-type: Payment Success]
+            RULE3[Inventory Updated Rule<br/>source: inventory.service<br/>detail-type: Stock Changed]
+            RULE4[Shipping Rule<br/>source: shipping.service<br/>detail-type: Package Shipped]
+        end
+
+        subgraph "Event Filtering & Transformation"
+            FILTER1[High Value Orders<br/>amount > 1000]
+            FILTER2[Low Stock Alert<br/>quantity < 10]
+            FILTER3[Priority Shipping<br/>method = express]
+            TRANSFORM[Event Enrichment<br/>Add Customer Data]
+        end
+    end
+
+    subgraph "Event Consumers & Actions"
+        subgraph "Lambda Functions"
+            FRAUD[Fraud Detection<br/>Lambda]
+            NOTIFY[Customer Notification<br/>Lambda]
+            ANALYTICS[Analytics Processor<br/>Lambda]
+            RESTOCK[Auto Restock<br/>Lambda]
+        end
+
+        subgraph "External Systems"
+            EMAIL[Email Service<br/>SES]
+            SMS[SMS Service<br/>SNS]
+            WEBHOOK[External Webhook<br/>API Gateway]
+            WAREHOUSE[Warehouse System<br/>SQS]
+        end
+
+        subgraph "Data Storage"
+            DYNAMO[(DynamoDB<br/>Event Store)]
+            S3[(S3 Bucket<br/>Event Archive)]
+            KINESIS[Kinesis Stream<br/>Real-time Analytics]
+        end
+    end
+
+    %% Event Flow
+    ORDER --> BUS
+    INVENTORY --> BUS
+    PAYMENT --> BUS
+    SHIPPING --> BUS
+
+    BUS --> RULE1
+    BUS --> RULE2
+    BUS --> RULE3
+    BUS --> RULE4
+
+    RULE1 --> FILTER1
+    RULE2 --> TRANSFORM
+    RULE3 --> FILTER2
+    RULE4 --> FILTER3
+
+    FILTER1 --> FRAUD
+    TRANSFORM --> NOTIFY
+    FILTER2 --> RESTOCK
+    FILTER3 --> WAREHOUSE
+
+    FRAUD --> EMAIL
+    NOTIFY --> SMS
+    ANALYTICS --> KINESIS
+    RESTOCK --> WAREHOUSE
+
+    %% Data Persistence
+    BUS -.-> DYNAMO
+    BUS -.-> S3
+    KINESIS --> ANALYTICS
+
+    %% Styling
+    classDef producer fill:#ff9900,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef eventbus fill:#569a31,stroke:#232F3E,stroke-width:2px,color:white
+    classDef rules fill:#4B9CD3,stroke:#232F3E,stroke-width:2px,color:white
+    classDef consumer fill:#8C4FFF,stroke:#232F3E,stroke-width:2px,color:white
+    classDef storage fill:#FF6B6B,stroke:#232F3E,stroke-width:2px,color:white
+
+    class ORDER,INVENTORY,PAYMENT,SHIPPING producer
+    class BUS eventbus
+    class RULE1,RULE2,RULE3,RULE4,FILTER1,FILTER2,FILTER3,TRANSFORM rules
+    class FRAUD,NOTIFY,ANALYTICS,RESTOCK,EMAIL,SMS,WEBHOOK,WAREHOUSE consumer
+    class DYNAMO,S3,KINESIS storage
+```
+
+<!-- 🔄 END TEMPORARY DIAGRAM -->
+
 ## Lab Steps
 
 ### 1. Create EventBridge Infrastructure
@@ -320,27 +422,36 @@ aws logs get-log-events \
 
 2. Check DLQ:
 
-[DIAGRAM: EventBridge Monitoring]
-Instructions for draw.io:
+[DIAGRAM: EventBridge Monitoring Flow]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS EventBridge icon
-   - AWS CloudWatch icon
-   - AWS Lambda icon
-   - AWS SNS icon
-   - AWS IAM icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Event Monitoring
-   - Log Analysis
-   - Alert Handling
-   - Archive Management
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each monitoring step
+```mermaid
+flowchart TD
+    EVENTS[Events Generated] --> METRICS[CloudWatch Metrics]
+    EVENTS --> LOGS[CloudWatch Logs]
+
+    METRICS --> DASHBOARD[Dashboard Views]
+    METRICS --> ALARMS{Alarm Thresholds}
+
+    ALARMS -->|Threshold Exceeded| ALERT[Send Alert]
+    ALARMS -->|Normal| MONITOR[Continue Monitoring]
+
+    LOGS --> INSIGHTS[Log Insights Queries]
+    INSIGHTS --> ANALYSIS[Error Analysis]
+
+    ANALYSIS --> RULES{Rule Issues?}
+    RULES -->|Pattern Problems| FIX_PATTERN[Fix Event Patterns]
+    RULES -->|Target Issues| FIX_TARGET[Fix Target Config]
+    RULES -->|No Issues| ARCHIVE[Archive Analysis]
+
+    FIX_PATTERN --> TEST[Test Rules]
+    FIX_TARGET --> TEST
+    TEST --> MONITOR
+
+    style EVENTS fill:#569a31,color:#fff
+    style ALERT fill:#dd344c,color:#fff
+    style ARCHIVE fill:#569a31,color:#fff
+    style ALARMS fill:#ff9900,color:#fff
+```
 
 ## Validation Steps
 

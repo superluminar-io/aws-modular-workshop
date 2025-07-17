@@ -5,28 +5,107 @@
 Amazon EventBridge is a serverless event bus service that makes it easy to connect applications together using data from your own applications, integrated Software-as-a-Service (SaaS) applications, and AWS services. This lab demonstrates how to use EventBridge to build event-driven architectures.
 
 [DIAGRAM: EventBridge Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS EventBridge icon
-   - AWS Lambda icon
-   - AWS SNS icon
-   - AWS SQS icon
-   - AWS CloudWatch icon
-   - AWS IAM icon
-3. Layout:
-   - Place EventBridge at the center
-   - Add event sources on the left
-   - Place targets on the right
-   - Show event bus and rules in the middle
-   - Add IAM roles and policies on the right
-4. Use AWS's standard connector arrows to show event flow
-5. Add event pattern visualization with filters
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for event components
-   - Gray for infrastructure elements
+<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_420_eventbridge_event_driven_architecture.drawio.svg -->
+
+```mermaid
+flowchart LR
+    subgraph "Event Sources"
+        APP[Custom Applications]
+        SAAS[SaaS Applications]
+        AWS[AWS Services]
+        CRON[Scheduled Events]
+    end
+
+    subgraph "EventBridge Central Hub"
+        subgraph "Event Buses"
+            DEFAULT[Default Event Bus]
+            CUSTOM[Custom Event Bus]
+            PARTNER[Partner Event Bus]
+        end
+
+        subgraph "Event Processing"
+            RULES[Event Rules<br/>Pattern Matching]
+            FILTER[Event Filtering]
+            TRANSFORM[Data Transformation]
+        end
+
+        subgraph "Event Routing"
+            ROUTER[Event Router]
+            DLQ[Dead Letter Queue]
+            RETRY[Retry Logic]
+        end
+    end
+
+    subgraph "Event Targets"
+        LAMBDA[Lambda Functions]
+        SQS[SQS Queues]
+        SNS[SNS Topics]
+        KINESIS[Kinesis Streams]
+        SF[Step Functions]
+        PIPES[EventBridge Pipes]
+    end
+
+    subgraph "Cross-Account & Region"
+        XACCOUNT[Cross-Account<br/>Event Sharing]
+        XREGION[Cross-Region<br/>Replication]
+        ARCHIVE[Event Archive<br/>& Replay]
+    end
+
+    subgraph "Monitoring & Observability"
+        CW[CloudWatch<br/>Metrics & Logs]
+        INSIGHTS[EventBridge<br/>Insights]
+        XRAY[X-Ray Tracing]
+    end
+
+    %% Event Flow
+    APP --> DEFAULT
+    SAAS --> PARTNER
+    AWS --> DEFAULT
+    CRON --> CUSTOM
+
+    DEFAULT --> RULES
+    CUSTOM --> RULES
+    PARTNER --> RULES
+
+    RULES --> FILTER
+    FILTER --> TRANSFORM
+    TRANSFORM --> ROUTER
+
+    ROUTER --> LAMBDA
+    ROUTER --> SQS
+    ROUTER --> SNS
+    ROUTER --> KINESIS
+    ROUTER --> SF
+    ROUTER --> PIPES
+
+    %% Error Handling
+    ROUTER -.->|Failed| DLQ
+    DLQ -.->|Retry| RETRY
+
+    %% Cross-boundary
+    ROUTER --> XACCOUNT
+    ROUTER --> XREGION
+    ROUTER --> ARCHIVE
+
+    %% Monitoring
+    RULES --> CW
+    ROUTER --> INSIGHTS
+    LAMBDA --> XRAY
+
+    %% Styling
+    classDef aws fill:#ff9900,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef eventbus fill:#569a31,stroke:#232F3E,stroke-width:2px,color:white
+    classDef processing fill:#4B9CD3,stroke:#232F3E,stroke-width:2px,color:white
+    classDef targets fill:#8C4FFF,stroke:#232F3E,stroke-width:2px,color:white
+
+    class APP,SAAS,AWS,CRON,LAMBDA,SQS,SNS,KINESIS,SF,PIPES,CW,INSIGHTS,XRAY aws
+    class DEFAULT,CUSTOM,PARTNER eventbus
+    class RULES,FILTER,TRANSFORM,ROUTER,RETRY processing
+    class XACCOUNT,XREGION,ARCHIVE,DLQ targets
+```
+
+<!-- 🔄 END TEMPORARY DIAGRAM -->
 
 ## Learning Objectives
 
@@ -215,25 +294,33 @@ In the hands-on section, you'll:
 - Monitor event flows
 - Test event delivery
 
-[DIAGRAM: EventBridge Flow]
-Instructions for draw.io:
+[DIAGRAM: EventBridge Processing Flow]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS EventBridge icon
-   - AWS Lambda icon
-   - AWS SNS icon
-   - AWS SQS icon
-   - AWS CloudWatch icon
-   - AWS IAM icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Event Generation
-   - Pattern Matching
-   - Rule Evaluation
-   - Target Delivery
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow
+```mermaid
+flowchart TD
+    EVENT[Event Generated] --> BUS[Event Bus]
+    BUS --> MATCH{Pattern Match}
+    MATCH -->|Match Found| RULE[Apply Rule]
+    MATCH -->|No Match| DROP[Drop Event]
+
+    RULE --> TRANSFORM{Transform Input?}
+    TRANSFORM -->|Yes| MAP[Input Mapping]
+    TRANSFORM -->|No| TARGET[Invoke Target]
+    MAP --> TARGET
+
+    TARGET --> SUCCESS{Target Success?}
+    SUCCESS -->|Yes| ARCHIVE[Archive Event]
+    SUCCESS -->|No| RETRY{Retry Policy}
+
+    RETRY -->|Attempts Left| TARGET
+    RETRY -->|Max Retries| DLQ[Dead Letter Queue]
+
+    ARCHIVE --> MONITOR[CloudWatch Metrics]
+    DLQ --> MONITOR
+
+    style EVENT fill:#569a31,color:#fff
+    style ARCHIVE fill:#569a31,color:#fff
+    style DROP fill:#dd344c,color:#fff
+    style DLQ fill:#dd344c,color:#fff
+    style MATCH fill:#ff9900,color:#fff
+```

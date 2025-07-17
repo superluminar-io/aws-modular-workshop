@@ -6,32 +6,45 @@ Amazon DynamoDB is a fully managed NoSQL database service that provides fast and
 
 [DIAGRAM: DynamoDB Architecture Overview]
 
-Instructions for draw.io:
+```mermaid
+flowchart TD
+    subgraph Apps["Applications"]
+        API[API Gateway]
+        Lambda[Lambda Functions]
+        App[Web Applications]
+    end
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS DynamoDB icon
-   - AWS Lambda icon
-   - AWS API Gateway icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS KMS icon
-3. Layout:
-   - Place DynamoDB table at the center
-   - Add applications and Lambda functions on the left
-   - Show Global Secondary Indexes on the right
-   - Include monitoring and security below
-4. Use AWS's standard connector arrows to show:
-   - Read/write access patterns
-   - Index query flows
-   - Scaling operations
-   - Monitoring and logging
-5. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for database components
-   - Purple for serverless components
-   - Gray for infrastructure elements
-6. Add clear labels for each component and access pattern
+    subgraph DDB["DynamoDB"]
+        Table[DynamoDB Table]
+        GSI[Global Secondary Index]
+        LSI[Local Secondary Index]
+    end
+
+    subgraph Features["DynamoDB Features"]
+        AutoScale[Auto Scaling]
+        Backup[Point-in-time Recovery]
+        Streams[DynamoDB Streams]
+        DAX[DynamoDB Accelerator]
+    end
+
+    subgraph Security["Security & Monitoring"]
+        IAM[IAM Policies]
+        KMS[KMS Encryption]
+        CW[CloudWatch Metrics]
+        VPC[VPC Endpoints]
+    end
+
+    Apps --> Table
+    Table --> GSI
+    Table --> LSI
+    Table --> Features
+    Security --> DDB
+
+    style Apps fill:#e1f5fe
+    style DDB fill:#3334b9,color:#fff
+    style Features fill:#e8f5e8
+    style Security fill:#dd344c,color:#fff
+```
 
 ## Learning Objectives
 

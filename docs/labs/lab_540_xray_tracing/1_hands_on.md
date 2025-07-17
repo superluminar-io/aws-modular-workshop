@@ -2,6 +2,8 @@
 
 ## Prerequisites
 
+Before starting this lab, ensure you have:
+
 - AWS CDK and AWS CLI configured
 - Node.js installed
 - Basic understanding of distributed tracing
@@ -61,30 +63,6 @@ flowchart TD
     XRAY --> ERRORS
     XRAY --> PERF
 ```
-
-[DIAGRAM: X-Ray Implementation]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS API Gateway icon
-   - AWS Lambda icon
-   - AWS DynamoDB icon
-   - AWS X-Ray icon
-   - AWS CloudWatch icon
-   - AWS IAM icon
-3. Layout:
-   - Place API Gateway at the top
-   - Add Lambda functions in the middle
-   - Place DynamoDB at the bottom
-   - Show X-Ray service on the right
-   - Add CloudWatch for monitoring
-4. Use AWS's standard connector arrows to show request flow
-5. Add tracing visualization with dotted lines
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for X-Ray components
-   - Gray for infrastructure elements
 
 ## Lab Steps
 

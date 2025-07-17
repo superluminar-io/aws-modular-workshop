@@ -2,6 +2,8 @@
 
 ## Prerequisites
 
+Before starting this lab, ensure you have:
+
 - AWS CDK and AWS CLI configured
 - Basic understanding of secrets management
 - Completed IAM lab
@@ -55,29 +57,6 @@ flowchart TD
     SM -.->|Audit| CloudTrail[CloudTrail]
     SM -.->|Monitor| CloudWatch[CloudWatch]
 ```
-
-[DIAGRAM: Secrets Manager Implementation]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Secrets Manager icon
-   - AWS KMS icon
-   - AWS IAM icon
-   - AWS Lambda icon
-   - AWS RDS icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Place Secrets Manager at the center
-   - Add KMS and IAM on the left
-   - Place Lambda functions and RDS on the right
-   - Show CloudWatch monitoring below
-4. Use AWS's standard connector arrows to show relationships
-5. Add secret flow visualization with encryption
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for Secrets Manager components
-   - Gray for infrastructure elements
 
 ## Lab Steps
 
@@ -271,27 +250,6 @@ apiKeySecret.addRotationSchedule('RotationSchedule', {
 ```
 
 2. Create rotation function `src/rotation-function/index.ts`:
-
-[DIAGRAM: Secrets Manager Rotation]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Secrets Manager icon
-   - AWS Lambda icon
-   - AWS KMS icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Secret Creation
-   - Secret Testing
-   - Secret Update
-   - Rotation Completion
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow
 
 ## Validation Steps
 

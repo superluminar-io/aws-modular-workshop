@@ -374,25 +374,38 @@ cdk destroy PipelineStack --profile your-profile-name
 ```
 
 [DIAGRAM: CI/CD Setup Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS CodePipeline icon
-   - AWS CodeBuild icon
-   - AWS CodeCommit icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Repository Setup
-   - Pipeline Creation
-   - Testing Configuration
-   - Security Setup
-   - Cross-Account Setup
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    START[Start CI/CD Setup] --> REPO[Setup Repository]
+    REPO --> PIPELINE[Create CodePipeline]
+    PIPELINE --> SOURCE[Configure Source Stage]
+
+    SOURCE --> BUILD[Setup Build Stage]
+    BUILD --> TEST{Add Testing?}
+    TEST -->|Yes| TEST_STAGE[Configure Test Stage]
+    TEST -->|No| DEPLOY[Setup Deploy Stage]
+
+    TEST_STAGE --> DEPLOY
+    DEPLOY --> IAM[Configure IAM Roles]
+    IAM --> CROSS{Cross-Account?}
+
+    CROSS -->|Yes| CROSS_IAM[Setup Cross-Account IAM]
+    CROSS -->|No| TRIGGERS[Configure Triggers]
+
+    CROSS_IAM --> TRIGGERS
+    TRIGGERS --> MONITOR[Setup Monitoring]
+    MONITOR --> VALIDATE{Test Pipeline}
+
+    VALIDATE -->|Success| COMPLETE[Setup Complete]
+    VALIDATE -->|Failed| DEBUG[Debug Issues]
+    DEBUG --> TRIGGERS
+
+    style START fill:#569a31,color:#fff
+    style COMPLETE fill:#569a31,color:#fff
+    style DEBUG fill:#dd344c,color:#fff
+    style TEST fill:#ff9900,color:#fff
+    style CROSS fill:#ff9900,color:#fff
+```
 
 ## Creating CI/CD Resources

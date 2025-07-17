@@ -6,6 +6,167 @@ Amazon Virtual Private Cloud (VPC) is a service that lets you launch AWS resourc
 
 [DIAGRAM: VPC Overview]
 
+<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_160_vpc_complex_network_topology.drawio.svg -->
+
+```mermaid
+flowchart TB
+    subgraph "Internet & External"
+        INTERNET[Internet]
+        CORPORATE[Corporate Network<br/>On-Premises]
+    end
+
+    subgraph "AWS Global Infrastructure"
+        subgraph "Availability Zone A"
+            subgraph "VPC_A [VPC - 10.0.0.0/16]"
+                subgraph "Public Subnet A"
+                    PUB_A[Public Subnet<br/>10.0.1.0/24]
+                    IGW[Internet Gateway]
+                    NAT_A[NAT Gateway]
+                    BASTION_A[Bastion Host<br/>EC2]
+                end
+
+                subgraph "Private Subnet A"
+                    PRIV_A[Private Subnet<br/>10.0.11.0/24]
+                    APP_A[Application Servers<br/>EC2]
+                    LAMBDA_A[Lambda Functions<br/>VPC Enabled]
+                end
+
+                subgraph "Database Subnet A"
+                    DB_A[Database Subnet<br/>10.0.21.0/24]
+                    RDS_A[RDS Instance<br/>Primary]
+                end
+            end
+        end
+
+        subgraph "Availability Zone B"
+            subgraph "VPC_B [Same VPC - 10.0.0.0/16]"
+                subgraph "Public Subnet B"
+                    PUB_B[Public Subnet<br/>10.0.2.0/24]
+                    NAT_B[NAT Gateway]
+                    ALB[Application Load Balancer]
+                end
+
+                subgraph "Private Subnet B"
+                    PRIV_B[Private Subnet<br/>10.0.12.0/24]
+                    APP_B[Application Servers<br/>EC2]
+                    ECS_B[ECS Tasks<br/>Fargate]
+                end
+
+                subgraph "Database Subnet B"
+                    DB_B[Database Subnet<br/>10.0.22.0/24]
+                    RDS_B[RDS Instance<br/>Read Replica]
+                end
+            end
+        end
+    end
+
+    subgraph "Network Security & Routing"
+        subgraph "Route Tables"
+            RT_PUB[Public Route Table<br/>0.0.0.0/0 → IGW]
+            RT_PRIV_A[Private Route Table A<br/>0.0.0.0/0 → NAT-A]
+            RT_PRIV_B[Private Route Table B<br/>0.0.0.0/0 → NAT-B]
+            RT_DB[Database Route Table<br/>Local VPC Only]
+        end
+
+        subgraph "Security Groups"
+            SG_WEB[Web Security Group<br/>80, 443 from 0.0.0.0/0]
+            SG_APP[App Security Group<br/>8080 from Web SG]
+            SG_DB[Database Security Group<br/>3306 from App SG]
+            SG_BASTION[Bastion Security Group<br/>22 from Corp Network]
+        end
+
+        subgraph "Network ACLs"
+            NACL_PUB[Public NACL<br/>Allow HTTP/HTTPS]
+            NACL_PRIV[Private NACL<br/>Allow App Traffic]
+            NACL_DB[Database NACL<br/>Allow DB Traffic Only]
+        end
+    end
+
+    subgraph "VPC Connectivity"
+        VPN[VPN Gateway<br/>Corporate Connection]
+        DX[Direct Connect<br/>Dedicated Line]
+        PEER[VPC Peering<br/>Cross-VPC]
+        TGW[Transit Gateway<br/>Hub-Spoke]
+    end
+
+    subgraph "DNS & Service Discovery"
+        R53[Route 53<br/>Private Hosted Zone]
+        RESOLVER[Route 53 Resolver<br/>Hybrid DNS]
+    end
+
+    %% Internet Connectivity
+    INTERNET --> IGW
+    IGW --> PUB_A
+    IGW --> PUB_B
+
+    %% Public to Private
+    PUB_A --> NAT_A
+    PUB_B --> NAT_B
+    NAT_A --> PRIV_A
+    NAT_B --> PRIV_B
+
+    %% Load Balancer Flow
+    ALB --> APP_A
+    ALB --> APP_B
+
+    %% Application to Database
+    APP_A --> RDS_A
+    APP_B --> RDS_B
+    LAMBDA_A --> RDS_A
+    ECS_B --> RDS_B
+
+    %% Cross-AZ Database Replication
+    RDS_A -.->|Replication| RDS_B
+
+    %% Bastion Access
+    BASTION_A --> APP_A
+    BASTION_A --> RDS_A
+
+    %% Route Table Associations
+    RT_PUB -.-> PUB_A
+    RT_PUB -.-> PUB_B
+    RT_PRIV_A -.-> PRIV_A
+    RT_PRIV_B -.-> PRIV_B
+    RT_DB -.-> DB_A
+    RT_DB -.-> DB_B
+
+    %% Security Group Associations
+    SG_WEB -.-> ALB
+    SG_APP -.-> APP_A
+    SG_APP -.-> APP_B
+    SG_DB -.-> RDS_A
+    SG_DB -.-> RDS_B
+    SG_BASTION -.-> BASTION_A
+
+    %% Corporate Connectivity
+    CORPORATE --> VPN
+    CORPORATE --> DX
+    VPN --> PRIV_A
+    DX --> PRIV_A
+
+    %% DNS Resolution
+    R53 -.-> PRIV_A
+    R53 -.-> PRIV_B
+    RESOLVER -.-> CORPORATE
+
+    %% Styling
+    classDef public fill:#569a31,stroke:#232F3E,stroke-width:2px,color:white
+    classDef private fill:#4B9CD3,stroke:#232F3E,stroke-width:2px,color:white
+    classDef database fill:#8C4FFF,stroke:#232F3E,stroke-width:2px,color:white
+    classDef security fill:#dd344c,stroke:#232F3E,stroke-width:2px,color:white
+    classDef connectivity fill:#ff9900,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef external fill:#95a5a6,stroke:#232F3E,stroke-width:2px,color:#232F3E
+
+    class PUB_A,PUB_B,IGW,NAT_A,NAT_B,ALB,BASTION_A public
+    class PRIV_A,PRIV_B,APP_A,APP_B,LAMBDA_A,ECS_B private
+    class DB_A,DB_B,RDS_A,RDS_B database
+    class SG_WEB,SG_APP,SG_DB,SG_BASTION,NACL_PUB,NACL_PRIV,NACL_DB,RT_PUB,RT_PRIV_A,RT_PRIV_B,RT_DB security
+    class VPN,DX,PEER,TGW,R53,RESOLVER connectivity
+    class INTERNET,CORPORATE external
+```
+
+<!-- 🔄 END TEMPORARY DIAGRAM -->
+
 Instructions for draw.io:
 
 1. Create a new diagram using the AWS Architecture 2023 template
@@ -18,19 +179,15 @@ Instructions for draw.io:
    - AWS Security Group icon
    - AWS Network ACL icon
 3. Layout:
-   - Place VPC at the center
-   - Add public and private subnets
-   - Show route tables and gateways
-   - Include security groups and NACLs
+   - Create a detailed component diagram
+   - Show relationships between components
+   - Include all networking elements
 4. Use AWS's standard connector arrows to show:
+   - Component relationships
    - Network flow
    - Security boundaries
-   - Routing paths
-5. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for public components
-   - Red for private components
-6. Add clear labels for each component
+5. Use AWS's standard color scheme for all elements
+6. Add clear labels for each component and relationship
 
 ## Learning Objectives
 

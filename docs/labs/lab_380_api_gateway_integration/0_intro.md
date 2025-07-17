@@ -5,26 +5,134 @@
 Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale. In this lab, you'll learn how to create and manage APIs using API Gateway with AWS CDK.
 
 [DIAGRAM: API Gateway Overview]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS API Gateway icon
-   - AWS Lambda icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-   - AWS Cognito icon
-3. Layout:
-   - Place API Gateway at the center
-   - Add REST, HTTP, and WebSocket APIs on the left
-   - Place integrations and authorizers on the right
-   - Show service interactions below
-4. Use AWS's standard connector arrows to show relationships
-5. Add clear labels for each component
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for API Gateway components
-   - Gray for infrastructure elements
+<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_380_api_gateway_multi_api_architecture.drawio.svg -->
+
+```mermaid
+flowchart TB
+    subgraph "Client Applications"
+        WEB[Web Application]
+        MOBILE[Mobile App]
+        IOT[IoT Devices]
+        B2B[Partner APIs]
+    end
+
+    subgraph "API Gateway Multi-API Architecture"
+        subgraph "API Types"
+            REST[REST API<br/>Regional/Edge]
+            HTTP[HTTP API<br/>Lower Latency]
+            WS[WebSocket API<br/>Real-time]
+        end
+
+        subgraph "Authentication & Authorization"
+            COGNITO[Cognito User Pool<br/>User Authentication]
+            IAM[IAM Roles<br/>Service Authentication]
+            LAMBDA_AUTH[Lambda Authorizer<br/>Custom Auth]
+            JWT[JWT Authorizer<br/>Token Validation]
+        end
+
+        subgraph "Request Processing"
+            VALIDATION[Request Validation<br/>JSON Schema]
+            TRANSFORM[Request/Response<br/>Mapping Templates]
+            THROTTLE[Throttling<br/>Rate Limiting]
+            CACHE[Response Caching<br/>Edge Optimization]
+        end
+
+        subgraph "Integration Types"
+            LAMBDA_PROXY[Lambda Proxy<br/>Integration]
+            LAMBDA_CUSTOM[Lambda Custom<br/>Integration]
+            HTTP_PROXY[HTTP Proxy<br/>Integration]
+            AWS_SERVICE[AWS Service<br/>Integration]
+            MOCK[Mock Integration<br/>Testing]
+        end
+    end
+
+    subgraph "Backend Services"
+        subgraph "Compute"
+            LAMBDA[Lambda Functions]
+            EC2[EC2 Services]
+            ECS[ECS Containers]
+        end
+
+        subgraph "Data Services"
+            DDB[(DynamoDB)]
+            RDS[(RDS Database)]
+            S3[(S3 Storage)]
+        end
+
+        subgraph "External Services"
+            EXTERNAL[External APIs]
+            SAAS[SaaS Services]
+        end
+    end
+
+    subgraph "Monitoring & Security"
+        WAF[AWS WAF<br/>Protection]
+        SHIELD[AWS Shield<br/>DDoS Protection]
+        CW[CloudWatch<br/>Monitoring]
+        XRAY[X-Ray<br/>Tracing]
+        LOGS[CloudWatch Logs<br/>Access Logs]
+    end
+
+    %% Client Connections
+    WEB --> REST
+    MOBILE --> HTTP
+    IOT --> WS
+    B2B --> REST
+
+    %% Authentication Flow
+    REST --> COGNITO
+    REST --> IAM
+    HTTP --> JWT
+    WS --> LAMBDA_AUTH
+
+    %% Request Processing
+    REST --> VALIDATION
+    HTTP --> TRANSFORM
+    WS --> THROTTLE
+    REST --> CACHE
+
+    %% Integrations
+    VALIDATION --> LAMBDA_PROXY
+    TRANSFORM --> LAMBDA_CUSTOM
+    THROTTLE --> HTTP_PROXY
+    CACHE --> AWS_SERVICE
+    LAMBDA_AUTH --> MOCK
+
+    %% Backend Connections
+    LAMBDA_PROXY --> LAMBDA
+    LAMBDA_CUSTOM --> LAMBDA
+    HTTP_PROXY --> EC2
+    AWS_SERVICE --> DDB
+    LAMBDA --> RDS
+    LAMBDA --> S3
+    HTTP_PROXY --> EXTERNAL
+    LAMBDA --> SAAS
+
+    %% Security & Monitoring
+    REST -.-> WAF
+    HTTP -.-> SHIELD
+    WS -.-> CW
+    LAMBDA --> XRAY
+    REST --> LOGS
+
+    %% Styling
+    classDef client fill:#ff9900,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef api fill:#569a31,stroke:#232F3E,stroke-width:2px,color:white
+    classDef auth fill:#4B9CD3,stroke:#232F3E,stroke-width:2px,color:white
+    classDef processing fill:#8C4FFF,stroke:#232F3E,stroke-width:2px,color:white
+    classDef backend fill:#FF6B6B,stroke:#232F3E,stroke-width:2px,color:white
+    classDef monitoring fill:#F39C12,stroke:#232F3E,stroke-width:2px,color:#232F3E
+
+    class WEB,MOBILE,IOT,B2B client
+    class REST,HTTP,WS api
+    class COGNITO,IAM,LAMBDA_AUTH,JWT auth
+    class VALIDATION,TRANSFORM,THROTTLE,CACHE,LAMBDA_PROXY,LAMBDA_CUSTOM,HTTP_PROXY,AWS_SERVICE,MOCK processing
+    class LAMBDA,EC2,ECS,DDB,RDS,S3,EXTERNAL,SAAS backend
+    class WAF,SHIELD,CW,XRAY,LOGS monitoring
+```
+
+<!-- 🔄 END TEMPORARY DIAGRAM -->
 
 ## Learning Objectives
 
@@ -36,26 +144,41 @@ Instructions for draw.io:
 - Monitor API performance
 - Implement best practices for API design
 
-[DIAGRAM: API Gateway Flow]
-Instructions for draw.io:
+[DIAGRAM: API Gateway Request Processing Flow]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS API Gateway icon
-   - AWS Lambda icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Request Handling
-   - Authentication
-   - Integration
-   - Response Handling
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow
+```mermaid
+flowchart TD
+    CLIENT[Client Request] --> GATEWAY[API Gateway]
+    GATEWAY --> AUTH{Authentication}
+    AUTH -->|Valid| AUTHORIZE{Authorization}
+    AUTH -->|Invalid| REJECT[401 Unauthorized]
+
+    AUTHORIZE -->|Allowed| VALIDATE[Request Validation]
+    AUTHORIZE -->|Denied| FORBID[403 Forbidden]
+
+    VALIDATE -->|Valid| TRANSFORM[Request Transform]
+    VALIDATE -->|Invalid| BADREQ[400 Bad Request]
+
+    TRANSFORM --> INTEGRATE[Backend Integration]
+    INTEGRATE --> LAMBDA[Lambda Function]
+    LAMBDA --> SUCCESS{Success?}
+
+    SUCCESS -->|Yes| RESPONSE[Transform Response]
+    SUCCESS -->|No| ERROR[Error Response]
+
+    RESPONSE --> CLIENT
+    ERROR --> CLIENT
+    REJECT --> CLIENT
+    FORBID --> CLIENT
+    BADREQ --> CLIENT
+
+    style CLIENT fill:#e1f5fe
+    style LAMBDA fill:#ff9900,color:#fff
+    style REJECT fill:#dd344c,color:#fff
+    style FORBID fill:#dd344c,color:#fff
+    style BADREQ fill:#dd344c,color:#fff
+    style ERROR fill:#dd344c,color:#fff
+```
 
 ## Core Concepts
 

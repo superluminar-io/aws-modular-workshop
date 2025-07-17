@@ -328,25 +328,37 @@ cdk destroy ApiStack --profile your-profile-name
 ```
 
 [DIAGRAM: API Gateway Setup Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS API Gateway icon
-   - AWS Lambda icon
-   - AWS IAM icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - API Creation
-   - Integration Configuration
-   - Security Setup
-   - Deployment Configuration
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow
+```mermaid
+flowchart TD
+    START[Start Setup] --> CREATE_API[Create REST API]
+    CREATE_API --> CREATE_RES[Create Resources]
+    CREATE_RES --> ADD_METHODS[Add Methods]
+
+    ADD_METHODS --> CONFIGURE{Configure Integration}
+    CONFIGURE -->|Lambda| LAMBDA_INT[Lambda Integration]
+    CONFIGURE -->|HTTP| HTTP_INT[HTTP Integration]
+    CONFIGURE -->|Mock| MOCK_INT[Mock Integration]
+
+    LAMBDA_INT --> PERMS[Set Permissions]
+    HTTP_INT --> PERMS
+    MOCK_INT --> SECURITY[Configure Security]
+
+    PERMS --> SECURITY
+    SECURITY --> CORS[Enable CORS]
+    CORS --> DEPLOY[Deploy API]
+
+    DEPLOY --> TEST[Test Endpoints]
+    TEST --> SUCCESS{Tests Pass?}
+    SUCCESS -->|Yes| DONE[Setup Complete]
+    SUCCESS -->|No| DEBUG[Debug Issues]
+    DEBUG --> TEST
+
+    style START fill:#569a31,color:#fff
+    style DONE fill:#569a31,color:#fff
+    style DEBUG fill:#dd344c,color:#fff
+    style CONFIGURE fill:#ff9900,color:#fff
+```
 
 ## Creating API Gateway Resources
 
@@ -398,3 +410,160 @@ sequenceDiagram
     Lambda->>API: Return Result
     API->>Client: HTTP Response
 ```
+
+## API Gateway Implementation
+
+<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_380_api_gateway_complete_implementation.drawio.svg -->
+
+```mermaid
+flowchart TD
+    subgraph "Client Layer"
+        CLIENT[Client Application]
+    end
+
+    subgraph "API Gateway Complete Implementation"
+        subgraph "Edge Layer"
+            CLOUDFRONT[CloudFront<br/>Global CDN]
+            EDGE[API Gateway<br/>Edge Optimized]
+        end
+
+        subgraph "API Endpoints"
+            ROOT[/ Root Resource]
+            USERS[/users Resource]
+            ORDERS[/orders Resource]
+            PRODUCTS[/products Resource]
+        end
+
+        subgraph "HTTP Methods & Integration"
+            GET_USERS[GET /users<br/>Lambda Integration]
+            POST_USER[POST /users<br/>Lambda Integration]
+            GET_USER[GET /users/{id}<br/>Lambda Integration]
+            PUT_USER[PUT /users/{id}<br/>Lambda Integration]
+            DELETE_USER[DELETE /users/{id}<br/>Lambda Integration]
+
+            GET_ORDERS[GET /orders<br/>DynamoDB Direct]
+            POST_ORDER[POST /orders<br/>Step Functions]
+
+            GET_PRODUCTS[GET /products<br/>S3 Integration]
+            POST_PRODUCT[POST /products<br/>Lambda + DynamoDB]
+        end
+
+        subgraph "Request/Response Pipeline"
+            AUTH_CHECK[Cognito Authorizer]
+            VALIDATION[Request Validation<br/>JSON Schema]
+            MAPPING[Request Mapping<br/>VTL Templates]
+            RATE_LIMIT[Throttling<br/>10,000 req/sec]
+            RESPONSE_MAP[Response Mapping<br/>VTL Templates]
+        end
+    end
+
+    subgraph "Backend Implementation"
+        subgraph "Lambda Functions"
+            USER_LAMBDA[User Management<br/>Lambda Function]
+            PRODUCT_LAMBDA[Product Catalog<br/>Lambda Function]
+        end
+
+        subgraph "Data Layer"
+            USER_DDB[(Users Table<br/>DynamoDB)]
+            ORDER_DDB[(Orders Table<br/>DynamoDB)]
+            PRODUCT_S3[(Product Images<br/>S3 Bucket)]
+        end
+
+        subgraph "Workflow Services"
+            ORDER_SF[Order Processing<br/>Step Functions]
+            INVENTORY_LAMBDA[Inventory Check<br/>Lambda]
+            PAYMENT_LAMBDA[Payment Processing<br/>Lambda]
+        end
+    end
+
+    subgraph "Cross-Cutting Concerns"
+        subgraph "Security"
+            COGNITO[Cognito User Pool]
+            WAF_RULES[WAF Rules<br/>SQL Injection<br/>XSS Protection]
+        end
+
+        subgraph "Monitoring"
+            API_LOGS[API Gateway<br/>Access Logs]
+            LAMBDA_LOGS[Lambda<br/>Function Logs]
+            XRAY_TRACE[X-Ray<br/>Distributed Tracing]
+            CW_METRICS[CloudWatch<br/>Custom Metrics]
+        end
+    end
+
+    %% Request Flow
+    CLIENT --> CLOUDFRONT
+    CLOUDFRONT --> EDGE
+    EDGE --> ROOT
+
+    ROOT --> USERS
+    ROOT --> ORDERS
+    ROOT --> PRODUCTS
+
+    %% User Management Flow
+    USERS --> GET_USERS
+    USERS --> POST_USER
+    USERS --> GET_USER
+    USERS --> PUT_USER
+    USERS --> DELETE_USER
+
+    %% Order Management Flow
+    ORDERS --> GET_ORDERS
+    ORDERS --> POST_ORDER
+
+    %% Product Management Flow
+    PRODUCTS --> GET_PRODUCTS
+    PRODUCTS --> POST_PRODUCT
+
+    %% Security Pipeline
+    GET_USERS --> AUTH_CHECK
+    AUTH_CHECK --> VALIDATION
+    VALIDATION --> MAPPING
+    MAPPING --> RATE_LIMIT
+
+    %% Backend Integrations
+    GET_USERS --> USER_LAMBDA
+    POST_USER --> USER_LAMBDA
+    USER_LAMBDA --> USER_DDB
+
+    GET_ORDERS --> ORDER_DDB
+    POST_ORDER --> ORDER_SF
+    ORDER_SF --> INVENTORY_LAMBDA
+    ORDER_SF --> PAYMENT_LAMBDA
+    INVENTORY_LAMBDA --> ORDER_DDB
+
+    GET_PRODUCTS --> PRODUCT_S3
+    POST_PRODUCT --> PRODUCT_LAMBDA
+    PRODUCT_LAMBDA --> PRODUCT_S3
+
+    %% Response Pipeline
+    USER_LAMBDA --> RESPONSE_MAP
+    ORDER_DDB --> RESPONSE_MAP
+    RESPONSE_MAP --> CLIENT
+
+    %% Security Integration
+    AUTH_CHECK -.-> COGNITO
+    EDGE -.-> WAF_RULES
+
+    %% Monitoring Integration
+    EDGE --> API_LOGS
+    USER_LAMBDA --> LAMBDA_LOGS
+    ORDER_SF --> XRAY_TRACE
+    RATE_LIMIT --> CW_METRICS
+
+    %% Styling
+    classDef client fill:#ff9900,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef api fill:#569a31,stroke:#232F3E,stroke-width:2px,color:white
+    classDef lambda fill:#4B9CD3,stroke:#232F3E,stroke-width:2px,color:white
+    classDef data fill:#8C4FFF,stroke:#232F3E,stroke-width:2px,color:white
+    classDef security fill:#dd344c,stroke:#232F3E,stroke-width:2px,color:white
+    classDef monitoring fill:#F39C12,stroke:#232F3E,stroke-width:2px,color:#232F3E
+
+    class CLIENT client
+    class CLOUDFRONT,EDGE,ROOT,USERS,ORDERS,PRODUCTS,GET_USERS,POST_USER,GET_USER,PUT_USER,DELETE_USER,GET_ORDERS,POST_ORDER,GET_PRODUCTS,POST_PRODUCT api
+    class USER_LAMBDA,PRODUCT_LAMBDA,INVENTORY_LAMBDA,PAYMENT_LAMBDA lambda
+    class USER_DDB,ORDER_DDB,PRODUCT_S3,ORDER_SF data
+    class AUTH_CHECK,VALIDATION,MAPPING,RATE_LIMIT,RESPONSE_MAP,COGNITO,WAF_RULES security
+    class API_LOGS,LAMBDA_LOGS,XRAY_TRACE,CW_METRICS monitoring
+```
+
+<!-- 🔄 END TEMPORARY DIAGRAM -->

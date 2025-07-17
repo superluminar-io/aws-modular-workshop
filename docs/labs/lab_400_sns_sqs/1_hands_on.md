@@ -95,39 +95,218 @@ Description: A detailed diagram showing the messaging resources we'll create in 
    Use AWS's standard color scheme with blue for AWS services and green for messaging components.
 
 [DIAGRAM: Messaging Setup Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS SNS icon
-   - AWS SQS icon
-   - AWS Lambda icon
-   - AWS CloudWatch icon
-   - AWS IAM icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Topic Creation
-   - Queue Configuration
-   - Subscription Setup
-   - Integration Configuration
-   - Security Setup
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow
+```mermaid
+flowchart TD
+    START[Start Messaging Setup] --> TOPIC[Create SNS Topic]
+    TOPIC --> QUEUE[Create SQS Queues]
+    QUEUE --> DLQ[Create Dead Letter Queues]
 
-Description: A sequence diagram showing how the messaging setup will work in our lab. The diagram should:
+    DLQ --> SUB[Create Subscriptions]
+    SUB --> TYPE{Subscription Type}
 
-1. Show the setup flow:
-   - Topic creation
-   - Queue configuration
-   - Subscription setup
-   - Integration configuration
-2. Include the specific operations we perform in the lab
-3. Show how different components interact
-4. Illustrate the messaging patterns
-   Use AWS's standard color scheme and include clear labels for each step.
+    TYPE -->|SQS| SQS_SUB[SQS Subscription]
+    TYPE -->|Lambda| LAMBDA_SUB[Lambda Subscription]
+    TYPE -->|Email| EMAIL_SUB[Email Subscription]
+    TYPE -->|HTTP| HTTP_SUB[HTTP Subscription]
+
+    SQS_SUB --> FILTER[Configure Message Filters]
+    LAMBDA_SUB --> FILTER
+    EMAIL_SUB --> FILTER
+    HTTP_SUB --> FILTER
+
+    FILTER --> PERMS[Configure IAM Permissions]
+    PERMS --> MONITOR[Setup CloudWatch Monitoring]
+    MONITOR --> TEST[Test Message Flow]
+
+    TEST --> VALIDATE{Messages Delivered?}
+    VALIDATE -->|Yes| COMPLETE[Setup Complete]
+    VALIDATE -->|No| DEBUG[Debug Configuration]
+
+    DEBUG --> CHECK{Check What?}
+    CHECK -->|Permissions| PERMS
+    CHECK -->|Filters| FILTER
+    CHECK -->|Subscriptions| SUB
+
+    style START fill:#569a31,color:#fff
+    style COMPLETE fill:#569a31,color:#fff
+    style DEBUG fill:#dd344c,color:#fff
+    style TYPE fill:#ff9900,color:#fff
+    style CHECK fill:#ff9900,color:#fff
+```
+
+## SNS and SQS Implementation
+
+<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_400_sns_sqs_multi_service_implementation.drawio.svg -->
+
+```mermaid
+flowchart TD
+    subgraph "E-Commerce Application Implementation"
+        subgraph "Order Processing Workflow"
+            ORDER_API[Order API<br/>API Gateway + Lambda]
+
+            ORDER_TOPIC[SNS Topic<br/>workshop-order-events<br/>arn:aws:sns:us-east-1:123456789012:workshop-order-events]
+
+            subgraph "Order Event Types"
+                EVENT_CREATED[OrderCreated<br/>message_type: order.created]
+                EVENT_UPDATED[OrderUpdated<br/>message_type: order.updated]
+                EVENT_CANCELLED[OrderCancelled<br/>message_type: order.cancelled]
+                EVENT_SHIPPED[OrderShipped<br/>message_type: order.shipped]
+            end
+        end
+
+        subgraph "Message Filtering & Routing"
+            subgraph "SNS Subscription Filters"
+                FILTER_PAYMENTS[Payment Filter<br/>message_type = order.created<br/>OR order.updated]
+                FILTER_INVENTORY[Inventory Filter<br/>message_type = order.created<br/>OR order.cancelled]
+                FILTER_SHIPPING[Shipping Filter<br/>message_type = order.created<br/>AND status = confirmed]
+                FILTER_NOTIFICATIONS[Notification Filter<br/>message_type IN [order.created,<br/>order.shipped, order.cancelled]]
+            end
+        end
+
+        subgraph "SQS Queue Implementation"
+            subgraph "Processing Queues"
+                PAYMENT_QUEUE[Payment Processing Queue<br/>workshop-payment-processing<br/>VisibilityTimeout: 60s<br/>MaxReceiveCount: 3]
+
+                INVENTORY_QUEUE[Inventory Update Queue<br/>workshop-inventory-updates.fifo<br/>ContentBasedDeduplication: true<br/>FifoThroughputLimit: perMessageGroupId]
+
+                SHIPPING_QUEUE[Shipping Queue<br/>workshop-shipping-requests<br/>DelaySeconds: 300<br/>MessageRetentionPeriod: 1209600]
+
+                NOTIFICATION_QUEUE[Notification Queue<br/>workshop-notifications<br/>BatchSize: 10<br/>MaxBatchingWindowInSeconds: 5]
+            end
+
+            subgraph "Dead Letter Queues"
+                PAYMENT_DLQ[Payment DLQ<br/>workshop-payment-dlq<br/>MaxReceiveCount: 0]
+
+                INVENTORY_DLQ[Inventory DLQ<br/>workshop-inventory-dlq.fifo<br/>Same settings as main queue]
+
+                SHIPPING_DLQ[Shipping DLQ<br/>workshop-shipping-dlq<br/>Alarm on message count > 0]
+            end
+        end
+
+        subgraph "Lambda Function Processors"
+            subgraph "Business Logic Functions"
+                PAYMENT_LAMBDA[Payment Processor<br/>Function: workshop-payment-processor<br/>Timeout: 60s<br/>Reserved Concurrency: 10]
+
+                INVENTORY_LAMBDA[Inventory Manager<br/>Function: workshop-inventory-manager<br/>Timeout: 30s<br/>EventSourceMapping: FIFO Queue]
+
+                SHIPPING_LAMBDA[Shipping Coordinator<br/>Function: workshop-shipping-coordinator<br/>Timeout: 45s<br/>Batch Size: 5]
+
+                NOTIFICATION_LAMBDA[Notification Sender<br/>Function: workshop-notification-sender<br/>Timeout: 15s<br/>Batch Size: 10]
+            end
+        end
+
+        subgraph "Data Persistence & External Services"
+            subgraph "Database Updates"
+                ORDERS_TABLE[(DynamoDB Orders Table<br/>PK: order_id<br/>GSI: customer_id-timestamp)]
+
+                INVENTORY_TABLE[(DynamoDB Inventory Table<br/>PK: product_id<br/>Attributes: stock_count, reserved)]
+
+                PAYMENTS_TABLE[(DynamoDB Payments Table<br/>PK: payment_id<br/>SK: order_id)]
+            end
+
+            subgraph "External Integrations"
+                PAYMENT_GATEWAY[Payment Gateway<br/>Stripe/PayPal API<br/>Webhook Response]
+
+                SHIPPING_API[Shipping Provider<br/>FedEx/UPS API<br/>Tracking Integration]
+
+                EMAIL_SERVICE[Email Service<br/>SES Templates<br/>Customer Communications]
+
+                SMS_SERVICE[SMS Notifications<br/>SNS SMS<br/>Order Status Updates]
+            end
+        end
+    end
+
+    subgraph "Message Flow & Error Handling"
+        subgraph "Success Flows"
+            SUCCESS_FLOW[Successful Processing<br/>Message Deleted from Queue]
+            RETRY_FLOW[Retry Logic<br/>Exponential Backoff<br/>Max 3 Attempts]
+        end
+
+        subgraph "Error Scenarios"
+            PAYMENT_FAIL[Payment Failure<br/>Invalid Card/Insufficient Funds]
+            INVENTORY_FAIL[Inventory Failure<br/>Out of Stock/SKU Not Found]
+            SHIPPING_FAIL[Shipping Failure<br/>Invalid Address/Service Unavailable]
+            NOTIFICATION_FAIL[Notification Failure<br/>Invalid Email/SMS Limit]
+        end
+    end
+
+    %% Order Processing Flow
+    ORDER_API --> ORDER_TOPIC
+    ORDER_TOPIC --> EVENT_CREATED
+    ORDER_TOPIC --> EVENT_UPDATED
+    ORDER_TOPIC --> EVENT_CANCELLED
+    ORDER_TOPIC --> EVENT_SHIPPED
+
+    %% Message Filtering
+    EVENT_CREATED --> FILTER_PAYMENTS
+    EVENT_CREATED --> FILTER_INVENTORY
+    EVENT_CREATED --> FILTER_SHIPPING
+    EVENT_CREATED --> FILTER_NOTIFICATIONS
+
+    EVENT_UPDATED --> FILTER_PAYMENTS
+    EVENT_CANCELLED --> FILTER_INVENTORY
+    EVENT_SHIPPED --> FILTER_NOTIFICATIONS
+
+    %% Queue Routing
+    FILTER_PAYMENTS --> PAYMENT_QUEUE
+    FILTER_INVENTORY --> INVENTORY_QUEUE
+    FILTER_SHIPPING --> SHIPPING_QUEUE
+    FILTER_NOTIFICATIONS --> NOTIFICATION_QUEUE
+
+    %% Lambda Processing
+    PAYMENT_QUEUE --> PAYMENT_LAMBDA
+    INVENTORY_QUEUE --> INVENTORY_LAMBDA
+    SHIPPING_QUEUE --> SHIPPING_LAMBDA
+    NOTIFICATION_QUEUE --> NOTIFICATION_LAMBDA
+
+    %% Database Operations
+    PAYMENT_LAMBDA --> ORDERS_TABLE
+    PAYMENT_LAMBDA --> PAYMENTS_TABLE
+    INVENTORY_LAMBDA --> INVENTORY_TABLE
+    SHIPPING_LAMBDA --> ORDERS_TABLE
+
+    %% External Service Integration
+    PAYMENT_LAMBDA --> PAYMENT_GATEWAY
+    SHIPPING_LAMBDA --> SHIPPING_API
+    NOTIFICATION_LAMBDA --> EMAIL_SERVICE
+    NOTIFICATION_LAMBDA --> SMS_SERVICE
+
+    %% Error Handling & DLQ
+    PAYMENT_QUEUE -.->|Max Retries Exceeded| PAYMENT_DLQ
+    INVENTORY_QUEUE -.->|Processing Failure| INVENTORY_DLQ
+    SHIPPING_QUEUE -.->|Service Unavailable| SHIPPING_DLQ
+
+    %% Error Scenarios
+    PAYMENT_LAMBDA -.->|Failure| PAYMENT_FAIL
+    INVENTORY_LAMBDA -.->|Failure| INVENTORY_FAIL
+    SHIPPING_LAMBDA -.->|Failure| SHIPPING_FAIL
+    NOTIFICATION_LAMBDA -.->|Failure| NOTIFICATION_FAIL
+
+    %% Success & Retry Flows
+    PAYMENT_LAMBDA --> SUCCESS_FLOW
+    PAYMENT_FAIL --> RETRY_FLOW
+    RETRY_FLOW -.->|Max Attempts| PAYMENT_DLQ
+
+    %% Styling
+    classDef api fill:#ff9900,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef sns fill:#569a31,stroke:#232F3E,stroke-width:2px,color:white
+    classDef sqs fill:#4B9CD3,stroke:#232F3E,stroke-width:2px,color:white
+    classDef lambda fill:#8C4FFF,stroke:#232F3E,stroke-width:2px,color:white
+    classDef database fill:#F39C12,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef external fill:#1ABC9C,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef error fill:#dd344c,stroke:#232F3E,stroke-width:2px,color:white
+
+    class ORDER_API api
+    class ORDER_TOPIC,EVENT_CREATED,EVENT_UPDATED,EVENT_CANCELLED,EVENT_SHIPPED,FILTER_PAYMENTS,FILTER_INVENTORY,FILTER_SHIPPING,FILTER_NOTIFICATIONS sns
+    class PAYMENT_QUEUE,INVENTORY_QUEUE,SHIPPING_QUEUE,NOTIFICATION_QUEUE,PAYMENT_DLQ,INVENTORY_DLQ,SHIPPING_DLQ sqs
+    class PAYMENT_LAMBDA,INVENTORY_LAMBDA,SHIPPING_LAMBDA,NOTIFICATION_LAMBDA lambda
+    class ORDERS_TABLE,INVENTORY_TABLE,PAYMENTS_TABLE database
+    class PAYMENT_GATEWAY,SHIPPING_API,EMAIL_SERVICE,SMS_SERVICE,SUCCESS_FLOW,RETRY_FLOW external
+    class PAYMENT_FAIL,INVENTORY_FAIL,SHIPPING_FAIL,NOTIFICATION_FAIL error
+```
+
+<!-- 🔄 END TEMPORARY DIAGRAM -->
 
 ## Lab Steps
 
@@ -287,139 +466,4 @@ export const handler: SQSHandler = async (event: SQSEvent) => {
 
 ```bash
 cdk deploy MessagingStack --profile your-profile-name
-```
-
-2. Send test messages:
-
-Create a test script `scripts/send-messages.ts`:
-
-```typescript:scripts/send-messages.ts
-import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
-import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
-
-const sns = new SNSClient({});
-const sqs = new SQSClient({});
-
-async function sendTestMessages() {
-  const topicArn = process.env.TOPIC_ARN;
-  const fifoQueueUrl = process.env.FIFO_QUEUE_URL;
-
-  // Send SNS message
-  await sns.send(new PublishCommand({
-    TopicArn: topicArn,
-    Message: JSON.stringify({
-      text: 'Test message',
-      timestamp: new Date().toISOString(),
-    }),
-    MessageAttributes: {
-      'messageType': {
-        DataType: 'String',
-        StringValue: 'important',
-      },
-    },
-  }));
-  console.log('Sent SNS message');
-
-  // Send FIFO message
-  await sqs.send(new SendMessageCommand({
-    QueueUrl: fifoQueueUrl,
-    MessageBody: JSON.stringify({
-      text: 'FIFO test message',
-      timestamp: new Date().toISOString(),
-    }),
-    MessageGroupId: 'testGroup',
-    MessageDeduplicationId: Date.now().toString(),
-  }));
-  console.log('Sent FIFO message');
-}
-
-sendTestMessages();
-```
-
-Run the test script:
-
-```bash
-export TOPIC_ARN=$(aws cloudformation describe-stacks \
-  --stack-name MessagingStack \
-  --query 'Stacks[0].Outputs[?OutputKey==`TopicArn`].OutputValue' \
-  --output text \
-  --profile your-profile-name)
-
-export FIFO_QUEUE_URL=$(aws cloudformation describe-stacks \
-  --stack-name MessagingStack \
-  --query 'Stacks[0].Outputs[?OutputKey==`FifoQueueUrl`].OutputValue' \
-  --output text \
-  --profile your-profile-name)
-
-ts-node scripts/send-messages.ts
-```
-
-### 4. Monitor Messages
-
-Check queue metrics:
-
-```bash
-# View messages in standard queue
-aws sqs get-queue-attributes \
-  --queue-url $STANDARD_QUEUE_URL \
-  --attribute-names ApproximateNumberOfMessages \
-  --profile your-profile-name
-
-# Check DLQ
-aws sqs get-queue-attributes \
-  --queue-url $DLQ_URL \
-  --attribute-names ApproximateNumberOfMessages \
-  --profile your-profile-name
-```
-
-## Validation Steps
-
-1. Infrastructure Setup
-
-   - [ ] SNS topic created
-   - [ ] SQS queues created
-   - [ ] Lambda function deployed
-   - [ ] Permissions configured
-
-2. Message Flow
-
-   - [ ] SNS messages delivered
-   - [ ] FIFO ordering maintained
-   - [ ] Message filtering working
-   - [ ] DLQ capturing failures
-
-3. Processing
-   - [ ] Lambda processing messages
-   - [ ] Messages being deleted
-   - [ ] Error handling working
-   - [ ] CloudWatch logs available
-
-## Troubleshooting
-
-1. Message Delivery
-
-   - Check subscription status
-   - Verify IAM permissions
-   - Review message attributes
-   - Check queue settings
-
-2. Processing Issues
-
-   - Check Lambda logs
-   - Verify queue visibility timeout
-   - Review DLQ messages
-   - Check function timeout
-
-3. Performance
-   - Monitor queue depth
-   - Check processing times
-   - Review throttling metrics
-   - Verify scaling behavior
-
-## Cleanup
-
-Remove the stack:
-
-```bash
-cdk destroy MessagingStack --profile your-profile-name
 ```

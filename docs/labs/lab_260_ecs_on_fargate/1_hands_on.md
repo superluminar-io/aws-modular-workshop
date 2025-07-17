@@ -278,25 +278,42 @@ cdk destroy EcsStack --profile your-profile-name
 Note: Ensure all tasks are stopped before deleting the service to avoid lingering resources.
 
 [DIAGRAM: ECS Deployment Flow]
-Instructions for draw.io:
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS ECS icon
-   - AWS Fargate icon
-   - AWS VPC icon
-   - AWS Application Load Balancer icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Task Definition Creation
-   - Service Deployment
-   - Container Scheduling
-   - Load Balancer Configuration
-5. Use AWS's standard color scheme for all elements
+```mermaid
+flowchart TD
+    START[Start Deployment] --> TASK_DEF[Create Task Definition]
+    TASK_DEF --> SERVICE[Create ECS Service]
+    SERVICE --> SCHEDULE{Schedule Tasks}
+
+    SCHEDULE -->|Fargate| FARGATE[Launch on Fargate]
+    SCHEDULE -->|EC2| EC2[Launch on EC2]
+
+    FARGATE --> REGISTER[Register with Load Balancer]
+    EC2 --> REGISTER
+
+    REGISTER --> HEALTH{Health Checks}
+    HEALTH -->|Healthy| RUNNING[Service Running]
+    HEALTH -->|Unhealthy| RETRY[Retry Task Launch]
+
+    RETRY --> LIMIT{Retry Limit?}
+    LIMIT -->|Under Limit| SCHEDULE
+    LIMIT -->|Over Limit| FAILED[Deployment Failed]
+
+    RUNNING --> MONITOR[Monitor Service]
+    MONITOR --> SCALE{Auto Scaling}
+    SCALE -->|Scale Up| ADD_TASKS[Add Tasks]
+    SCALE -->|Scale Down| REMOVE_TASKS[Remove Tasks]
+    SCALE -->|No Change| MONITOR
+
+    ADD_TASKS --> MONITOR
+    REMOVE_TASKS --> MONITOR
+
+    style START fill:#569a31,color:#fff
+    style RUNNING fill:#569a31,color:#fff
+    style FAILED fill:#dd344c,color:#fff
+    style HEALTH fill:#ff9900,color:#fff
+    style SCALE fill:#ff9900,color:#fff
+```
 
 ## Creating ECS Resources
 

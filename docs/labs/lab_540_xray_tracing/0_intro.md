@@ -4,28 +4,42 @@
 
 AWS X-Ray helps developers analyze and debug production, distributed applications, such as those built using a microservices architecture. With X-Ray, you can understand how your application and its underlying services are performing to identify and troubleshoot the root cause of performance issues and errors.
 
-[DIAGRAM: X-Ray Overview]
-Instructions for draw.io:
+[DIAGRAM: X-Ray Tracing Architecture]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS X-Ray icon
-   - AWS Lambda icon
-   - AWS API Gateway icon
-   - AWS CloudWatch icon
-   - AWS IAM icon
-   - AWS KMS icon
-3. Layout:
-   - Place X-Ray at the center
-   - Add traces and segments on the left
-   - Place service maps on the right
-   - Show sampling rules at the bottom
-4. Use AWS's standard connector arrows to show relationships
-5. Add tracing flow visualization with segments
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for X-Ray components
-   - Gray for infrastructure elements
+```mermaid
+flowchart TD
+    subgraph App["Application"]
+        API[API Gateway]
+        Lambda[Lambda Functions]
+        Service[Application Services]
+        DB[Database Calls]
+    end
+
+    subgraph XRay["AWS X-Ray"]
+        Daemon[X-Ray Daemon]
+        Traces[Traces]
+        Segments[Segments]
+        ServiceMap[Service Map]
+        Analytics[Analytics]
+    end
+
+    subgraph Config["Configuration"]
+        Sampling[Sampling Rules]
+        Encryption[KMS Encryption]
+        IAM[IAM Permissions]
+    end
+
+    App --> Daemon
+    Daemon --> Traces
+    Traces --> Segments
+    Segments --> ServiceMap
+    Traces --> Analytics
+    Config --> XRay
+
+    style App fill:#e1f5fe
+    style XRay fill:#ff9900,color:#fff
+    style Config fill:#e8f5e8
+```
 
 ## Learning Objectives
 
@@ -164,24 +178,3 @@ In the hands-on portion of this lab, you will:
 6. Analyze trace data
 7. Create service maps
 8. Troubleshoot using traces
-
-[DIAGRAM: X-Ray Flow]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS X-Ray icon
-   - AWS Lambda icon
-   - AWS API Gateway icon
-   - AWS CloudWatch icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Request Tracking
-   - Segment Creation
-   - Trace Collection
-   - Analysis
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each step in the flow

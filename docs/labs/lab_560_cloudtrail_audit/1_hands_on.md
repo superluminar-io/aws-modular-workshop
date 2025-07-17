@@ -6,32 +6,7 @@
 - Basic understanding of AWS services
 - Completed IAM lab
 
-[DIAGRAM: CloudTrail Implementation]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS CloudTrail icon
-   - AWS S3 icon
-   - AWS KMS icon
-   - AWS CloudWatch icon
-   - AWS EventBridge icon
-   - AWS SNS icon
-3. Layout:
-   - Place CloudTrail at the center
-   - Add S3 bucket and KMS key on the left
-   - Place CloudWatch Logs and EventBridge on the right
-   - Show SNS notifications at the bottom
-4. Use AWS's standard connector arrows to show relationships
-5. Add audit flow visualization with events
-6. Use AWS's standard color scheme:
-   - Blue for AWS services
-   - Green for CloudTrail components
-   - Gray for infrastructure elements
-
-## Lab Steps
-
-### 1. Create CloudTrail Infrastructure
+## Step 1: Create CloudTrail Infrastructure
 
 Create a new file `lib/cloudtrail-stack.ts`:
 
@@ -274,26 +249,6 @@ export LAKE_STORE_ARN=$(aws cloudformation describe-stacks \
   --output text \
   --profile your-profile-name)
 ```
-
-[DIAGRAM: CloudTrail Testing]
-Instructions for draw.io:
-
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS CloudTrail icon
-   - AWS CloudWatch icon
-   - AWS S3 icon
-   - AWS EventBridge icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Event Logging
-   - Log Analysis
-   - Lake Queries
-   - Alert Monitoring
-5. Use AWS's standard color scheme for all elements
 
 ## Validation Steps
 

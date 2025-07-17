@@ -85,6 +85,93 @@ Instructions for draw.io:
    - Green for workflow components
    - Gray for infrastructure elements
 
+## Step Functions Implementation
+
+<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_440_step_functions_detailed_implementation.drawio.svg -->
+
+```mermaid
+flowchart TD
+    subgraph "Detailed State Machine Implementation"
+        START[Start: ValidateInput]
+
+        subgraph "Input Processing"
+            VALIDATE[Validate Request<br/>Lambda Function]
+            TRANSFORM[Transform Data<br/>Lambda Function]
+        end
+
+        subgraph "Business Logic"
+            CHOICE{Order Type?}
+
+            subgraph "Standard Processing"
+                INVENTORY[Check Inventory<br/>DynamoDB Query]
+                PAYMENT[Process Payment<br/>External API]
+                SHIP[Schedule Shipping<br/>Lambda + SQS]
+            end
+
+            subgraph "Express Processing"
+                PRIORITY[Priority Queue<br/>SQS FIFO]
+                EXPRESS[Express Handler<br/>Lambda Function]
+            end
+        end
+
+        subgraph "Completion Flow"
+            PARALLEL[Parallel State]
+            NOTIFY[Send Notification<br/>SNS Topic]
+            AUDIT[Audit Trail<br/>DynamoDB Put]
+            METRICS[Update Metrics<br/>CloudWatch]
+            SUCCESS[Success State]
+        end
+
+        subgraph "Error Handling"
+            RETRY[Retry Logic<br/>Exponential Backoff]
+            DLQ[Dead Letter Queue<br/>SQS]
+            FAIL[Fail State<br/>Error Notification]
+        end
+    end
+
+    %% Flow
+    START --> VALIDATE
+    VALIDATE --> TRANSFORM
+    TRANSFORM --> CHOICE
+
+    CHOICE -->|Standard| INVENTORY
+    CHOICE -->|Express| PRIORITY
+
+    INVENTORY --> PAYMENT
+    PAYMENT --> SHIP
+    SHIP --> PARALLEL
+
+    PRIORITY --> EXPRESS
+    EXPRESS --> PARALLEL
+
+    PARALLEL --> NOTIFY
+    PARALLEL --> AUDIT
+    PARALLEL --> METRICS
+
+    NOTIFY --> SUCCESS
+    AUDIT --> SUCCESS
+    METRICS --> SUCCESS
+
+    %% Error Flows
+    VALIDATE -.->|Error| RETRY
+    PAYMENT -.->|Error| RETRY
+    RETRY -.->|Max Attempts| DLQ
+    DLQ --> FAIL
+
+    %% Styling
+    classDef aws fill:#ff9900,stroke:#232F3E,stroke-width:2px,color:#232F3E
+    classDef success fill:#569a31,stroke:#232F3E,stroke-width:2px,color:white
+    classDef error fill:#dd344c,stroke:#232F3E,stroke-width:2px,color:white
+    classDef processing fill:#4B9CD3,stroke:#232F3E,stroke-width:2px,color:white
+
+    class VALIDATE,TRANSFORM,INVENTORY,PAYMENT,SHIP,EXPRESS,NOTIFY,AUDIT,METRICS processing
+    class START,PARALLEL,SUCCESS success
+    class CHOICE,RETRY,DLQ,FAIL error
+    class PRIORITY aws
+```
+
+<!-- 🔄 END TEMPORARY DIAGRAM -->
+
 ## Lab Steps
 
 ### 1. Create Step Functions Infrastructure
@@ -323,26 +410,33 @@ startExecution();
 
 3. Run test execution:
 
-[DIAGRAM: Step Functions Testing]
-Instructions for draw.io:
+[DIAGRAM: Step Functions Testing Flow]
 
-1. Create a new diagram using the AWS Architecture 2023 template
-2. Use the following AWS symbols from the symbol pack:
-   - AWS Step Functions icon
-   - AWS Lambda icon
-   - AWS CloudWatch icon
-   - AWS X-Ray icon
-3. Layout:
-   - Create a flowchart using AWS's standard flowchart shapes
-   - Use diamond shapes for decision points
-   - Use AWS's standard connector arrows
-4. Add process boxes for:
-   - Execution Creation
-   - State Transitions
-   - Error Handling
-   - Result Validation
-5. Use AWS's standard color scheme for all elements
-6. Add clear labels for each testing step
+```mermaid
+flowchart TD
+    CREATE[Create Test Input] --> START[Start Execution]
+    START --> MONITOR[Monitor Progress]
+    MONITOR --> CHECK{Check Status}
+    CHECK -->|Running| WAIT[Wait]
+    CHECK -->|Succeeded| VALIDATE[Validate Results]
+    CHECK -->|Failed| DEBUG[Debug Errors]
+
+    WAIT --> MONITOR
+    VALIDATE --> VERIFY{Results Correct?}
+    VERIFY -->|Yes| PASS[Test Passed]
+    VERIFY -->|No| ANALYZE[Analyze Output]
+
+    DEBUG --> LOGS[Check CloudWatch Logs]
+    LOGS --> FIX[Fix Issues]
+    FIX --> START
+
+    ANALYZE --> LOGS
+
+    style CREATE fill:#569a31,color:#fff
+    style PASS fill:#569a31,color:#fff
+    style DEBUG fill:#dd344c,color:#fff
+    style CHECK fill:#ff9900,color:#fff
+```
 
 ### 4. Monitor Execution
 
