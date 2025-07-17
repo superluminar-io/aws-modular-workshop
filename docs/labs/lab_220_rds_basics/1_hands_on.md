@@ -223,7 +223,7 @@ new cdk.CfnOutput(this, 'ReadReplicaEndpoint', {
 To avoid ongoing charges:
 
 ```bash
-cdk destroy RdsStack --profile your-profile-name
+cdk destroy --profile your-profile-name
 ```
 
 ## Troubleshooting

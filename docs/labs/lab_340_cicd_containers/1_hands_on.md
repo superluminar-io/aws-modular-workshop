@@ -97,6 +97,9 @@ export class ContainerPipelineStack extends cdk.Stack {
           },
           post_build: {
             commands: [
+              'echo "Container built successfully with health checks enabled"',
+              'echo "Checking for security scan results..."',
+              'aws ecr describe-image-scan-findings --repository-name workshop-app --image-id imageTag=$IMAGE_TAG || true',
               'docker push $REPOSITORY_URI:$IMAGE_TAG',
               'docker push $REPOSITORY_URI:latest',
               'echo "::set-output name=image::$REPOSITORY_URI:$IMAGE_TAG"',
@@ -196,16 +199,25 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello from containerized app!' });
 });
 
+// Add health check endpoint for container monitoring
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 ```
 
-2. Create Dockerfile:
+2. Create production-ready Dockerfile with health checks:
 
 ```dockerfile:Dockerfile
 # Build stage
-FROM node:16-alpine as builder
+FROM node:22-alpine as builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -213,12 +225,22 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:16-alpine
+FROM node:22-alpine
 WORKDIR /app
+
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 COPY package*.json ./
 RUN npm ci --production
 COPY --from=builder /app/dist ./dist
+
 EXPOSE 3000
+
+# Add container health check for monitoring
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
+
 CMD ["node", "dist/app.js"]
 ```
 
@@ -296,20 +318,20 @@ aws logs get-log-events \
    - [ ] Pipeline created successfully
    - [ ] GitHub integration working
    - [ ] Build project configured
-   - [ ] ECR repository created
+   - [ ] ECR repository created with scan-on-push enabled
 
 2. Build Process
 
-   - [ ] Container builds successfully
-   - [ ] Tests passing
-   - [ ] Image pushed to ECR
-   - [ ] Tags applied correctly
+   - [ ] Container builds successfully with health checks
+   - [ ] Security scan results displayed (if any vulnerabilities found)
+   - [ ] Health check endpoint accessible
+   - [ ] Image pushed to ECR with proper tags
 
 3. Deployment
-   - [ ] ECS service running
-   - [ ] Application accessible
-   - [ ] Health checks passing
-   - [ ] Logs available
+   - [ ] ECS service running with health checks
+   - [ ] Container health status showing as healthy
+   - [ ] Application accessible via load balancer
+   - [ ] Health check logs available in CloudWatch
 
 ## Troubleshooting
 
@@ -392,67 +414,43 @@ aws codepipeline get-pipeline-state \
 
 # Monitor first build
 aws codebuild list-builds-for-project \
-  --project-name ContainerBuild \
+  --project-name $(aws cloudformation describe-stacks \
+    --stack-name ContainerPipelineStack \
+    --query 'Stacks[0].Outputs[?contains(OutputKey, `BuildProject`)].OutputValue' \
+    --output text) \
   --profile your-profile-name
 
 # Check ECS service deployment
 aws ecs describe-services \
-  --cluster MyCluster \
-  --services MyService \
+  --cluster $(aws cloudformation describe-stacks \
+    --stack-name ContainerPipelineStack \
+    --query 'Stacks[0].Outputs[?contains(OutputKey, `Cluster`)].OutputValue' \
+    --output text) \
+  --services $(aws cloudformation describe-stacks \
+    --stack-name ContainerPipelineStack \
+    --query 'Stacks[0].Outputs[?contains(OutputKey, `Service`)].OutputValue' \
+    --output text) \
   --profile your-profile-name
 ```
 
-## Validation Steps
+## Final Validation
 
 After completing this lab, verify that:
 
 1. ✅ Container pipeline created successfully
-2. ✅ ECR repository configured
-3. ✅ CodeBuild project building images
+2. ✅ ECR repository configured with security scanning
+3. ✅ CodeBuild project building images with health checks
 4. ✅ ECS service deploying containers
 5. ✅ Load balancer health checks passing
-6. ✅ Blue/green deployments working
+6. ✅ Security scan results visible in build logs
+7. ✅ Application health endpoint responding
 
-## Troubleshooting
+## Next Steps
 
-Common issues and solutions:
+After completing this lab, you can:
 
-1. **Build Failures**
-
-   - Check Dockerfile syntax
-   - Verify base image availability
-   - Check build logs in CodeBuild
-   - Ensure proper IAM permissions
-
-2. **Deployment Issues**
-
-   - Check ECS service events
-   - Verify task definition
-   - Check ALB target group health
-   - Review security group rules
-
-3. **Container Issues**
-   - Check container logs
-   - Verify port configurations
-   - Test health check endpoints
-   - Monitor resource usage
-
-## Cleanup
-
-```bash
-# Scale down ECS service
-aws ecs update-service \
-  --cluster MyCluster \
-  --service MyService \
-  --desired-count 0 \
-  --profile your-profile-name
-
-# Wait for tasks to stop
-aws ecs wait services-stable \
-  --cluster MyCluster \
-  --services MyService \
-  --profile your-profile-name
-
-# Destroy the CDK stack
-cdk destroy ContainerPipelineStack --profile your-profile-name
-```
+- Implement multi-stage deployments (dev/staging/prod)
+- Add automated testing in the pipeline
+- Configure blue/green deployments
+- Implement container monitoring with CloudWatch Container Insights
+- Add notification alerts for pipeline failures

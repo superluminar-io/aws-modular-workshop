@@ -24,7 +24,7 @@ flowchart LR
 Before starting this lab, ensure you have:
 
 - An AWS account with appropriate permissions
-- Node.js (version 18.x or later, 20.x LTS recommended) installed
+- Node.js (version 18.x or later, 22.x LTS recommended) installed
 - AWS CLI version 2 installed
 - A code editor (VS Code recommended)
 
@@ -153,6 +153,130 @@ Let's examine the key files created by CDK:
      --stack-name my-cdk-app \
      --query 'Stacks[0].Outputs[0].OutputValue' \
      --profile your-profile-name
+   ```
+
+## Validate Your CDK Environment
+
+After deployment, verify your CDK setup is working correctly:
+
+### 1. CDK Environment Check
+
+```bash
+# Check CDK version and environment
+cdk doctor --profile your-profile-name
+
+# List all stacks in your account
+cdk list --profile your-profile-name
+
+# Show stack differences (should show no changes after deployment)
+cdk diff --profile your-profile-name
+```
+
+### 2. Bootstrap Verification
+
+```bash
+# Verify CDK bootstrap stack exists
+aws cloudformation describe-stacks \
+  --stack-name CDKToolkit \
+  --profile your-profile-name
+
+# Check S3 bucket for CDK assets
+aws s3 ls | grep cdk
+```
+
+## Advanced Troubleshooting
+
+### Common CDK Issues and Solutions
+
+1. **CDK Version Mismatches**:
+
+   ```bash
+   # Check for version conflicts
+   npm list aws-cdk
+
+   # Update to latest CDK version
+   npm update -g aws-cdk
+   npm update
+   ```
+
+2. **Context Value Issues**:
+
+   ```bash
+   # Clear CDK context cache
+   cdk context --clear
+
+   # View current context
+   cdk context
+   ```
+
+3. **Synthesis Errors**:
+
+   ```bash
+   # Get detailed synthesis output
+   cdk synth --verbose --profile your-profile-name
+
+   # Validate CloudFormation template
+   aws cloudformation validate-template \
+     --template-body file://cdk.out/YourStackName.template.json
+   ```
+
+### Environment-Specific Configuration
+
+Add environment-specific settings to your CDK app:
+
+```typescript
+// In bin/my-cdk-app.ts
+const app = new cdk.App();
+
+// Development environment
+new MyCdkAppStack(app, "MyCdkApp-Dev", {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+  tags: {
+    Environment: "Development",
+    Project: "Workshop",
+  },
+});
+
+// Production environment (commented out for workshop)
+// new MyCdkAppStack(app, 'MyCdkApp-Prod', {
+//   env: { account: 'PROD-ACCOUNT-ID', region: 'us-east-1' },
+//   tags: { Environment: 'Production', Project: 'Workshop' }
+// });
+```
+
+### CDK Best Practices
+
+1. **Use Feature Flags** (add to cdk.json):
+
+   ```json
+   {
+     "context": {
+       "@aws-cdk/core:enableStackNameDuplicates": "true",
+       "@aws-cdk/core:stackRelativeExports": "true"
+     }
+   }
+   ```
+
+2. **Implement CDK Aspects** for cross-cutting concerns:
+
+   ```typescript
+   import { IAspect, IConstruct } from "constructs";
+   import { CfnResource, Aspects, Tag } from "aws-cdk-lib";
+
+   class SecurityAspect implements IAspect {
+     visit(node: IConstruct): void {
+       if (node instanceof CfnResource) {
+         // Add security tags to all resources
+         Aspects.of(node).add(new Tag("SecurityLevel", "Workshop"));
+       }
+     }
+   }
+
+   // Apply to your stack
+   Aspects.of(this).add(new SecurityAspect());
    ```
 
 ## Clean Up

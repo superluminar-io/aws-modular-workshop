@@ -8,38 +8,45 @@ Amazon Elastic Container Service (ECS) is a fully managed container orchestratio
 
 ```mermaid
 flowchart TD
+    subgraph Internet["Internet"]
+        USER[Users]
+    end
+
+    subgraph ALB["Application Load Balancer"]
+        LB[Load Balancer]
+        TG[Target Group]
+        HC[Health Checks]
+    end
+
     subgraph ECS["ECS Cluster"]
-        CLUSTER[Cluster]
-        SERVICE[Services]
-        TASK[Tasks]
+        SERVICE[Fargate Service]
+        TASK1[Task 1]
+        TASK2[Task 2]
     end
 
-    subgraph FARGATE["Fargate"]
-        PROFILE[Fargate Profile]
-        TASK_DEF[Task Definition]
-    end
-
-    subgraph NETWORK["Networking"]
-        VPC[VPC]
-        ALB[Load Balancer]
-        SG[Security Groups]
-    end
-
-    subgraph MONITOR["Monitoring"]
+    subgraph HEALTH["Health Monitoring"]
         CW[CloudWatch]
-        LOGS[Logs]
-        METRICS[Metrics]
+        LOGS[Container Logs]
+        METRICS[Health Metrics]
     end
 
-    CLUSTER --> SERVICE
-    SERVICE --> TASK
-    FARGATE --> TASK
-    VPC --> FARGATE
-    ALB --> SERVICE
-    SG --> TASK
-    CW --> CLUSTER
-    LOGS --> TASK
-    METRICS --> SERVICE
+    USER --> LB
+    LB --> TG
+    TG --> TASK1
+    TG --> TASK2
+    HC --> TASK1
+    HC --> TASK2
+    SERVICE --> TASK1
+    SERVICE --> TASK2
+    TASK1 --> CW
+    TASK2 --> CW
+    CW --> LOGS
+    CW --> METRICS
+
+    style Internet fill:#e1f5fe
+    style ALB fill:#ff9900,color:#fff
+    style ECS fill:#569a31,color:#fff
+    style HEALTH fill:#e8f5e8
 ```
 
 ## Learning Objectives
@@ -47,6 +54,8 @@ flowchart TD
 - Understand ECS core concepts and components
 - Deploy containers using AWS Fargate
 - Configure service discovery and load balancing
+- **Set up Application Load Balancer for high availability**
+- **Implement container health checks and monitoring**
 - Implement logging and monitoring
 - Manage container scaling and updates
 
@@ -210,7 +219,8 @@ In the hands-on section, you'll:
 - Create an ECS cluster
 - Define task definitions
 - Deploy services with Fargate
-- Configure load balancing
+- **Configure Application Load Balancer with health checks**
+- **Implement container health monitoring**
 - Implement auto scaling
 - Monitor your containers
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources. With IAM, you can manage who (identity) or what (role) can access specific resources and how they can access them.
+AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources. With IAM, you can manage who (identity) or what (role) can access specific resources and how they can access them. This lab focuses on practical IAM implementation with monitoring, auditing, and troubleshooting capabilities.
 
 [DIAGRAM: IAM Architecture Overview]
 
@@ -26,6 +26,12 @@ flowchart TD
         Lambda[Lambda Function]
     end
 
+    subgraph Monitoring["Security Monitoring"]
+        CT[CloudTrail Audit]
+        CW[CloudWatch Alarms]
+        AA[Access Analyzer]
+    end
+
     User --> UP
     Role --> RP
     Group --> GP
@@ -35,172 +41,80 @@ flowchart TD
     RP --> Resources
     GP --> Resources
 
+    Resources --> CT
+    Policies --> CW
+    Identity --> AA
+
     style Identity fill:#e8f5e8
     style Policies fill:#fff3e0
     style Resources fill:#e1f5fe
+    style Monitoring fill:#dd344c,color:#fff
 ```
 
 ## Learning Objectives
+
+After completing this lab, you will be able to:
 
 - Understand IAM core concepts and best practices
 - Create and manage IAM roles and policies
 - Implement the principle of least privilege
 - Configure permissions for AWS services
+- Set up IAM monitoring and security alerts
+- Use CloudTrail for access auditing
+- Troubleshoot permission issues effectively
+- Apply security monitoring best practices
 
-## Core Concepts
+## Architecture Overview
 
-### IAM Roles
+This lab implements a production-ready IAM setup with:
 
-An IAM role is an AWS identity with permission policies that determine what the identity can and cannot do in AWS. Unlike an IAM user, a role:
+- Lambda function with least-privilege IAM role
+- S3 bucket with proper access controls
+- CloudTrail logging for all IAM actions
+- CloudWatch alarms for security monitoring
+- Access analysis and monitoring tools
+- Comprehensive error handling and debugging
 
-- Doesn't have permanent credentials
-- Is assumable by anyone or anything that needs it
-- Is ideal for granting temporary access to AWS resources
+## Security Monitoring Features
 
-### IAM Policies
+1. **Access Tracking**
 
-Policies are documents that define permissions. A policy typically includes:
+   - CloudTrail logs for all API calls
+   - IAM action monitoring
+   - Failed access attempt detection
+   - Access pattern analysis
 
-- **Actions**: What actions are allowed or denied
-- **Resources**: Which AWS resources the actions apply to
-- **Effect**: Whether to allow or deny access
-- **Conditions**: Optional circumstances under which the policy is in effect
+2. **Real-time Alerting**
 
-### Example IAM Role
+   - Unusual access pattern alerts
+   - Permission escalation detection
+   - Failed authentication monitoring
+   - Root account usage alerts
 
-Here's a typical role that allows EC2 instances to read from an S3 bucket:
+3. **Compliance and Auditing**
+   - Complete audit trail of all actions
+   - Permission change tracking
+   - Resource access logging
+   - Security compliance reporting
 
-1. **Trust Policy** (defines who can assume the role):
+## Best Practices Covered
 
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-```
+1. **Security**
 
-2. **Permission Policy** (defines what the role can do):
+   - Principle of least privilege
+   - Regular permission auditing
+   - Multi-factor authentication
+   - Credential rotation
 
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::example-bucket/*"
-    }
-  ]
-}
-```
+2. **Monitoring**
 
-## Policy Evaluation Logic
+   - CloudTrail integration
+   - Security event alerting
+   - Access pattern analysis
+   - Automated compliance checking
 
-When IAM evaluates a request, it follows these rules:
-
-1. **Default Deny**: By default, all requests are denied
-2. **Explicit Allow**: An explicit allow in a policy overrides the default deny
-3. **Explicit Deny**: An explicit deny in any policy overrides any allows
-
-### Complex Policy Example
-
-Here's a more sophisticated policy that demonstrates multiple permission types:
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "s3:ListAllMyBuckets",
-      "Resource": "arn:aws:s3:::*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["s3:GetObject", "s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::*"]
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"],
-      "Resource": "arn:aws:s3:::example-bucket/*"
-    },
-    {
-      "Effect": "Deny",
-      "Action": "s3:DeleteObject",
-      "Resource": "arn:aws:s3:::restricted-bucket/*"
-    }
-  ]
-}
-```
-
-This policy:
-
-- Allows listing all S3 buckets
-- Allows reading objects from any bucket
-- Allows full access to objects in `example-bucket`
-- Explicitly denies deleting objects in `restricted-bucket`
-
-[DIAGRAM: IAM Permission Flow]
-
-```mermaid
-flowchart TD
-    A[Request Initiation] --> B{Policy Evaluation}
-    B -->|Allow| C[Permission Granted]
-    B -->|Deny| D[Permission Denied]
-    C --> E[Action Execution]
-    D --> F[Request Blocked]
-
-    subgraph Monitoring
-        G[CloudWatch Logs]
-        H[CloudTrail Audit]
-    end
-
-    E --> G
-    E --> H
-    F --> G
-    F --> H
-```
-
-## Best Practices
-
-1. **Principle of Least Privilege**
-
-   - Grant only the permissions required for a task
-   - Regularly review and remove unused permissions
-
-2. **Use IAM Groups**
-
-   - Assign permissions to groups rather than individual users
-   - Manage permissions collectively for similar users
-
-3. **Regular Rotation**
-
-   - Rotate credentials regularly
-   - Remove unused credentials and permissions
-
-4. **Use MFA**
-
-   - Enable multi-factor authentication
-   - Especially important for privileged users
-
-5. **Use IAM Roles**
-   - Use roles for applications running on EC2
-   - Avoid storing credentials in code or on instances
-
-## What's Next
-
-In the hands-on section, you'll:
-
-- Create IAM roles and policies using AWS CDK
-- Configure permissions for AWS services
-- Test and validate IAM permissions
-- Learn to troubleshoot common IAM issues
+3. **Operations**
+   - Error handling and debugging
+   - Permission troubleshooting
+   - Security incident response
+   - Documentation and logging

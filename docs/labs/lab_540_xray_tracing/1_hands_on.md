@@ -91,7 +91,7 @@ export class XRayStack extends cdk.Stack {
 
     // Create Lambda function with X-Ray tracing enabled
     const itemsFunction = new lambda.Function(this, 'ItemsFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/items-function'),
       tracing: lambda.Tracing.ACTIVE, // Enable X-Ray tracing

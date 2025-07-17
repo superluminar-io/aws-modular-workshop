@@ -194,6 +194,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
 import { Construct } from 'constructs';
 
 export class EventBridgeStack extends cdk.Stack {
@@ -210,12 +211,15 @@ export class EventBridgeStack extends cdk.Stack {
       retentionPeriod: cdk.Duration.days(14),
     });
 
-    // Create SNS Topic for notifications
+    // Create SNS Topic for notifications and alerts
     const notificationTopic = new sns.Topic(this, 'NotificationTopic');
+    const alertTopic = new sns.Topic(this, 'AlertTopic', {
+      displayName: 'EventBridge Alerts',
+    });
 
     // Create Lambda function to process events
     const processorFunction = new lambda.Function(this, 'ProcessorFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/processor'),
       environment: {
@@ -226,11 +230,11 @@ export class EventBridgeStack extends cdk.Stack {
     // Grant permissions
     notificationTopic.grantPublish(processorFunction);
 
-    // Create Rules
-    new events.Rule(this, 'HighPriorityRule', {
+    // Create Rules with enhanced error handling
+    const highPriorityRule = new events.Rule(this, 'HighPriorityRule', {
       eventBus: customBus,
       ruleName: 'high-priority-events',
-      description: 'Rule for high priority events',
+      description: 'Rule for high priority events with monitoring',
       eventPattern: {
         source: ['workshop.events'],
         detailType: ['transaction'],
@@ -245,7 +249,7 @@ export class EventBridgeStack extends cdk.Stack {
       })],
     });
 
-    new events.Rule(this, 'AllEventsRule', {
+    const allEventsRule = new events.Rule(this, 'AllEventsRule', {
       eventBus: customBus,
       ruleName: 'all-events-logging',
       description: 'Rule for logging all events',
@@ -255,16 +259,55 @@ export class EventBridgeStack extends cdk.Stack {
       targets: [new targets.SqsQueue(dlq)],
     });
 
-    // Archive events
-    new events.Archive(this, 'EventArchive', {
+    // Archive events for replay capability
+    const eventArchive = new events.Archive(this, 'EventArchive', {
       sourceEventBus: customBus,
       archiveName: 'workshop-archive',
-      description: 'Archive for workshop events',
+      description: 'Archive for workshop events with replay capability',
       retention: cdk.Duration.days(30),
       eventPattern: {
         source: ['workshop.events'],
       },
     });
+
+    // CloudWatch alarms for monitoring
+    const failedEventAlarm = new cloudwatch.Alarm(this, 'FailedEventAlarm', {
+      alarmName: 'workshop-eventbridge-failed-events',
+      alarmDescription: 'Alarm when EventBridge events fail to process',
+      metric: new cloudwatch.Metric({
+        namespace: 'AWS/Events',
+        metricName: 'FailedInvocations',
+        dimensionsMap: {
+          RuleName: highPriorityRule.ruleName,
+        },
+      }),
+      threshold: 1,
+      evaluationPeriods: 1,
+      treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
+    });
+
+    const lambdaErrorAlarm = new cloudwatch.Alarm(this, 'LambdaErrorAlarm', {
+      alarmName: 'workshop-event-processor-errors',
+      alarmDescription: 'Alarm when event processor Lambda has errors',
+      metric: processorFunction.metricErrors(),
+      threshold: 3,
+      evaluationPeriods: 2,
+      treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
+    });
+
+    const dlqAlarm = new cloudwatch.Alarm(this, 'DeadLetterQueueAlarm', {
+      alarmName: 'workshop-eventbridge-dlq-messages',
+      alarmDescription: 'Alarm when messages appear in EventBridge DLQ',
+      metric: dlq.metricApproximateNumberOfVisibleMessages(),
+      threshold: 1,
+      evaluationPeriods: 1,
+      treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
+    });
+
+    // Send alarms to SNS topic
+    failedEventAlarm.addAlarmAction(new cloudwatch.SnsAction(alertTopic));
+    lambdaErrorAlarm.addAlarmAction(new cloudwatch.SnsAction(alertTopic));
+    dlqAlarm.addAlarmAction(new cloudwatch.SnsAction(alertTopic));
 
     // Outputs
     new cdk.CfnOutput(this, 'EventBusName', {
@@ -281,6 +324,16 @@ export class EventBridgeStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'TopicArn', {
       value: notificationTopic.topicArn,
+    });
+
+    new cdk.CfnOutput(this, 'AlertTopicArn', {
+      value: alertTopic.topicArn,
+      description: 'Subscribe to this topic for EventBridge alerts',
+    });
+
+    new cdk.CfnOutput(this, 'ArchiveName', {
+      value: eventArchive.archiveName,
+      description: 'Use this archive name for event replay in AWS Console',
     });
   }
 }
@@ -403,77 +456,100 @@ export EVENT_BUS_NAME=$(aws cloudformation describe-stacks \
 ts-node scripts/send-events.ts
 ```
 
-### 4. Monitor Events
+### 4. Monitor and Test Your EventBridge Setup
 
-1. Check Lambda logs:
+#### Subscribe to Alert Notifications
 
 ```bash
-aws logs get-log-events \
-  --log-group-name /aws/lambda/ProcessorFunction \
-  --log-stream-name $(aws logs describe-log-streams \
-    --log-group-name /aws/lambda/ProcessorFunction \
-    --order-by LastEventTime \
-    --descending \
-    --limit 1 \
-    --query 'logStreams[0].logStreamName' \
+# Subscribe to security and operational alerts
+aws sns subscribe \
+  --topic-arn $(aws cloudformation describe-stacks \
+    --stack-name EventBridgeStack \
+    --query 'Stacks[0].Outputs[?OutputKey==`AlertTopicArn`].OutputValue' \
+    --output text) \
+  --protocol email \
+  --notification-endpoint your-email@example.com \
+  --profile your-profile-name
+```
+
+#### Test Event Processing
+
+```bash
+# Set up environment
+export EVENT_BUS_NAME=$(aws cloudformation describe-stacks \
+  --stack-name EventBridgeStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`EventBusName`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+# Test normal event processing
+ts-node scripts/send-events.ts
+```
+
+#### Test Error Handling
+
+```bash
+# Send invalid event to test error handling
+aws events put-events \
+  --entries Source=workshop.events,DetailType=invalid-test,Detail='{"test":"error"}' \
+  --event-bus-name $EVENT_BUS_NAME \
+  --profile your-profile-name
+
+# Check if alarm triggers (may take a few minutes)
+aws cloudwatch describe-alarms \
+  --alarm-names workshop-eventbridge-failed-events \
+  --profile your-profile-name
+```
+
+#### Monitor Event Flow
+
+```bash
+# Check Lambda function logs
+aws logs tail /aws/lambda/EventBridgeStack-ProcessorFunction \
+  --follow \
+  --profile your-profile-name
+
+# Check DLQ for failed events
+aws sqs receive-message \
+  --queue-url $(aws cloudformation describe-stacks \
+    --stack-name EventBridgeStack \
+    --query 'Stacks[0].Outputs[?OutputKey==`DlqUrl`].OutputValue' \
     --output text) \
   --profile your-profile-name
 ```
 
-2. Check DLQ:
-
-[DIAGRAM: EventBridge Monitoring Flow]
-
-```mermaid
-flowchart TD
-    EVENTS[Events Generated] --> METRICS[CloudWatch Metrics]
-    EVENTS --> LOGS[CloudWatch Logs]
-
-    METRICS --> DASHBOARD[Dashboard Views]
-    METRICS --> ALARMS{Alarm Thresholds}
-
-    ALARMS -->|Threshold Exceeded| ALERT[Send Alert]
-    ALARMS -->|Normal| MONITOR[Continue Monitoring]
-
-    LOGS --> INSIGHTS[Log Insights Queries]
-    INSIGHTS --> ANALYSIS[Error Analysis]
-
-    ANALYSIS --> RULES{Rule Issues?}
-    RULES -->|Pattern Problems| FIX_PATTERN[Fix Event Patterns]
-    RULES -->|Target Issues| FIX_TARGET[Fix Target Config]
-    RULES -->|No Issues| ARCHIVE[Archive Analysis]
-
-    FIX_PATTERN --> TEST[Test Rules]
-    FIX_TARGET --> TEST
-    TEST --> MONITOR
-
-    style EVENTS fill:#569a31,color:#fff
-    style ALERT fill:#dd344c,color:#fff
-    style ARCHIVE fill:#569a31,color:#fff
-    style ALARMS fill:#ff9900,color:#fff
-```
-
 ## Validation Steps
 
-1. Infrastructure Setup
+1. **Infrastructure Setup**
 
-   - [ ] Event bus created
-   - [ ] Rules configured
-   - [ ] Lambda function deployed
-   - [ ] DLQ set up
+   - [ ] Event bus created successfully
+   - [ ] Rules configured with proper patterns
+   - [ ] Lambda function deployed and accessible
+   - [ ] Dead letter queue configured
+   - [ ] CloudWatch alarms active
+   - [ ] SNS alert topic ready
 
-2. Event Processing
+2. **Event Processing**
 
-   - [ ] Events being sent
-   - [ ] Rules matching
-   - [ ] Lambda processing
-   - [ ] Notifications working
+   - [ ] Events routing to correct targets
+   - [ ] Rules matching expected patterns
+   - [ ] Lambda function processing events
+   - [ ] Notifications sending properly
+   - [ ] Error events routing to DLQ
 
-3. Monitoring
-   - [ ] CloudWatch logs available
-   - [ ] Events archived
-   - [ ] DLQ capturing failures
-   - [ ] Metrics visible
+3. **Monitoring and Alerting**
+
+   - [ ] CloudWatch logs capturing all events
+   - [ ] Events being archived for replay
+   - [ ] Failed events triggering alarms
+   - [ ] Alert notifications working
+   - [ ] Metrics visible in CloudWatch console
+
+4. **Error Handling**
+   - [ ] Retry logic functioning on failures
+   - [ ] DLQ capturing unprocessable events
+   - [ ] Timeouts preventing hung executions
+   - [ ] Graceful degradation on service issues
 
 ## Troubleshooting
 

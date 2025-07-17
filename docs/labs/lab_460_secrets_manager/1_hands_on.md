@@ -105,7 +105,7 @@ export class SecretsManagerStack extends cdk.Stack {
 
     // Create Lambda function to demonstrate secret access
     const secretsFunction = new lambda.Function(this, 'SecretsFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/secrets-function'),
       environment: {
@@ -235,7 +235,7 @@ ts-node scripts/test-secrets.ts
 ```typescript:lib/secrets-manager-stack.ts
 // Add to the stack after creating apiKeySecret
 const rotationFunction = new lambda.Function(this, 'RotationFunction', {
-  runtime: lambda.Runtime.NODEJS_18_X,
+  runtime: lambda.Runtime.NODEJS_22_X,
   handler: 'index.handler',
   code: lambda.Code.fromAsset('src/rotation-function'),
   environment: {

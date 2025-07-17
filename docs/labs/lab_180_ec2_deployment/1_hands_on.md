@@ -353,3 +353,18 @@ sequenceDiagram
     EC2->>User: HTTP response
     EC2->>CloudWatch: Log access
 ```
+
+## Clean Up
+
+When you're finished with this lab, clean up the resources to avoid ongoing charges:
+
+```bash
+cdk destroy --profile your-profile-name
+```
+
+This will remove:
+
+- EC2 instance and associated resources
+- VPC and networking components
+- Security groups and IAM roles
+- CloudWatch logs and monitoring

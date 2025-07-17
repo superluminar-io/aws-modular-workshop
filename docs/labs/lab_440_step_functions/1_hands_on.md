@@ -203,19 +203,23 @@ export class StepFunctionsStack extends cdk.Stack {
 
     // Create Lambda functions
     const validateOrderFunction = new lambda.Function(this, 'ValidateOrder', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/validate-order'),
     });
 
     const processPaymentFunction = new lambda.Function(this, 'ProcessPayment', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/process-payment'),
+      environment: {
+        TABLE_NAME: table.tableName,
+        TOPIC_ARN: notificationTopic.topicArn,
+      },
     });
 
     const updateInventoryFunction = new lambda.Function(this, 'UpdateInventory', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/update-inventory'),
     });

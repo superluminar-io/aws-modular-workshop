@@ -176,7 +176,7 @@ When you're finished with this lab:
 aws s3 rm s3://BUCKET_NAME --recursive --profile your-profile-name
 
 # Destroy the CDK stack
-cdk destroy S3Stack --profile your-profile-name
+cdk destroy --profile your-profile-name
 ```
 
 ## Validation Steps

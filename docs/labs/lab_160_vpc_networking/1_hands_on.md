@@ -509,3 +509,29 @@ flowchart TD
 ```
 
 <!-- 🔄 END TEMPORARY DIAGRAM -->
+
+## Clean Up
+
+When you're finished with this lab, clean up the resources to avoid ongoing charges:
+
+```bash
+cdk destroy --profile your-profile-name
+```
+
+Confirm the deletion when prompted. This will remove:
+
+- VPC and all subnets
+- Internet Gateway and NAT Gateway
+- Security Groups and NACLs
+- EC2 instances
+- VPC Flow Logs
+
+## Next Steps
+
+After completing this lab, you can:
+
+- Implement more complex networking patterns
+- Add additional VPC endpoints
+- Configure VPC peering
+- Implement transit gateways
+- Set up site-to-site VPN

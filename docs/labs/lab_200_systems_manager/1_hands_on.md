@@ -241,7 +241,7 @@ aws ssm delete-parameter \
   --profile your-profile-name
 
 # Destroy the CDK stack
-cdk destroy SystemsManagerStack --profile your-profile-name
+cdk destroy --profile your-profile-name
 ```
 
 [DIAGRAM: Systems Manager Operations]

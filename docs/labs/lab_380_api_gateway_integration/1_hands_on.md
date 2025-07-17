@@ -55,7 +55,7 @@ export class ApiStack extends cdk.Stack {
 
     // Create Lambda functions
     const getItemsFunction = new lambda.Function(this, 'GetItemsFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/get-items'),
       environment: {
@@ -64,7 +64,7 @@ export class ApiStack extends cdk.Stack {
     });
 
     const createItemFunction = new lambda.Function(this, 'CreateItemFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/create-item'),
       environment: {

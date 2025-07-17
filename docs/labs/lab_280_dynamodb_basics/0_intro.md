@@ -14,44 +14,58 @@ flowchart TD
         App[Web Applications]
     end
 
-    subgraph DDB["DynamoDB"]
-        Table[DynamoDB Table]
-        GSI[Global Secondary Index]
-        LSI[Local Secondary Index]
+    subgraph DDB["DynamoDB Table"]
+        TABLE[Users Table<br/>PK: userId, SK: email]
+        GSI1[EmailIndex GSI<br/>PK: email]
+        GSI2[StatusIndex GSI<br/>PK: status, SK: createdAt]
+        TTL[TTL Attribute<br/>Automatic Expiration]
     end
 
-    subgraph Features["DynamoDB Features"]
-        AutoScale[Auto Scaling]
-        Backup[Point-in-time Recovery]
-        Streams[DynamoDB Streams]
-        DAX[DynamoDB Accelerator]
+    subgraph QUERIES["Query Patterns"]
+        Q1[Single Item Lookup]
+        Q2[User's All Emails]
+        Q3[Email-based Search]
+        Q4[Status-based Queries]
+        Q5[Conditional Updates]
     end
 
-    subgraph Security["Security & Monitoring"]
-        IAM[IAM Policies]
-        KMS[KMS Encryption]
-        CW[CloudWatch Metrics]
-        VPC[VPC Endpoints]
+    subgraph FEATURES["Advanced Features"]
+        AutoExpire[Auto Data Cleanup]
+        PITR[Point-in-time Recovery]
+        Monitoring[CloudWatch Metrics]
     end
 
-    Apps --> Table
-    Table --> GSI
-    Table --> LSI
-    Table --> Features
-    Security --> DDB
+    Apps --> Q1
+    Apps --> Q2
+    Apps --> Q3
+    Apps --> Q4
+    Apps --> Q5
+
+    Q1 --> TABLE
+    Q2 --> TABLE
+    Q3 --> GSI1
+    Q4 --> GSI2
+    Q5 --> TABLE
+
+    TTL --> AutoExpire
+    TABLE --> TTL
+    TABLE --> PITR
+    TABLE --> Monitoring
 
     style Apps fill:#e1f5fe
     style DDB fill:#3334b9,color:#fff
-    style Features fill:#e8f5e8
-    style Security fill:#dd344c,color:#fff
+    style QUERIES fill:#e8f5e8
+    style FEATURES fill:#ff9900,color:#fff
 ```
 
 ## Learning Objectives
 
 - Understand DynamoDB's core concepts and data model
 - Design efficient table structures and access patterns
+- **Learn common query patterns and best practices**
 - Implement basic CRUD operations
 - Use indexes for efficient queries
+- **Configure Time-to-Live (TTL) for automatic data expiration**
 - Manage capacity and scaling
 - Implement best practices for cost optimization
 
@@ -234,7 +248,9 @@ flowchart TD
 In the hands-on section, you'll:
 
 - Create DynamoDB tables
+- **Implement common query patterns and access strategies**
 - Implement CRUD operations
+- **Configure TTL for automatic data cleanup**
 - Use secondary indexes
 - Configure capacity and scaling
 - Monitor performance

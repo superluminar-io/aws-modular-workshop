@@ -70,31 +70,214 @@ const vpc = new ec2.Vpc(this, "FargateVPC", {
 });
 ```
 
-### 2. Create ECS Cluster and Fargate Service
+### 2. Create ECS Cluster with Load Balancer
 
-Now we'll create an ECS cluster and Fargate service using our existing ECR repository:
+Now we'll create an ECS cluster, Fargate service, and Application Load Balancer:
 
 ```typescript
-const cluster = new ecs.Cluster(this, "FargateCluster", {
-  vpc,
+import * as cdk from "aws-cdk-lib";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as ecs from "aws-cdk-lib/aws-ecs";
+import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import * as ecr from "aws-cdk-lib/aws-ecr";
+import { Construct } from "constructs";
+
+export class EcsStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // Create VPC for Fargate
+    const vpc = new ec2.Vpc(this, "FargateVPC", {
+      maxAzs: 2,
+      subnetConfiguration: [
+        {
+          cidrMask: 24,
+          name: "Public",
+          subnetType: ec2.SubnetType.PUBLIC,
+        },
+        {
+          cidrMask: 24,
+          name: "Private",
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        },
+      ],
+    });
+
+    // Import existing ECR repository from lab 240
+    const repository = ecr.Repository.fromRepositoryName(
+      this,
+      "ImportedRepo",
+      "my-app-repo"
+    );
+
+    // Create ECS cluster
+    const cluster = new ecs.Cluster(this, "FargateCluster", {
+      vpc,
+      enableFargateCapacityProviders: true,
+    });
+
+    // Create Application Load Balancer
+    const loadBalancer = new elbv2.ApplicationLoadBalancer(this, "ALB", {
+      vpc,
+      internetFacing: true,
+      loadBalancerName: "workshop-alb",
+    });
+
+    // Create security group for ALB
+    const albSecurityGroup = new ec2.SecurityGroup(this, "ALBSecurityGroup", {
+      vpc,
+      description: "Security group for Application Load Balancer",
+      allowAllOutbound: true,
+    });
+
+    albSecurityGroup.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(80),
+      "Allow HTTP access from anywhere"
+    );
+
+    loadBalancer.addSecurityGroup(albSecurityGroup);
+
+    // Create target group
+    const targetGroup = new elbv2.ApplicationTargetGroup(this, "TargetGroup", {
+      vpc,
+      port: 3000,
+      protocol: elbv2.ApplicationProtocol.HTTP,
+      targetType: elbv2.TargetType.IP,
+      healthCheckPath: "/health",
+      healthCheckIntervalSeconds: 30,
+      healthCheckTimeoutSeconds: 5,
+      healthyThresholdCount: 2,
+      unhealthyThresholdCount: 3,
+    });
+
+    // Add listener to load balancer
+    const listener = loadBalancer.addListener("PublicListener", {
+      port: 80,
+      open: true,
+      defaultTargetGroups: [targetGroup],
+    });
+
+    // Create task definition with health check
+    const taskDefinition = new ecs.FargateTaskDefinition(this, "TaskDef", {
+      memoryLimitMiB: 512,
+      cpu: 256,
+    });
+
+    const container = taskDefinition.addContainer("MyContainer", {
+      image: ecs.ContainerImage.fromEcrRepository(repository, "latest"),
+      portMappings: [
+        {
+          containerPort: 3000,
+          protocol: ecs.Protocol.TCP,
+        },
+      ],
+      logging: ecs.LogDrivers.awsLogs({
+        streamPrefix: "workshop-ecs",
+        logRetention: logs.RetentionDays.ONE_WEEK,
+      }),
+      // Add health check
+      healthCheck: {
+        command: [
+          "CMD-SHELL",
+          "curl -f http://localhost:3000/health || exit 1",
+        ],
+        interval: cdk.Duration.seconds(30),
+        timeout: cdk.Duration.seconds(5),
+        retries: 3,
+        startPeriod: cdk.Duration.seconds(60),
+      },
+      environment: {
+        PORT: "3000",
+        NODE_ENV: "production",
+      },
+    });
+
+    // Create Fargate service
+    const service = new ecs.FargateService(this, "Service", {
+      cluster,
+      taskDefinition,
+      desiredCount: 2,
+      assignPublicIp: false, // Use private subnets
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+      },
+      healthCheckGracePeriod: cdk.Duration.seconds(60),
+    });
+
+    // Attach service to target group
+    service.attachToApplicationTargetGroup(targetGroup);
+
+    // Output the load balancer DNS name
+    new cdk.CfnOutput(this, "LoadBalancerDNS", {
+      value: loadBalancer.loadBalancerDnsName,
+      description: "DNS name of the load balancer",
+    });
+
+    new cdk.CfnOutput(this, "LoadBalancerURL", {
+      value: `http://${loadBalancer.loadBalancerDnsName}`,
+      description: "URL of the application",
+    });
+  }
+}
+```
+
+### 3. Update Your Application for Health Checks
+
+Before deploying, update your Node.js application to include a health check endpoint:
+
+```javascript:workshop-app/app.js
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
 });
 
-const taskDefinition = new ecs.FargateTaskDefinition(this, "TaskDef", {
-  memoryLimitMiB: 512,
-  cpu: 256,
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>Hello from ECS Fargate!</h1>
+    <p>Container ID: ${process.env.HOSTNAME}</p>
+    <p>Time: ${new Date().toISOString()}</p>
+    <p><a href="/health">Health Check</a></p>
+  `);
 });
 
-// Use the existing ECR repository from lab 240
-taskDefinition.addContainer("MyContainer", {
-  image: ecs.ContainerImage.fromEcrRepository(repository, "latest"),
-  // ... container configuration
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
 });
+```
 
-const service = new ecs.FargateService(this, "Service", {
-  cluster,
-  taskDefinition,
-  // ... service configuration
-});
+### 4. Test Load Balancer and Health Checks
+
+#### Get Application URL
+
+```bash
+LOAD_BALANCER_URL=$(aws cloudformation describe-stacks \
+  --stack-name EcsStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerURL`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+echo "Application URL: $LOAD_BALANCER_URL"
+```
+
+#### Test Application Access
+
+```bash
+# Test the main application
+curl $LOAD_BALANCER_URL
+```
+
+```bash
+# Test health check endpoint
+curl $LOAD_BALANCER_URL/health
 ```
 
 ### 3. Configure Auto Scaling
@@ -180,28 +363,11 @@ aws cloudformation describe-stacks \
 Test scaling:
 
 ```bash
-# Generate load to test auto scaling
+# Generate load
 for i in {1..100}; do
   curl http://your-load-balancer-dns/
   sleep 1
 done
-
-# Monitor scaling activity
-aws ecs describe-services \
-  --cluster your-cluster-name \
-  --services your-service-name \
-  --profile your-profile-name
-
-# Check CloudWatch metrics
-aws cloudwatch get-metric-statistics \
-  --namespace AWS/ECS \
-  --metric-name CPUUtilization \
-  --dimensions Name=ServiceName,Value=your-service-name Name=ClusterName,Value=your-cluster-name \
-  --start-time $(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S) \
-  --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
-  --period 300 \
-  --statistics Average \
-  --profile your-profile-name
 ```
 
 ## Validation Steps
@@ -272,7 +438,7 @@ aws ecs delete-service \
   --profile your-profile-name
 
 # Destroy the CDK stack
-cdk destroy EcsStack --profile your-profile-name
+cdk destroy --profile your-profile-name
 ```
 
 Note: Ensure all tasks are stopped before deleting the service to avoid lingering resources.

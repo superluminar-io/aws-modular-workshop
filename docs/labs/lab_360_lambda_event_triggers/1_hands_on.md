@@ -48,7 +48,7 @@ export class LambdaStack extends cdk.Stack {
 
     // Create S3 Event Handler
     const s3Handler = new lambda.Function(this, 'S3EventHandler', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/s3-handler'),
       environment: {
@@ -60,7 +60,7 @@ export class LambdaStack extends cdk.Stack {
 
     // Create DynamoDB Stream Handler
     const streamHandler = new lambda.Function(this, 'StreamHandler', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/stream-handler'),
       deadLetterQueue: dlq,
@@ -69,7 +69,7 @@ export class LambdaStack extends cdk.Stack {
 
     // Create Scheduled Handler
     const scheduledHandler = new lambda.Function(this, 'ScheduledHandler', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/scheduled-handler'),
       deadLetterQueue: dlq,

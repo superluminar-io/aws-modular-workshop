@@ -101,7 +101,7 @@ Create a package.json:
 Create a Dockerfile in your application directory:
 
 ```dockerfile:workshop-app/Dockerfile
-FROM node:16-alpine
+FROM node:22-alpine
 
 WORKDIR /usr/src/app
 
@@ -331,7 +331,7 @@ xargs -I {} aws ecr batch-delete-image \
   --profile your-profile-name {}
 
 # Destroy the CDK stack
-cdk destroy EcrStack --profile your-profile-name
+cdk destroy --profile your-profile-name
 ```
 
 Note: Deleting images from ECR is irreversible. Ensure you no longer need the images before cleanup.

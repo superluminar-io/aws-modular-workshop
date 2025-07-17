@@ -371,7 +371,7 @@ export class MessagingStack extends cdk.Stack {
 
     // Create Lambda function to process messages
     const processorFunction = new lambda.Function(this, 'ProcessorFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/processor'),
       environment: {
@@ -467,3 +467,34 @@ export const handler: SQSHandler = async (event: SQSEvent) => {
 ```bash
 cdk deploy MessagingStack --profile your-profile-name
 ```
+
+## Cleanup
+
+When you're finished with this lab, clean up the resources to avoid ongoing charges:
+
+```bash
+# Purge all queues first
+aws sqs purge-queue \
+  --queue-url $(aws cloudformation describe-stacks \
+    --stack-name MessagingStack \
+    --query 'Stacks[0].Outputs[?OutputKey==`StandardQueueUrl`].OutputValue' \
+    --output text) \
+  --profile your-profile-name
+
+aws sqs purge-queue \
+  --queue-url $(aws cloudformation describe-stacks \
+    --stack-name MessagingStack \
+    --query 'Stacks[0].Outputs[?OutputKey==`FifoQueueUrl`].OutputValue' \
+    --output text) \
+  --profile your-profile-name
+
+# Destroy the CDK stack
+cdk destroy MessagingStack --profile your-profile-name
+```
+
+This will remove:
+
+- SNS topics and subscriptions
+- SQS queues and dead letter queues
+- Lambda functions and IAM roles
+- CloudWatch logs and metrics

@@ -159,7 +159,7 @@ export class CloudWatchStack extends cdk.Stack {
 
     // Create Lambda function for custom metrics
     const metricsFunction = new lambda.Function(this, 'MetricsFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/metrics-function'),
       environment: {
