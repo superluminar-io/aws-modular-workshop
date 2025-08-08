@@ -90,7 +90,7 @@ RDS offers several instance classes optimized for different use cases:
 3. **Burstable Classes (db.t classes)**
    - Cost-effective for variable workloads
    - Ability to burst CPU when needed
-   - Example: db.t3.micro, db.t4g.micro
+   - Examples: db.t3.micro (Intel), db.t4g.micro (ARM-based Graviton)
 
 ### Storage Types
 

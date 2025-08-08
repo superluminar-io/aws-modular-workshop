@@ -243,15 +243,18 @@ cdk deploy ApiStack --profile your-profile-name
 2. Get API key value:
 
 ```bash
-aws apigateway get-api-key \
+export API_KEY=$(aws apigateway get-api-key \
   --api-key $(aws cloudformation describe-stacks \
     --stack-name ApiStack \
     --query 'Stacks[0].Outputs[?OutputKey==`ApiKey`].OutputValue' \
-    --output text) \
+    --output text \
+    --profile your-profile-name) \
   --include-value \
   --query 'value' \
   --output text \
-  --profile your-profile-name
+  --profile your-profile-name)
+
+echo "API Key: $API_KEY"
 ```
 
 3. Test the API:
@@ -266,12 +269,12 @@ export API_URL=$(aws cloudformation describe-stacks \
 
 # Test GET endpoint
 curl -X GET $API_URL/items \
-  -H "x-api-key: your-api-key"
+  -H "x-api-key: $API_KEY"
 
 # Test POST endpoint
 curl -X POST $API_URL/items \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your-api-key" \
+  -H "x-api-key: $API_KEY" \
   -d '{"name": "Test Item", "description": "This is a test item"}'
 ```
 
@@ -360,35 +363,17 @@ flowchart TD
     style CONFIGURE fill:#ff9900,color:#fff
 ```
 
-## Creating API Gateway Resources
+### 4. Advanced API Configuration
 
-The API Gateway infrastructure is now complete. Let's verify our setup:
+You can further customize your API with additional features:
 
 ```bash
-# Get the API Gateway ID
-export API_ID=$(aws cloudformation describe-stacks \
-  --stack-name ApiStack \
-  --query 'Stacks[0].Outputs[?OutputKey==`ApiUrl`].OutputValue' \
-  --output text \
-  --profile your-profile-name | cut -d'/' -f3)
+# Get the API Gateway ID from the console or use:
+aws apigateway get-rest-apis --profile your-profile-name
 
-# Check API Gateway configuration
-aws apigateway get-rest-api --rest-api-id $API_ID --profile your-profile-name
-
-# List all methods
-aws apigateway get-resources --rest-api-id $API_ID --profile your-profile-name
-
-# Monitor API usage
-aws apigateway get-usage \
-  --usage-plan-id $(aws apigateway get-usage-plans \
-    --query 'items[0].id' \
-    --output text \
-    --profile your-profile-name) \
-  --key-id $(aws cloudformation describe-stacks \
-    --stack-name ApiStack \
-    --query 'Stacks[0].Outputs[?OutputKey==`ApiKey`].OutputValue' \
-    --output text \
-    --profile your-profile-name) \
+# View API usage metrics
+aws logs get-metric-filter \
+  --log-group-name API-Gateway-Execution-Logs \
   --profile your-profile-name
 ```
 

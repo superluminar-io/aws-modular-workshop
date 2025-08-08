@@ -1,0 +1,95 @@
+/* Language Toggle Switch Styles */
+.language-toggle-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+#language-toggle {
+  background: linear-gradient(45deg, #03feb7, #0288d1);
+  border: none;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(3, 254, 183, 0.3);
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+#language-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(3, 254, 183, 0.4);
+  background: linear-gradient(45deg, #00e6a3, #0277bd);
+}
+
+#language-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(3, 254, 183, 0.3);
+}
+
+#language-toggle.active {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+#language-toggle.active:hover {
+  background: linear-gradient(45deg, #e55a2b, #e8851a);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.language-toggle-container .loading {
+  position: relative;
+}
+
+.language-toggle-container .loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid transparent;
+  border-top: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .language-toggle-container {
+    top: 10px;
+    right: 10px;
+  }
+  
+  #language-toggle {
+    padding: 8px 16px;
+    font-size: 12px;
+    min-width: 70px;
+  }
+}
+
+/* Integration with Docsify sidebar */
+.sidebar {
+  padding-top: 60px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    padding-top: 50px;
+  }
+}

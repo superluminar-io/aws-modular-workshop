@@ -49,6 +49,10 @@ Create a new CDK project:
 mkdir dynamodb-lab
 cd dynamodb-lab
 npx aws-cdk init app --language typescript
+
+# Install required AWS SDK packages
+npm install @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb
+npm install --save-dev @types/node ts-node
 ```
 
 ## Lab Steps
@@ -58,6 +62,7 @@ npx aws-cdk init app --language typescript
 Let's create a DynamoDB table with TTL support and proper indexing:
 
 ```typescript
+import * as cdk from "aws-cdk-lib";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 
 const table = new dynamodb.Table(this, "UsersTable", {
@@ -342,7 +347,7 @@ demonstrateTTL();
 
 ```bash
 export TABLE_NAME=$(aws cloudformation describe-stacks \
-  --stack-name DynamoDBStack \
+  --stack-name DynamodbLabStack \
   --query 'Stacks[0].Outputs[?OutputKey==`TableName`].OutputValue' \
   --output text \
   --profile your-profile-name)
@@ -469,11 +474,11 @@ When you're finished with this lab:
 
 ```bash
 # Empty the table (if needed)
-aws dynamodb scan --table-name UsersTable --projection-expression "userId,email" --profile your-profile-name | \
+aws dynamodb scan --table-name $TABLE_NAME --projection-expression "userId,email" --profile your-profile-name | \
   jq -r '.Items[] | [.userId.S, .email.S] | @tsv' | \
   while read userId email; do
     aws dynamodb delete-item \
-      --table-name UsersTable \
+      --table-name $TABLE_NAME \
       --key "{\"userId\":{\"S\":\"$userId\"},\"email\":{\"S\":\"$email\"}}" \
       --profile your-profile-name
   done

@@ -123,7 +123,7 @@
 
 ## Tutorials and Workshops
 
-- [X-Ray Workshop](https://www.workshops.aws/card/AWS-X-Ray)
+- [X-Ray Workshop](https://catalog.workshops.aws/categories/Management%20&%20Governance)
 - [Serverless Observability Workshop](https://catalog.workshops.aws/observability/en-US)
 - [Microservices Workshop](https://catalog.workshops.aws/microservices/en-US)
 - [ECS Workshop](https://ecsworkshop.com/monitoring/container-insights/)

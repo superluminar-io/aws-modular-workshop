@@ -52,9 +52,9 @@
 
 ## Tutorials and Workshops
 
-- [VPC Networking Workshop](https://networking.workshop.aws/) - Hands-on networking exercises
-- [Security Workshop](https://security.workshop.aws/) - Network security practices
-- [AWS Skill Builder - Networking](https://explore.skillbuilder.aws/learn/course/internal/view/elearning/2050/aws-networking-basics) - Free training
+- [VPC Networking Workshop](https://catalog.workshops.aws/networking/) - Hands-on networking exercises
+- [AWS Security Workshops](https://catalog.workshops.aws/security/) - Network security practices
+- [AWS Skill Builder - Networking](https://skillbuilder.aws/learning-plans/networking-content-delivery) - Networking training courses
 
 ## Tools and Utilities
 

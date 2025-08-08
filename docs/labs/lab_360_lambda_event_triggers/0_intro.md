@@ -218,3 +218,15 @@ In the hands-on section, you'll:
 - Test different event patterns
 
 [DIAGRAM: Lambda Event Flow]
+
+```mermaid
+flowchart TD
+    S3[S3 Event] --> LAMBDA[Lambda Function]
+    DDB[DynamoDB Stream] --> LAMBDA
+    SCHEDULE[EventBridge Schedule] --> LAMBDA
+    LAMBDA --> PROCESS[Process Event]
+    PROCESS --> OUTPUT[Write Result]
+    OUTPUT --> TARGET[Target Service]
+```
+
+This completes the comprehensive Lambda and Event Triggers lab, giving you practical experience with serverless event-driven architectures on AWS.

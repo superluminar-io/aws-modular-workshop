@@ -56,8 +56,8 @@
 
 ## Tutorials and Workshops
 
-- [Systems Manager Workshop](https://www.workshops.aws/card/Systems%20Manager) - Hands-on exercises
-- [AWS Skill Builder](https://explore.skillbuilder.aws/learn/course/internal/view/elearning/8888/getting-started-with-aws-systems-manager) - Free training
+- [Systems Manager Workshop](https://catalog.workshops.aws/categories/Management%20&%20Governance) - Hands-on exercises
+- [AWS Skill Builder](https://skillbuilder.aws/learning-plans/management-governance) - Management and governance training
 - [Getting Started Guide](https://aws.amazon.com/getting-started/hands-on/remotely-run-commands-ec2-instance-systems-manager/) - Quick start tutorial
 
 ## Community Resources

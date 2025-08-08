@@ -35,6 +35,7 @@ flowchart TD
 Update your stack file with the following code:
 
 ```typescript
+import * as cdk from 'aws-cdk-lib';
 import {
   CfnOutput,
   Duration,
@@ -107,28 +108,40 @@ cdk deploy --profile your-profile-name
 
 After deployment, let's interact with our bucket using the AWS CLI:
 
-1. **Create a test file**:
+1. **Get the bucket name from the stack outputs**:
+
+```bash
+export BUCKET_NAME=$(aws cloudformation describe-stacks \
+  --stack-name AwsFundamentalsWorkshopLabsStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+echo "Bucket name: $BUCKET_NAME"
+```
+
+2. **Create a test file**:
 
 ```bash
 echo "Hello, S3!" > test.txt
 ```
 
-2. **Upload the file**:
+3. **Upload the file**:
 
 ```bash
-aws s3 cp test.txt s3://BUCKET_NAME/test.txt --profile your-profile-name
+aws s3 cp test.txt s3://$BUCKET_NAME/test.txt --profile your-profile-name
 ```
 
-3. **List bucket contents**:
+4. **List bucket contents**:
 
 ```bash
-aws s3 ls s3://BUCKET_NAME --profile your-profile-name
+aws s3 ls s3://$BUCKET_NAME --profile your-profile-name
 ```
 
-4. **Download the file**:
+5. **Download the file**:
 
 ```bash
-aws s3 cp s3://BUCKET_NAME/test.txt downloaded.txt --profile your-profile-name
+aws s3 cp s3://$BUCKET_NAME/test.txt downloaded.txt --profile your-profile-name
 ```
 
 ### 3. Enable Versioning
@@ -139,16 +152,16 @@ Our bucket already has versioning enabled. Let's see it in action:
 
 ```bash
 echo "Version 1" > test.txt
-aws s3 cp test.txt s3://BUCKET_NAME/test.txt --profile your-profile-name
+aws s3 cp test.txt s3://$BUCKET_NAME/test.txt --profile your-profile-name
 
 echo "Version 2" > test.txt
-aws s3 cp test.txt s3://BUCKET_NAME/test.txt --profile your-profile-name
+aws s3 cp test.txt s3://$BUCKET_NAME/test.txt --profile your-profile-name
 ```
 
 2. **List versions**:
 
 ```bash
-aws s3api list-object-versions --bucket BUCKET_NAME --prefix test.txt --profile your-profile-name
+aws s3api list-object-versions --bucket $BUCKET_NAME --prefix test.txt --profile your-profile-name
 ```
 
 ### 4. Work with Lifecycle Rules
@@ -158,13 +171,13 @@ We've configured a lifecycle rule to move objects to STANDARD_IA storage class a
 1. **Check object storage class**:
 
 ```bash
-aws s3api head-object --bucket BUCKET_NAME --key test.txt --profile your-profile-name
+aws s3api head-object --bucket $BUCKET_NAME --key test.txt --profile your-profile-name
 ```
 
 2. **View lifecycle configuration**:
 
 ```bash
-aws s3api get-bucket-lifecycle-configuration --bucket BUCKET_NAME --profile your-profile-name
+aws s3api get-bucket-lifecycle-configuration --bucket $BUCKET_NAME --profile your-profile-name
 ```
 
 ### 5. Clean Up
@@ -173,7 +186,7 @@ When you're finished with this lab:
 
 ```bash
 # Remove all objects from the bucket
-aws s3 rm s3://BUCKET_NAME --recursive --profile your-profile-name
+aws s3 rm s3://$BUCKET_NAME --recursive --profile your-profile-name
 
 # Destroy the CDK stack
 cdk destroy --profile your-profile-name

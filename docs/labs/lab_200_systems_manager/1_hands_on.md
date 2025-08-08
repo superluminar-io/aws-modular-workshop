@@ -59,12 +59,9 @@ Description: A detailed diagram showing the Systems Manager resources we'll crea
 
 This lab builds on the EC2 deployment lab. Download the completed EC2 lab state to begin:
 
-```bash
-curl <S3_URL>/lab-180-completed.zip -o lab-180-completed.zip
-unzip lab-180-completed.zip
-cd lab-180-completed
-npm install
-```
+- Completed the EC2 Deployment lab
+- AWS CDK and CLI configured with appropriate permissions
+- Basic understanding of Systems Manager concepts
 
 ## Lab Steps
 
@@ -73,6 +70,8 @@ npm install
 Now we'll add Systems Manager access to our existing EC2 instance:
 
 ```typescript
+import * as iam from "aws-cdk-lib/aws-iam";
+
 // Create role for Systems Manager
 const role = new iam.Role(this, "SSMInstanceRole", {
   assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
@@ -92,8 +91,15 @@ instance.role.addManagedPolicy(
 1. **Start a Session**:
 
 ```bash
+# Get instance ID from previous lab outputs
+export INSTANCE_ID=$(aws cloudformation describe-stacks \
+  --stack-name AwsFundamentalsWorkshopLabsStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`InstanceId`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
 aws ssm start-session \
-    --target your-instance-id \
+    --target $INSTANCE_ID \
     --profile your-profile-name
 ```
 
@@ -143,7 +149,7 @@ aws ssm get-parameter --name "/myapp/dev/log-level"
 aws ssm send-command \
     --document-name "AWS-RunShellScript" \
     --parameters 'commands=["df -h"]' \
-    --targets "Key=instanceids,Values=your-instance-id" \
+    --targets "Key=instanceids,Values=$INSTANCE_ID" \
     --profile your-profile-name
 ```
 
@@ -159,7 +165,7 @@ aws ssm list-commands \
 ```bash
 aws ssm get-command-invocation \
     --command-id "command-id-from-previous-step" \
-    --instance-id your-instance-id \
+    --instance-id $INSTANCE_ID \
     --profile your-profile-name
 ```
 

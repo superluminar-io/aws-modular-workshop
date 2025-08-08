@@ -1,0 +1,18 @@
+{
+  "name": "workshop-credentials-service",
+  "version": "1.0.0",
+  "description": "Backend service for AWS temporary credentials",
+  "main": "credentials-service.js",
+  "scripts": {
+    "start": "node credentials-service.js",
+    "dev": "nodemon credentials-service.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sts": "^3.490.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

@@ -63,12 +63,10 @@ flowchart TD
 
 This lab builds on the VPC networking lab. Download the completed VPC lab state to begin:
 
-```bash
-curl <S3_URL>/lab-160-completed.zip -o lab-160-completed.zip
-unzip lab-160-completed.zip
-cd lab-160-completed
-npm install
-```
+- Completed the VPC Networking lab
+- AWS CDK and CLI configured with appropriate permissions  
+- MySQL client installed locally (for testing connections)
+- Basic understanding of relational databases
 
 ## Lab Steps
 
@@ -117,11 +115,32 @@ After deployment, you'll need the following information:
 - Master username (default: admin)
 - Master password (generated automatically)
 
+First, get the database endpoint and secret ARN from the stack outputs:
+
+```bash
+# Get database endpoint
+export DATABASE_ENDPOINT=$(aws cloudformation describe-stacks \
+  --stack-name RdsStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`DatabaseEndpoint`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+# Get secret ARN
+export SECRET_ARN=$(aws cloudformation describe-stacks \
+  --stack-name RdsStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`DatabaseSecretArn`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+echo "Database endpoint: $DATABASE_ENDPOINT"
+echo "Secret ARN: $SECRET_ARN"
+```
+
 Retrieve the database password from Secrets Manager:
 
 ```bash
 aws secretsmanager get-secret-value \
-  --secret-id <SECRET_ARN> \
+  --secret-id $SECRET_ARN \
   --query 'SecretString' \
   --output text \
   --profile your-profile-name
@@ -132,7 +151,7 @@ aws secretsmanager get-secret-value \
 Using the MySQL client:
 
 ```bash
-mysql -h <DATABASE_ENDPOINT> -P 3306 -u admin -p
+mysql -h $DATABASE_ENDPOINT -P 3306 -u admin -p
 ```
 
 Create a test database and table:

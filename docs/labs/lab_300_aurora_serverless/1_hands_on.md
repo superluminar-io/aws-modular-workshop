@@ -573,7 +573,7 @@ export ALERT_TOPIC=$(aws cloudformation describe-stacks \
 aws sns subscribe \
   --topic-arn $ALERT_TOPIC \
   --protocol email \
-  --notification-endpoint your-email@example.com \
+  --notification-endpoint YOUR_EMAIL_ADDRESS \
   --profile your-profile-name
 
 # Open the CloudWatch dashboard

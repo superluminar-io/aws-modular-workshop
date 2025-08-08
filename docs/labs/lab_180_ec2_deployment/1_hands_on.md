@@ -4,12 +4,9 @@
 
 Before starting this lab, ensure you have:
 
-```bash
-curl <S3_URL>/lab-160-completed.zip -o lab-160-completed.zip
-unzip lab-160-completed.zip
-cd lab-160-completed
-npm install
-```
+- Completed the VPC Networking lab
+- AWS CDK and CLI configured with appropriate permissions
+- Basic understanding of EC2 concepts
 
 ## Lab Steps
 
@@ -18,15 +15,15 @@ npm install
 With our VPC infrastructure in place, let's create an EC2 instance:
 
 ```typescript
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+
 const instance = new ec2.Instance(this, "WebServer", {
   vpc, // Using the existing VPC from lab 160
   instanceType: ec2.InstanceType.of(
     ec2.InstanceClass.T3,
     ec2.InstanceSize.MICRO
   ),
-  machineImage: new ec2.AmazonLinuxImage({
-    generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
-  }),
+  machineImage: ec2.MachineImage.latestAmazonLinux2(),
   // ... rest of EC2 configuration
 });
 ```
@@ -36,6 +33,7 @@ const instance = new ec2.Instance(this, "WebServer", {
 Update your stack file with the following code:
 
 ```typescript
+import * as cdk from 'aws-cdk-lib';
 import { CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
 import {
   Instance,
@@ -169,8 +167,15 @@ cdk deploy --profile your-profile-name
 Use AWS Systems Manager Session Manager to connect:
 
 ```bash
+# Get instance ID from stack outputs
+export INSTANCE_ID=$(aws cloudformation describe-stacks \
+  --stack-name AwsFundamentalsWorkshopLabsStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`InstanceId`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
 aws ssm start-session \
-    --target your-instance-id \
+    --target $INSTANCE_ID \
     --profile your-profile-name
 ```
 
@@ -225,7 +230,7 @@ history -c
 
 ```bash
 aws ec2 create-image \
-    --instance-id your-instance-id \
+    --instance-id $INSTANCE_ID \
     --name "WebServer-AMI" \
     --description "Apache web server AMI" \
     --profile your-profile-name

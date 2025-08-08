@@ -183,3 +183,5 @@ In the hands-on portion of this lab, you will:
 6. Analyze audit logs
 7. Implement compliance controls
 8. Set up automated monitoring
+
+This comprehensive lab will teach you to implement robust auditing and compliance monitoring using AWS CloudTrail, essential for maintaining security and meeting regulatory requirements in enterprise environments.

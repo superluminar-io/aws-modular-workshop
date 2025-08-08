@@ -64,7 +64,7 @@
 ## Tutorials and Workshops
 
 - [Step Functions Tutorials](https://docs.aws.amazon.com/step-functions/latest/dg/tutorials.html)
-- [AWS Workshop Studio - Step Functions](https://workshops.aws/)
+- [AWS Step Functions Workshops](https://catalog.workshops.aws/categories/Application%20Integration)
 - [Step Functions Sample Projects](https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html)
 
 ## Community Resources

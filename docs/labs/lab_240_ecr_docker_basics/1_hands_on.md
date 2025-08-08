@@ -49,6 +49,7 @@ npx aws-cdk init app --language typescript
 Let's create an ECR repository to store our Docker images:
 
 ```typescript
+import * as cdk from "aws-cdk-lib";
 import * as ecr from "aws-cdk-lib/aws-ecr";
 
 const repository = new ecr.Repository(this, "MyRepository", {
@@ -138,25 +139,36 @@ curl http://localhost:3000
 
 ### 5. Push to ECR
 
+First, get your AWS account ID and region:
+
+```bash
+# Get account ID and region
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text --profile your-profile-name)
+export AWS_REGION=$(aws configure get region --profile your-profile-name)
+
+echo "Account ID: $AWS_ACCOUNT_ID"
+echo "Region: $AWS_REGION"
+```
+
 Authenticate Docker to ECR:
 
 ```bash
-aws ecr get-login-password --region your-region --profile your-profile-name | \
+aws ecr get-login-password --region $AWS_REGION --profile your-profile-name | \
   docker login --username AWS --password-stdin \
-  your-account-id.dkr.ecr.your-region.amazonaws.com
+  $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 ```
 
 Tag your image:
 
 ```bash
 docker tag workshop-app:latest \
-  your-account-id.dkr.ecr.your-region.amazonaws.com/workshop-app:latest
+  $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app-repo:latest
 ```
 
 Push to ECR:
 
 ```bash
-docker push your-account-id.dkr.ecr.your-region.amazonaws.com/workshop-app:latest
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app-repo:latest
 ```
 
 ### 6. Implement Image Scanning
@@ -165,7 +177,7 @@ View scan results:
 
 ```bash
 aws ecr describe-image-scan-findings \
-  --repository-name workshop-app \
+  --repository-name my-app-repo \
   --image-id imageTag=latest \
   --profile your-profile-name
 ```
@@ -175,13 +187,13 @@ aws ecr describe-image-scan-findings \
 Remove local image:
 
 ```bash
-docker rmi your-account-id.dkr.ecr.your-region.amazonaws.com/workshop-app:latest
+docker rmi $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app-repo:latest
 ```
 
 Pull from ECR:
 
 ```bash
-docker pull your-account-id.dkr.ecr.your-region.amazonaws.com/workshop-app:latest
+docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app-repo:latest
 ```
 
 ## Validation Steps
@@ -229,13 +241,13 @@ Remove local resources:
 
 ```bash
 docker rmi workshop-app
-docker rmi your-account-id.dkr.ecr.your-region.amazonaws.com/workshop-app:latest
+docker rmi $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app-repo:latest
 ```
 
 Destroy CDK stack:
 
 ```bash
-cdk destroy EcrStack --profile your-profile-name
+cdk destroy --profile your-profile-name
 ```
 
 [DIAGRAM: Container Build Flow]
@@ -317,7 +329,7 @@ When you're finished with this lab:
 ```bash
 # Remove local Docker images
 docker rmi workshop-app:latest
-docker rmi your-account-id.dkr.ecr.your-region.amazonaws.com/my-app-repo:latest
+docker rmi $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app-repo:latest
 
 # Remove all images from ECR repository (optional)
 aws ecr list-images \

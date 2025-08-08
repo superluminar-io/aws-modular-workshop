@@ -28,5 +28,8 @@
   "homepage": "https://github.com/superluminar-io/aws_fundamentals_workshop_labs#readme",
   "devDependencies": {
     "docsify-cli": "^4.4.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-translate": "^3.490.0"
   }
 }

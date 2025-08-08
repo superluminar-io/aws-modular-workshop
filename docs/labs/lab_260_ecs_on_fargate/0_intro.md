@@ -54,8 +54,8 @@ flowchart TD
 - Understand ECS core concepts and components
 - Deploy containers using AWS Fargate
 - Configure service discovery and load balancing
-- **Set up Application Load Balancer for high availability**
-- **Implement container health checks and monitoring**
+- Set up Application Load Balancer for high availability
+- Implement container health checks and monitoring
 - Implement logging and monitoring
 - Manage container scaling and updates
 
@@ -152,9 +152,9 @@ flowchart TD
    - Service discovery
 
 2. **Load Balancing**
-   - Application Load Balancer
-   - Network Load Balancer
-   - Service Discovery
+   - Application Load Balancer (ALB): Layer 7 load balancing for HTTP/HTTPS traffic
+   - Network Load Balancer (NLB): Layer 4 load balancing for TCP/UDP traffic
+   - Service Discovery: DNS-based service location for microservices
 
 ### Monitoring and Logging
 
@@ -219,8 +219,8 @@ In the hands-on section, you'll:
 - Create an ECS cluster
 - Define task definitions
 - Deploy services with Fargate
-- **Configure Application Load Balancer with health checks**
-- **Implement container health monitoring**
+- Configure Application Load Balancer with health checks
+- Implement container health monitoring
 - Implement auto scaling
 - Monitor your containers
 

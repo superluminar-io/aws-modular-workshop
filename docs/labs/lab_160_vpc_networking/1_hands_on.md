@@ -63,6 +63,7 @@ flowchart TD
 Update your stack file with the following code:
 
 ```typescript
+import * as cdk from 'aws-cdk-lib';
 import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import {
   Vpc,
@@ -257,9 +258,9 @@ Enable VPC Flow Logs to monitor network traffic:
 // Add to your stack
 const logGroup = new logs.LogGroup(this, "VPCFlowLogs");
 
-new ec2.FlowLog(this, "FlowLog", {
-  resourceType: ec2.FlowLogResourceType.fromVpc(vpc),
-  destination: ec2.FlowLogDestination.toCloudWatchLogs(logGroup),
+new FlowLog(this, "FlowLog", {
+  resourceType: FlowLogResourceType.fromVpc(vpc),
+  destination: FlowLogDestination.toCloudWatchLogs(logGroup),
 });
 ```
 

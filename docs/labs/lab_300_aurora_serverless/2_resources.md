@@ -71,7 +71,7 @@
 - [Aurora Module in CDK](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds-readme.html)
 - [ServerlessCluster Construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds.ServerlessCluster.html)
 - [CDK Aurora Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/rds)
-- [CDK Workshop Aurora](https://cdkworkshop.com/20-typescript/40-hit-counter/300-resources.html)
+- [CDK Workshop](https://cdkworkshop.com/)
 
 ## Tools and Utilities
 

@@ -37,7 +37,7 @@
 
 ## Video Content
 
-- [AWS re:Invent CDK Sessions](https://www.youtube.com/results?search_query=aws+reinvent+cdk) - Conference presentations about CDK
+- [AWS CDK Video Content](https://www.youtube.com/c/AmazonWebServices/search?query=cdk) - Official AWS CDK video tutorials
 - [AWS Online Tech Talks](https://aws.amazon.com/developer/learning/online-tech-talks/) - Technical deep dives
 - [AWS Builders Online Series](https://aws.amazon.com/events/builders-online-series/) - Educational webinars
 

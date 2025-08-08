@@ -110,6 +110,6 @@
 ### Additional Learning
 
 - [ECS Deep Dive Series](https://aws.amazon.com/blogs/containers/category/compute/amazon-ecs/)
-- [AWS Skill Builder - ECS Courses](https://explore.skillbuilder.aws/learn/course/external/view/elearning/11099/amazon-elastic-container-service-ecs-primer)
+- [AWS Skill Builder - ECS Courses](https://skillbuilder.aws/learning-plans/containers)
 - [AWS Solutions Library - Containers](https://aws.amazon.com/solutions/?solutions-all.sort-by=item.additionalFields.sortDate&solutions-all.sort-order=desc&awsf.AWS-Product%20Category=tech-category%23containers)
 - [Container Security Best Practices](https://aws.amazon.com/blogs/containers/guidance-for-container-image-security-in-amazon-elastic-container-registry/)

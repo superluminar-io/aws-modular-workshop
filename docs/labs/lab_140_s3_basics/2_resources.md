@@ -40,7 +40,7 @@
 
 - [Getting Started with S3](https://aws.amazon.com/getting-started/hands-on/backup-files-to-amazon-s3/) - Hands-on tutorial
 - [S3 Workshops](https://workshops.aws/categories/Storage) - AWS workshops featuring S3
-- [AWS Skill Builder - S3](https://explore.skillbuilder.aws/learn/course/external/view/elearning/134/amazon-s3-basics) - Free training course
+- [AWS Skill Builder - S3](https://skillbuilder.aws/learning-plans/storage) - Storage services training courses
 
 ## Common Use Cases
 

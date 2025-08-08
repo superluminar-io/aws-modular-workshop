@@ -107,7 +107,7 @@ export class AwsBackupStack extends cdk.Stack {
     });
 
     backupTopic.addSubscription(
-      new subscriptions.EmailSubscription('your-email@example.com')
+      new subscriptions.EmailSubscription('YOUR_EMAIL_ADDRESS') // Replace with your email
     );
 
     // Create backup vault with encryption

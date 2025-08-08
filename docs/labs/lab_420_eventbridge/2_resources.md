@@ -119,7 +119,7 @@
 - [AWS Compute Blog](https://aws.amazon.com/blogs/compute/)
 - [EventBridge Workshop](https://catalog.workshops.aws/eventbridge/en-US)
 - [AWS Online Tech Talks](https://aws.amazon.com/events/online-tech-talks/)
-- [AWS re:Invent Sessions](https://www.youtube.com/results?search_query=aws+reinvent+eventbridge)
+- [AWS EventBridge Video Content](https://www.youtube.com/c/AmazonWebServices/search?query=eventbridge)
 
 ### Support and Forums
 

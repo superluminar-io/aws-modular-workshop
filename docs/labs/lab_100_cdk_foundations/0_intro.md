@@ -62,7 +62,7 @@ Understanding the core concepts of AWS CDK is crucial to effectively using the f
    - It defines the scope of deployment and orchestrates the lifecycle of the stacks it contains.
    - An app is instantiated in your main entry point file (e.g., `app.ts` or `app.py`), and you can define multiple stacks within the app to organize your resources logically and manage dependencies between them.
 
-[DIAGRAM: CDK Architecture Overview]
+[DIAGRAM: CDK Synthesis Process]
 
 ```mermaid
 flowchart TD
@@ -90,11 +90,12 @@ flowchart TD
     A --> C[Compute Stack]
     A --> D[Database Stack]
 
-    B --> B1[S3 Bucket]
-    B --> B2[VPC]
+    B --> B1[VPC]
+    B --> B2[Security Groups]
 
     C --> C1[EC2 Instance]
     C --> C2[Lambda Function]
+    C --> C3[S3 Bucket]
 
     D --> D1[RDS Instance]
     D --> D2[DynamoDB Table]
@@ -138,14 +139,6 @@ CDK’s integration with CloudFormation offers several key benefits:
 - **Repeatability**: Deploy infrastructure consistently, reducing human error.
 - **Automation**: Automate resource provisioning and management for better scalability.
 
-[DIAGRAM: State Management Flow]
-Description: A detailed flowchart showing how CloudFormation manages infrastructure state. The diagram should:
-
-1. Show the current state and desired state comparison process
-2. Illustrate the change detection mechanism
-3. Display the resource update flow
-4. Show the state tracking and rollback capabilities
-   Include decision points and feedback loops. Use AWS's standard color scheme with blue for AWS services and green for CDK components.
 
 ## State Management
 

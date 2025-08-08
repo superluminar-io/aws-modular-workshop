@@ -199,9 +199,22 @@ cdk deploy LambdaStack --profile your-profile-name
 
 2. Test S3 trigger:
 
+First, get the bucket name from the CDK stack outputs:
+
+```bash
+# Get bucket name from stack outputs
+export BUCKET_NAME=$(aws cloudformation describe-stacks \
+  --stack-name LambdaStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+echo "Bucket name: $BUCKET_NAME"
+```
+
 ```bash
 # Upload file to S3
-aws s3 cp test.txt s3://your-bucket-name/ \
+aws s3 cp test.txt s3://$BUCKET_NAME/ \
   --profile your-profile-name
 ```
 
@@ -226,7 +239,14 @@ aws logs get-log-events \
 ```bash
 aws logs get-log-events \
   --log-group-name /aws/lambda/ScheduledHandler \
-  --log-stream-name latest \
+  --log-stream-name $(aws logs describe-log-streams \
+    --log-group-name /aws/lambda/ScheduledHandler \
+    --order-by LastEventTime \
+    --descending \
+    --limit 1 \
+    --query 'logStreams[0].logStreamName' \
+    --output text \
+    --profile your-profile-name) \
   --profile your-profile-name
 ```
 
@@ -271,14 +291,20 @@ When you're finished with this lab:
 
 ```bash
 # Empty S3 bucket
-aws s3 rm s3://your-bucket-name --recursive --profile your-profile-name
+aws s3 rm s3://$BUCKET_NAME --recursive --profile your-profile-name
 
-# Remove all items from DynamoDB table (optional)
-aws dynamodb scan --table-name YourTableName --profile your-profile-name | \
+# Get table name and remove all items from DynamoDB table (optional)
+export TABLE_NAME=$(aws cloudformation describe-stacks \
+  --stack-name LambdaStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`TableName`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+aws dynamodb scan --table-name $TABLE_NAME --profile your-profile-name | \
   jq -r '.Items[].id.S' | \
   while read id; do
     aws dynamodb delete-item \
-      --table-name YourTableName \
+      --table-name $TABLE_NAME \
       --key "{\"id\":{\"S\":\"$id\"}}" \
       --profile your-profile-name
   done

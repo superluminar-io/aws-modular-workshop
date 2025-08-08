@@ -70,6 +70,7 @@ import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Construct } from 'constructs';
 
 export class SecretsManagerStack extends cdk.Stack {
@@ -91,11 +92,11 @@ export class SecretsManagerStack extends cdk.Stack {
       engine: rds.DatabaseInstanceEngine.mysql({
         version: rds.MysqlEngineVersion.VER_8_0,
       }),
-      instanceType: cdk.aws_ec2.InstanceType.of(
-        cdk.aws_ec2.InstanceClass.BURSTABLE3,
-        cdk.aws_ec2.InstanceSize.MICRO,
+      instanceType: ec2.InstanceType.of(
+        ec2.InstanceClass.BURSTABLE3,
+        ec2.InstanceSize.MICRO,
       ),
-      vpc: new cdk.aws_ec2.Vpc(this, 'VPC', {
+      vpc: new ec2.Vpc(this, 'VPC', {
         maxAzs: 2,
       }),
       databaseName: 'myapp',

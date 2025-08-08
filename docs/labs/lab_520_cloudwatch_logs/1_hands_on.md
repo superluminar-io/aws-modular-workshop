@@ -83,7 +83,7 @@ export class CloudWatchStack extends cdk.Stack {
     // Create SNS topic for alerts
     const alertTopic = new sns.Topic(this, 'AlertTopic');
     alertTopic.addSubscription(
-      new subscriptions.EmailSubscription('your-email@example.com')
+      new subscriptions.EmailSubscription('YOUR_EMAIL_ADDRESS') // Replace with your email
     );
 
     // Create VPC and EC2 instance to monitor
@@ -324,7 +324,6 @@ export LOG_GROUP_NAME=$(aws cloudformation describe-stacks \
 
 ```bash
 ts-node scripts/publish-logs.ts
-ts-node scripts/check-alarms.ts
 ```
 
 ## Validation Steps

@@ -102,7 +102,7 @@
 
 ### Tutorials and Workshops
 
-- [AWS Container Workshop](https://container-workshop.aws-management.tools/)
+- [AWS Container Workshops](https://catalog.workshops.aws/categories/Containers)
 - [Docker Getting Started Tutorial](https://docs.docker.com/get-started/)
 - [ECR Sample Applications](https://github.com/aws-samples?q=ecr&type=all&language=&sort=)
 

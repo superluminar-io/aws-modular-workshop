@@ -70,8 +70,8 @@ flowchart TD
 3. Initialize local repository:
 
 ```bash
-# Clone your new repository
-git clone https://github.com/your-username/workshop-pipeline.git
+# Clone your new repository (replace YOUR_GITHUB_USERNAME with your actual GitHub username)
+git clone https://github.com/YOUR_GITHUB_USERNAME/workshop-pipeline.git
 cd workshop-pipeline
 
 # Initialize CDK project
@@ -97,8 +97,8 @@ export class PipelineStack extends cdk.Stack {
     const pipeline = new pipelines.CodePipeline(this, 'Pipeline', {
       pipelineName: 'WorkshopPipeline',
       synth: new pipelines.ShellStep('Synth', {
-        input: pipelines.CodePipelineSource.connection('your-username/workshop-pipeline', 'main', {
-          connectionArn: 'your-connection-arn'  // Replace with your Connection ARN from step 1
+        input: pipelines.CodePipelineSource.connection('YOUR_GITHUB_USERNAME/workshop-pipeline', 'main', {
+          connectionArn: 'YOUR_CONNECTION_ARN'  // Replace with your actual Connection ARN from step 1
         }),
         commands: [
           'npm ci',
@@ -183,7 +183,7 @@ export function addTestingStage(pipeline: pipelines.CodePipeline, stage: pipelin
     ],
     envFromCfnOutputs: {
       // Map CloudFormation outputs to environment variables
-      API_ENDPOINT: stage.stack.exportValue('ApiEndpoint'),
+      // API_ENDPOINT: stage.stackOutputs['ApiEndpoint'],  // Example - replace with actual stack output
     },
   }));
 }
@@ -274,6 +274,7 @@ Create a new file `lib/pipeline-monitoring.ts`:
 ```typescript:lib/pipeline-monitoring.ts
 import * as cdk from 'aws-cdk-lib';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as actions from 'aws-cdk-lib/aws-cloudwatch-actions';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import { Construct } from 'constructs';
 
@@ -298,12 +299,12 @@ export class PipelineMonitoring extends Construct {
       threshold: 1,
       evaluationPeriods: 1,
       alarmDescription: 'Pipeline execution failed',
-    }).addAlarmAction(new cdk.aws_cloudwatch_actions.SnsAction(topic));
+    }).addAlarmAction(new actions.SnsAction(topic));
   }
 }
 ```
 
-## Creating CI/CD Resources
+## Deploy and Monitor Pipeline
 
 Deploy the CI/CD infrastructure:
 
@@ -407,5 +408,3 @@ flowchart TD
     style TEST fill:#ff9900,color:#fff
     style CROSS fill:#ff9900,color:#fff
 ```
-
-## Creating CI/CD Resources

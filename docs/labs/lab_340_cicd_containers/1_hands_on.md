@@ -53,6 +53,7 @@ import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecs_patterns from 'aws-cdk-lib/aws-ecs-patterns';
 import { Construct } from 'constructs';
@@ -120,8 +121,8 @@ export class ContainerPipelineStack extends cdk.Stack {
     const sourceOutput = new codepipeline.Artifact();
     const sourceAction = new codepipeline_actions.GitHubSourceAction({
       actionName: 'GitHub',
-      owner: 'your-github-username',
-      repo: 'your-repo-name',
+      owner: 'YOUR_GITHUB_USERNAME', // Replace with your actual GitHub username
+      repo: 'YOUR_REPO_NAME', // Replace with your actual repository name
       branch: 'main',
       oauthToken: cdk.SecretValue.secretsManager('github-token'),
       output: sourceOutput,
@@ -148,7 +149,7 @@ export class ContainerPipelineStack extends cdk.Stack {
 
     // Create ECS Cluster and Service
     const cluster = new ecs.Cluster(this, 'Cluster', {
-      vpc: new cdk.aws_ec2.Vpc(this, 'Vpc', { maxAzs: 2 }),
+      vpc: new ec2.Vpc(this, 'Vpc', { maxAzs: 2 }),
     });
 
     const service = new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'Service', {
@@ -211,6 +212,8 @@ app.get('/health', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+export { app };
 ```
 
 2. Create production-ready Dockerfile with health checks:
@@ -266,7 +269,7 @@ describe('App', () => {
 ```bash
 aws secretsmanager create-secret \
   --name github-token \
-  --secret-string your-github-token \
+  --secret-string YOUR_GITHUB_TOKEN \
   --profile your-profile-name
 ```
 
@@ -399,39 +402,6 @@ flowchart TD
     style TARGET fill:#ff9900,color:#fff
 ```
 
-## Creating Container CI/CD Resources
-
-Deploy the container CI/CD infrastructure:
-
-```bash
-# Deploy the container pipeline stack
-cdk deploy ContainerPipelineStack --profile your-profile-name
-
-# Check pipeline status
-aws codepipeline get-pipeline-state \
-  --name ContainerPipeline \
-  --profile your-profile-name
-
-# Monitor first build
-aws codebuild list-builds-for-project \
-  --project-name $(aws cloudformation describe-stacks \
-    --stack-name ContainerPipelineStack \
-    --query 'Stacks[0].Outputs[?contains(OutputKey, `BuildProject`)].OutputValue' \
-    --output text) \
-  --profile your-profile-name
-
-# Check ECS service deployment
-aws ecs describe-services \
-  --cluster $(aws cloudformation describe-stacks \
-    --stack-name ContainerPipelineStack \
-    --query 'Stacks[0].Outputs[?contains(OutputKey, `Cluster`)].OutputValue' \
-    --output text) \
-  --services $(aws cloudformation describe-stacks \
-    --stack-name ContainerPipelineStack \
-    --query 'Stacks[0].Outputs[?contains(OutputKey, `Service`)].OutputValue' \
-    --output text) \
-  --profile your-profile-name
-```
 
 ## Final Validation
 

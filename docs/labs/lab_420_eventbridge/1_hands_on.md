@@ -468,7 +468,7 @@ aws sns subscribe \
     --query 'Stacks[0].Outputs[?OutputKey==`AlertTopicArn`].OutputValue' \
     --output text) \
   --protocol email \
-  --notification-endpoint your-email@example.com \
+  --notification-endpoint YOUR_EMAIL_ADDRESS \
   --profile your-profile-name
 ```
 

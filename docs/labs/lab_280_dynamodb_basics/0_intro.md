@@ -62,10 +62,10 @@ flowchart TD
 
 - Understand DynamoDB's core concepts and data model
 - Design efficient table structures and access patterns
-- **Learn common query patterns and best practices**
+- Learn common query patterns and best practices
 - Implement basic CRUD operations
 - Use indexes for efficient queries
-- **Configure Time-to-Live (TTL) for automatic data expiration**
+- Configure Time-to-Live (TTL) for automatic data expiration
 - Manage capacity and scaling
 - Implement best practices for cost optimization
 
@@ -248,9 +248,9 @@ flowchart TD
 In the hands-on section, you'll:
 
 - Create DynamoDB tables
-- **Implement common query patterns and access strategies**
+- Implement common query patterns and access strategies
 - Implement CRUD operations
-- **Configure TTL for automatic data cleanup**
+- Configure TTL for automatic data cleanup
 - Use secondary indexes
 - Configure capacity and scaling
 - Monitor performance

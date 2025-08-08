@@ -51,6 +51,7 @@ flowchart TD
 Create a comprehensive IAM stack with monitoring capabilities:
 
 ```typescript:lib/iam-stack.ts
+import * as cdk from 'aws-cdk-lib';
 import { CfnOutput, RemovalPolicy, Stack, StackProps, Duration } from "aws-cdk-lib";
 import {
   Policy,
@@ -60,7 +61,7 @@ import {
   Effect,
 } from "aws-cdk-lib/aws-iam";
 import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
-import { Bucket, BucketNotification } from "aws-cdk-lib/aws-s3";
+import { Bucket } from "aws-cdk-lib/aws-s3";
 import { Trail } from "aws-cdk-lib/aws-cloudtrail";
 import { Alarm, Metric, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import { Topic } from "aws-cdk-lib/aws-sns";
@@ -93,7 +94,7 @@ export class IamStack extends Stack {
 
     // Add email subscription (replace with your email)
     securityAlertTopic.addSubscription(
-      new EmailSubscription("your-security-team@example.com")
+      new EmailSubscription("YOUR_EMAIL_ADDRESS") // Replace with your email
     );
 
     // Create CloudTrail for auditing IAM actions
@@ -343,7 +344,7 @@ export ALERT_TOPIC=$(aws cloudformation describe-stacks \
 aws sns subscribe \
   --topic-arn $ALERT_TOPIC \
   --protocol email \
-  --notification-endpoint your-security-email@example.com \
+  --notification-endpoint YOUR_EMAIL_ADDRESS \
   --profile your-profile-name
 
 # Check CloudTrail events for IAM actions

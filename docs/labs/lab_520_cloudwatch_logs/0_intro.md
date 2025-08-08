@@ -187,3 +187,5 @@ In the hands-on portion of this lab, you will:
 6. Configure Container Insights
 7. Set up synthetic monitoring
 8. Implement cross-account monitoring
+
+This comprehensive lab will give you hands-on experience with Amazon CloudWatch's monitoring and observability capabilities, essential for maintaining healthy and performant AWS applications.

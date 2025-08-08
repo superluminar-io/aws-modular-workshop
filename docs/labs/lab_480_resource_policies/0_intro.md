@@ -168,3 +168,5 @@ In the hands-on portion of this lab, you will:
 5. Use policy conditions for access control
 6. Monitor and audit policy changes
 7. Troubleshoot policy issues
+
+This comprehensive lab will provide you with hands-on experience in implementing resource-based policies across various AWS services, essential for managing secure and scalable cloud architectures.

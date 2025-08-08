@@ -103,7 +103,7 @@
 - [AWS Containers Blog](https://aws.amazon.com/blogs/containers/)
 - [ECS Workshop](https://ecsworkshop.com/)
 - [Container Security Learning](https://aws.amazon.com/security/security-learning/)
-- [AWS Skill Builder - Containers](https://explore.skillbuilder.aws/learn/course/external/view/elearning/87/introduction-to-containers)
+- [AWS Skill Builder - Containers](https://skillbuilder.aws/learning-plans/containers)
 
 ### Support and Forums
 

@@ -33,8 +33,8 @@
 ## Video Content
 
 - [AWS re:Invent IAM Sessions](https://www.youtube.com/results?search_query=aws+reinvent+iam) - Conference presentations about IAM
-- [AWS Skill Builder - IAM](https://explore.skillbuilder.aws/learn/course/internal/view/elearning/7319/aws-identity-and-access-management-iam-essentials) - Official AWS training
-- [AWS Security Fundamentals](https://www.aws.training/Details/Curriculum?id=11048) - Free digital course
+- [AWS Skill Builder - IAM](https://skillbuilder.aws/learning-plans/security) - Official AWS security training courses
+- [AWS Security Fundamentals](https://skillbuilder.aws/learning-plans/security) - Security learning path
 
 ## Best Practices Guides
 

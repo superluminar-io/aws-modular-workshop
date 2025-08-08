@@ -318,8 +318,14 @@ Common issues and solutions:
 When you're finished with this lab:
 
 ```bash
-# Remove test objects from S3
-aws s3 rm s3://your-bucket-name --recursive --profile your-profile-name
+# Remove test objects from S3 (get bucket name from stack outputs)
+export BUCKET_NAME=$(aws cloudformation describe-stacks \
+  --stack-name ResourcePoliciesStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+aws s3 rm s3://$BUCKET_NAME --recursive --profile your-profile-name
 
 # Destroy the CDK stack
 cdk destroy ResourcePoliciesStack --profile your-profile-name

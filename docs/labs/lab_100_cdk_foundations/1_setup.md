@@ -217,7 +217,7 @@ aws s3 ls | grep cdk
 
    # Validate CloudFormation template
    aws cloudformation validate-template \
-     --template-body file://cdk.out/YourStackName.template.json
+     --template-body file://cdk.out/MyCdkAppStack.template.json
    ```
 
 ### Environment-Specific Configuration
@@ -226,6 +226,9 @@ Add environment-specific settings to your CDK app:
 
 ```typescript
 // In bin/my-cdk-app.ts
+import * as cdk from 'aws-cdk-lib';
+import { MyCdkAppStack } from '../lib/my-cdk-app-stack';
+
 const app = new cdk.App();
 
 // Development environment

@@ -178,3 +178,5 @@ In the hands-on portion of this lab, you will:
 6. Analyze trace data
 7. Create service maps
 8. Troubleshoot using traces
+
+This lab will provide you with practical skills in implementing distributed tracing using AWS X-Ray, essential for monitoring and troubleshooting complex serverless and microservices architectures.

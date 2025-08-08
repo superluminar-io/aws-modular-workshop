@@ -39,12 +39,10 @@ flowchart TD
 
 This lab builds on the ECR and Docker basics lab. Download the completed ECR lab state to begin:
 
-```bash
-curl <S3_URL>/lab-240-completed.zip -o lab-240-completed.zip
-unzip lab-240-completed.zip
-cd lab-240-completed
-npm install
-```
+- Completed the ECR and Docker Basics lab
+- AWS CDK and CLI configured with appropriate permissions
+- Docker installed and configured locally
+- Basic understanding of containerization and microservices
 
 ## Lab Steps
 
@@ -80,6 +78,7 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import * as ecr from "aws-cdk-lib/aws-ecr";
+import * as logs from "aws-cdk-lib/aws-logs";
 import { Construct } from "constructs";
 
 export class EcsStack extends cdk.Stack {
@@ -344,7 +343,7 @@ const xrayContainer = {
   }),
 };
 
-taskDef.addContainer('xray', xrayContainer);
+taskDefinition.addContainer('xray', xrayContainer);
 ```
 
 ### 7. Test the Deployment
@@ -365,7 +364,7 @@ Test scaling:
 ```bash
 # Generate load
 for i in {1..100}; do
-  curl http://your-load-balancer-dns/
+  curl $LOAD_BALANCER_URL
   sleep 1
 done
 ```
@@ -481,143 +480,3 @@ flowchart TD
     style SCALE fill:#ff9900,color:#fff
 ```
 
-## Creating ECS Resources
-
-### 1. Create VPC for Fargate
-
-First, let's create a VPC for our Fargate tasks:
-
-```typescript
-const vpc = new ec2.Vpc(this, "FargateVPC", {
-  maxAzs: 2,
-  subnetConfiguration: [
-    {
-      cidrMask: 24,
-      name: "Public",
-      subnetType: ec2.SubnetType.PUBLIC,
-    },
-    {
-      cidrMask: 24,
-      name: "Private",
-      subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
-    },
-  ],
-});
-```
-
-### 2. Create ECS Cluster and Fargate Service
-
-Now we'll create an ECS cluster and Fargate service using our existing ECR repository:
-
-```typescript
-const cluster = new ecs.Cluster(this, "FargateCluster", {
-  vpc,
-});
-
-const taskDefinition = new ecs.FargateTaskDefinition(this, "TaskDef", {
-  memoryLimitMiB: 512,
-  cpu: 256,
-});
-
-// Use the existing ECR repository from lab 240
-taskDefinition.addContainer("MyContainer", {
-  image: ecs.ContainerImage.fromEcrRepository(repository, "latest"),
-  // ... container configuration
-});
-
-const service = new ecs.FargateService(this, "Service", {
-  cluster,
-  taskDefinition,
-  // ... service configuration
-});
-```
-
-### 3. Configure Auto Scaling
-
-Add auto scaling to your service:
-
-```typescript:lib/ecs-stack.ts
-const scaling = service.autoScaleTaskCount({
-  minCapacity: 2,
-  maxCapacity: 4,
-});
-
-scaling.scaleOnCpuUtilization('CpuScaling', {
-  targetUtilizationPercent: 70,
-  scaleInCooldown: cdk.Duration.seconds(60),
-  scaleOutCooldown: cdk.Duration.seconds(60),
-});
-```
-
-### 4. Configure Service Discovery
-
-Add service discovery to your ECS stack:
-
-```typescript:lib/ecs-stack.ts
-const namespace = new ecs.CloudMapNamespace(this, 'WorkshopNamespace', {
-  vpc,
-  name: 'workshop.local',
-});
-
-const serviceDiscovery = service.enableCloudMap({
-  name: 'workshop-app',
-  cloudMapNamespace: namespace,
-});
-```
-
-### 5. Implement Container Health Checks
-
-Add health check to your service:
-
-```typescript:lib/ecs-stack.ts
-taskDefinition.addContainer('MyContainer', {
-  image: ecs.ContainerImage.fromEcrRepository(repository, 'latest'),
-  healthCheck: {
-    command: ['CMD-SHELL', 'curl -f http://localhost:3000/ || exit 1'],
-    interval: cdk.Duration.seconds(30),
-    timeout: cdk.Duration.seconds(5),
-    retries: 3,
-    startPeriod: cdk.Duration.seconds(60),
-  },
-});
-```
-
-### 6. Configure Enhanced Monitoring
-
-Add Container Insights and X-Ray:
-
-```typescript:lib/ecs-stack.ts
-const xrayContainer = {
-  image: ecs.ContainerImage.fromRegistry('amazon/aws-xray-daemon'),
-  memoryLimitMiB: 256,
-  cpu: 256,
-  logging: new ecs.AwsLogDriver({
-    streamPrefix: 'xray-daemon',
-  }),
-};
-
-taskDef.addContainer('xray', xrayContainer);
-```
-
-### 7. Test the Deployment
-
-Access your application:
-
-```bash
-# Get the Load Balancer DNS name
-aws cloudformation describe-stacks \
-  --stack-name EcsStack \
-  --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerDNS`].OutputValue' \
-  --output text \
-  --profile your-profile-name
-```
-
-Test scaling:
-
-```bash
-# Generate load
-for i in {1..100}; do
-  curl http://your-load-balancer-dns/
-  sleep 1
-done
-```

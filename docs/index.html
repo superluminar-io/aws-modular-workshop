@@ -27,6 +27,7 @@
       rel="stylesheet"
       href="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css"
     />
+    <link rel="stylesheet" href="./css/language-toggle.css" />
     <style>
       :root {
         --base-background-color: #2a1c23;
@@ -94,6 +95,9 @@
   </head>
 
   <body>
+    <div class="language-toggle-container">
+      <button id="language-toggle" onclick="toggleLanguage()">🇺🇸 EN</button>
+    </div>
     <div id="app"></div>
     <script>
       window.$docsify = {
@@ -137,6 +141,66 @@
         startOnLoad: false,
         theme: 'dark',
       })
+    </script>
+
+    <!-- Translation Service -->
+    <script src="./js/translator.js"></script>
+    <script>
+      // Toggle language function
+      async function toggleLanguage() {
+        const button = document.getElementById('language-toggle');
+        const currentLang = window.translationService.currentLanguage;
+        const newLang = currentLang === 'en' ? 'de' : 'en';
+        
+        button.classList.add('loading');
+        button.disabled = true;
+        
+        try {
+          await window.translationService.switchLanguage(newLang);
+        } catch (error) {
+          console.error('Error switching language:', error);
+        } finally {
+          button.classList.remove('loading');
+          button.disabled = false;
+        }
+      }
+
+      // Initialize translation on page load
+      window.addEventListener('DOMContentLoaded', function() {
+        // Set up observer for dynamic content changes
+        const observer = new MutationObserver(function(mutations) {
+          // Debounce translation calls
+          clearTimeout(window.translationTimeout);
+          window.translationTimeout = setTimeout(() => {
+            if (window.translationService.currentLanguage === 'de') {
+              window.translationService.translatePage();
+            }
+          }, 500);
+        });
+
+        // Observe the main app div for changes
+        const appElement = document.getElementById('app');
+        if (appElement) {
+          observer.observe(appElement, {
+            childList: true,
+            subtree: true
+          });
+        }
+      });
+
+      // Hook into Docsify route changes
+      window.$docsify.plugins = [
+        function(hook, vm) {
+          hook.doneEach(function () {
+            // Translate new content after route change
+            setTimeout(() => {
+              if (window.translationService.currentLanguage === 'de') {
+                window.translationService.translatePage();
+              }
+            }, 300);
+          });
+        }
+      ].concat(window.$docsify.plugins || []);
     </script>
   </body>
 </html>

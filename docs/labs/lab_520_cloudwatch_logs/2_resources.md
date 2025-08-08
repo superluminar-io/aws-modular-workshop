@@ -109,7 +109,7 @@
 
 - [Getting Started Tutorial](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/GettingStarted.html)
 - [AWS Workshops](https://workshops.aws/)
-- [Observability Workshop](https://observability.workshop.aws/)
+- [Observability Workshop](https://catalog.workshops.aws/categories/Management%20&%20Governance)
 - [Container Insights Workshop](https://www.eksworkshop.com/intermediate/250_cloudwatch_container_insights/)
 
 ## Community Resources

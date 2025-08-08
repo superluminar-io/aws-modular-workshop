@@ -54,7 +54,7 @@ export class CloudTrailStack extends cdk.Stack {
     });
 
     trailTopic.addSubscription(
-      new subscriptions.EmailSubscription('your-email@example.com')
+      new subscriptions.EmailSubscription('YOUR_EMAIL_ADDRESS') // Replace with your email
     );
 
     // Create CloudTrail trail
@@ -301,7 +301,14 @@ aws logs delete-log-group \
   --profile your-profile-name
 
 # Empty S3 bucket
-aws s3 rm s3://cloudtrail-logs-bucket --recursive --profile your-profile-name
+# Get bucket name from stack outputs first
+export BUCKET_NAME=$(aws cloudformation describe-stacks \
+  --stack-name CloudTrailStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
+  --output text \
+  --profile your-profile-name)
+
+aws s3 rm s3://$BUCKET_NAME --recursive --profile your-profile-name
 
 # Destroy the CDK stack
 cdk destroy CloudTrailStack --profile your-profile-name

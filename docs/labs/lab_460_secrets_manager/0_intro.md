@@ -132,3 +132,5 @@ In the hands-on portion of this lab, you will:
 4. Set up cross-account secret access
 5. Monitor secret usage using CloudWatch and CloudTrail
 6. Implement best practices for secret management
+
+This lab will provide you with practical experience in implementing secure secrets management using AWS Secrets Manager, an essential skill for building secure applications on AWS.

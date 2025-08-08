@@ -192,3 +192,5 @@ In the hands-on portion of this lab, you will:
 5. Perform a test restore
 6. Monitor backup activities
 7. Use AWS Backup Audit Manager
+
+This hands-on lab will provide you with comprehensive experience in implementing enterprise backup and recovery strategies using AWS Backup, crucial for data protection and business continuity.

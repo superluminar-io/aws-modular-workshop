@@ -113,7 +113,7 @@
 
 - [Getting Started Tutorial](https://docs.aws.amazon.com/aws-backup/latest/devguide/getting-started.html)
 - [AWS Workshops](https://workshops.aws/)
-- [AWS Backup Workshop](https://backup.workshop.aws/)
+- [AWS Backup Workshop](https://catalog.workshops.aws/categories/Management%20&%20Governance)
 - [Hands-on Tutorials](https://aws.amazon.com/getting-started/hands-on/)
 
 ## Community Resources

@@ -55,7 +55,7 @@
 - [DynamoDB Construct Library](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_dynamodb-readme.html)
 - [Table Construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_dynamodb.Table.html)
 - [CDK DynamoDB Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/dynamodb-lambda)
-- [CDK Workshop DynamoDB](https://cdkworkshop.com/20-typescript/30-hello-cdk/200-lambda.html)
+- [CDK Workshop DynamoDB](https://cdkworkshop.com/)
 
 ## Tools and Utilities
 

@@ -121,3 +121,14 @@ In the hands-on section, you'll:
 - Test auto-scaling behavior
 - Monitor performance metrics
 - Configure alert notifications
+
+## What's Next
+
+In the hands-on section, you'll:
+
+- Create an Aurora Serverless v2 cluster
+- Configure auto-scaling parameters
+- Implement Data API connections
+- Set up monitoring and alerts
+- Test serverless scaling behavior
+- Explore cost optimization features

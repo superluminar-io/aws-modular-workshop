@@ -64,8 +64,8 @@
 ## Tutorials and Workshops
 
 - [EC2 Getting Started](https://aws.amazon.com/getting-started/hands-on/launch-windows-vm/) - Hands-on tutorial
-- [EC2 Workshop](https://ec2-workshop.workshop.aws/) - In-depth workshop
-- [AWS Skill Builder - EC2](https://explore.skillbuilder.aws/learn/course/external/view/elearning/2045/amazon-elastic-compute-cloud-amazon-ec2-basics) - Free training
+- [AWS Compute Workshops](https://catalog.workshops.aws/categories/Compute) - EC2 and compute workshops
+- [AWS Skill Builder - EC2](https://skillbuilder.aws/learning-plans/compute) - Compute services training
 
 ## Community Resources
 
