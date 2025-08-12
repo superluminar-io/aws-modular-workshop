@@ -175,11 +175,11 @@ export class EcsStack extends cdk.Stack {
         streamPrefix: "workshop-ecs",
         logRetention: logs.RetentionDays.ONE_WEEK,
       }),
-      // Add health check
+      // Add health check (wget is available in Node Alpine images)
       healthCheck: {
         command: [
           "CMD-SHELL",
-          "curl -f http://localhost:3000/health || exit 1",
+          "wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1",
         ],
         interval: cdk.Duration.seconds(30),
         timeout: cdk.Duration.seconds(5),
@@ -279,7 +279,7 @@ curl $LOAD_BALANCER_URL
 curl $LOAD_BALANCER_URL/health
 ```
 
-### 3. Configure Auto Scaling
+### 5. Configure Auto Scaling
 
 Add auto scaling to your service:
 
@@ -296,7 +296,7 @@ scaling.scaleOnCpuUtilization('CpuScaling', {
 });
 ```
 
-### 4. Configure Service Discovery
+### 6. Configure Service Discovery
 
 Add service discovery to your ECS stack:
 
@@ -312,24 +312,8 @@ const serviceDiscovery = service.enableCloudMap({
 });
 ```
 
-### 5. Implement Container Health Checks
 
-Add health check to your service:
-
-```typescript:lib/ecs-stack.ts
-taskDefinition.addContainer('MyContainer', {
-  image: ecs.ContainerImage.fromEcrRepository(repository, 'latest'),
-  healthCheck: {
-    command: ['CMD-SHELL', 'curl -f http://localhost:3000/ || exit 1'],
-    interval: cdk.Duration.seconds(30),
-    timeout: cdk.Duration.seconds(5),
-    retries: 3,
-    startPeriod: cdk.Duration.seconds(60),
-  },
-});
-```
-
-### 6. Configure Enhanced Monitoring
+### 7. Configure Enhanced Monitoring
 
 Add Container Insights and X-Ray:
 
@@ -346,7 +330,7 @@ const xrayContainer = {
 taskDefinition.addContainer('xray', xrayContainer);
 ```
 
-### 7. Test the Deployment
+### 8. Test the Deployment
 
 Access your application:
 

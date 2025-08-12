@@ -64,40 +64,47 @@ Let's create a DynamoDB table with TTL support and proper indexing:
 ```typescript
 import * as cdk from "aws-cdk-lib";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import { Construct } from "constructs";
 
-const table = new dynamodb.Table(this, "UsersTable", {
-  partitionKey: { name: "userId", type: dynamodb.AttributeType.STRING },
-  sortKey: { name: "email", type: dynamodb.AttributeType.STRING },
-  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-  removalPolicy: cdk.RemovalPolicy.DESTROY,
+export class DynamodbLabStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
 
-  // Enable TTL for automatic data expiration
-  timeToLiveAttribute: "ttl",
+    const table = new dynamodb.Table(this, "UsersTable", {
+      partitionKey: { name: "userId", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "email", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
 
-  // Enable point-in-time recovery
-  pointInTimeRecovery: true,
-});
+      // Enable TTL for automatic data expiration
+      timeToLiveAttribute: "ttl",
 
-// Add GSI for email lookup
-table.addGlobalSecondaryIndex({
-  indexName: "EmailIndex",
-  partitionKey: { name: "email", type: dynamodb.AttributeType.STRING },
-  projectionType: dynamodb.ProjectionType.ALL,
-});
+      // Enable point-in-time recovery
+      pointInTimeRecovery: true,
+    });
 
-// Add GSI for status-based queries
-table.addGlobalSecondaryIndex({
-  indexName: "StatusIndex",
-  partitionKey: { name: "status", type: dynamodb.AttributeType.STRING },
-  sortKey: { name: "createdAt", type: dynamodb.AttributeType.STRING },
-  projectionType: dynamodb.ProjectionType.ALL,
-});
+    // Add GSI for email lookup
+    table.addGlobalSecondaryIndex({
+      indexName: "EmailIndex",
+      partitionKey: { name: "email", type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
 
-// Output table name
-new cdk.CfnOutput(this, "TableName", {
-  value: table.tableName,
-  description: "DynamoDB table name",
-});
+    // Add GSI for status-based queries
+    table.addGlobalSecondaryIndex({
+      indexName: "StatusIndex",
+      partitionKey: { name: "status", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "createdAt", type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    // Output table name
+    new cdk.CfnOutput(this, "TableName", {
+      value: table.tableName,
+      description: "DynamoDB table name",
+    });
+  }
+}
 ```
 
 ### 2. Implement Query Patterns

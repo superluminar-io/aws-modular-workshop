@@ -166,7 +166,7 @@ aws s3api list-object-versions --bucket $BUCKET_NAME --prefix test.txt --profile
 
 ### 4. Work with Lifecycle Rules
 
-We've configured a lifecycle rule to move objects to STANDARD_IA storage class after 30 days. To verify this:
+We've configured a lifecycle rule to move objects to INFREQUENT_ACCESS storage class after 30 days. To verify this:
 
 1. **Check object storage class**:
 
@@ -197,11 +197,11 @@ cdk destroy --profile your-profile-name
 After completing this lab, verify that:
 
 1. ✅ S3 bucket created successfully
-2. ✅ Bucket policy and CORS configured
-3. ✅ Versioning enabled and working
-4. ✅ Lifecycle rules applied
-5. ✅ Objects uploaded and accessed via CLI
-6. ✅ Encryption at rest enabled
+2. ✅ Versioning enabled and working
+3. ✅ Lifecycle rules applied
+4. ✅ Objects uploaded and accessed via CLI
+5. ✅ Encryption at rest enabled
+6. ✅ Block public access configured
 
 ## Troubleshooting
 

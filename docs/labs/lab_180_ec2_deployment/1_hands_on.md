@@ -18,7 +18,7 @@ With our VPC infrastructure in place, let's create an EC2 instance:
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 
 const instance = new ec2.Instance(this, "WebServer", {
-  vpc, // Using the existing VPC from lab 160
+  vpc, // Using the VPC created below
   instanceType: ec2.InstanceType.of(
     ec2.InstanceClass.T3,
     ec2.InstanceSize.MICRO

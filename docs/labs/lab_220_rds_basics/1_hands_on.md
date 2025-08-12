@@ -92,6 +92,13 @@ const dbSecurityGroup = new ec2.SecurityGroup(this, "DatabaseSecurityGroup", {
   allowAllOutbound: true,
 });
 
+// Allow MySQL access from private subnets
+dbSecurityGroup.addIngressRule(
+  ec2.Peer.ipv4(vpc.vpcCidrBlock),
+  ec2.Port.tcp(3306),
+  "Allow MySQL access from VPC"
+);
+
 // Create RDS instance
 const database = new rds.DatabaseInstance(this, "Database", {
   engine: rds.DatabaseInstanceEngine.mysql({
@@ -102,7 +109,27 @@ const database = new rds.DatabaseInstance(this, "Database", {
     subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
   },
   securityGroups: [dbSecurityGroup],
-  // ... rest of RDS configuration
+  instanceType: ec2.InstanceType.of(
+    ec2.InstanceClass.BURSTABLE3,
+    ec2.InstanceSize.MICRO
+  ),
+  databaseName: "workshopdb",
+  credentials: rds.Credentials.generatePassword("admin"),
+  backupRetention: cdk.Duration.days(7),
+  deleteAutomatedBackups: true,
+  removalPolicy: cdk.RemovalPolicy.DESTROY,
+});
+
+// Output database endpoint
+new cdk.CfnOutput(this, "DatabaseEndpoint", {
+  value: database.instanceEndpoint.hostname,
+  description: "Database endpoint",
+});
+
+// Output database secret ARN
+new cdk.CfnOutput(this, "DatabaseSecretArn", {
+  value: database.secret!.secretArn,
+  description: "Database credentials secret ARN",
 });
 ```
 

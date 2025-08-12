@@ -252,15 +252,13 @@ new MyCdkAppStack(app, "MyCdkApp-Dev", {
 
 ### CDK Best Practices
 
-1. **Use Feature Flags** (add to cdk.json):
+1. **Resource Naming** - Use consistent naming conventions:
 
-   ```json
-   {
-     "context": {
-       "@aws-cdk/core:enableStackNameDuplicates": "true",
-       "@aws-cdk/core:stackRelativeExports": "true"
-     }
-   }
+   ```typescript
+   // Use descriptive names with environment prefixes
+   const bucket = new s3.Bucket(this, 'MyAppDataBucket', {
+     bucketName: `myapp-data-${props.environment}`,
+   });
    ```
 
 2. **Implement CDK Aspects** for cross-cutting concerns:
