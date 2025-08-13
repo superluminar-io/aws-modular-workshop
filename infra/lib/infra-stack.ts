@@ -25,6 +25,13 @@ import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment'
 import * as wafv2 from 'aws-cdk-lib/aws-wafv2'
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch'
 import { AwsSolutionsChecks } from 'cdk-nag'
+import * as iam from 'aws-cdk-lib/aws-iam'
+import * as cognito from 'aws-cdk-lib/aws-cognito'
+import {
+  AwsCustomResource,
+  AwsCustomResourcePolicy,
+  PhysicalResourceId,
+} from 'aws-cdk-lib/custom-resources'
 
 export class InfraStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -222,6 +229,45 @@ export class InfraStack extends Stack {
     // Enable cdk-nag (AWS Solutions checks)
     Aspects.of(this).add(new AwsSolutionsChecks({ verbose: true }))
 
+    // Cognito Identity Pool for client-side AWS Translate (no backend required)
+    const translateUnauthRole = new iam.Role(this, 'TranslateUnauthRole', {
+      assumedBy: new iam.FederatedPrincipal(
+        'cognito-identity.amazonaws.com',
+        {
+          StringEquals: { 'cognito-identity.amazonaws.com:aud': '*' },
+          'ForAnyValue:StringLike': {
+            'cognito-identity.amazonaws.com:amr': 'unauthenticated',
+          },
+        },
+        'sts:AssumeRoleWithWebIdentity'
+      ),
+      description:
+        'Unauthenticated role allowing translate:TranslateText for demo translation',
+    })
+
+    translateUnauthRole.addToPolicy(
+      new iam.PolicyStatement({
+        actions: ['translate:TranslateText'],
+        resources: ['*'],
+      })
+    )
+
+    const identityPool = new cognito.CfnIdentityPool(
+      this,
+      'WorkshopIdentityPool',
+      {
+        identityPoolName: `workshop-translate-${this.region}`,
+        allowUnauthenticatedIdentities: true,
+      }
+    )
+
+    new cognito.CfnIdentityPoolRoleAttachment(this, 'IdentityPoolRoles', {
+      identityPoolId: identityPool.ref,
+      roles: {
+        unauthenticated: translateUnauthRole.roleArn,
+      },
+    })
+
     // Outputs
     new CfnOutput(this, 'WorkshopURL', {
       value: `https://${distribution.distributionDomainName}`,
@@ -245,6 +291,47 @@ export class InfraStack extends Stack {
       value: distribution.distributionDomainName,
       description: 'CloudFront Domain Name',
       exportName: 'WorkshopDomain',
+    })
+
+    new CfnOutput(this, 'TranslateIdentityPoolId', {
+      value: identityPool.ref,
+      description: 'Cognito Identity Pool ID for browser-based translation',
+      exportName: 'TranslateIdentityPoolId',
+    })
+
+    // Write dynamic config.js to the site bucket (contains region and Identity Pool ID)
+    const configBody = `window.WORKSHOP_CONFIG={"region":"${this.region}","translateIdentityPoolId":"${identityPool.ref}"}`
+
+    new AwsCustomResource(this, 'WriteConfigJs', {
+      onCreate: {
+        service: 'S3',
+        action: 'putObject',
+        parameters: {
+          Bucket: workshopBucket.bucketName,
+          Key: 'config.js',
+          Body: configBody,
+          ContentType: 'application/javascript',
+        },
+        physicalResourceId: PhysicalResourceId.of(
+          'config-js-' + Date.now().toString()
+        ),
+      },
+      onUpdate: {
+        service: 'S3',
+        action: 'putObject',
+        parameters: {
+          Bucket: workshopBucket.bucketName,
+          Key: 'config.js',
+          Body: configBody,
+          ContentType: 'application/javascript',
+        },
+        physicalResourceId: PhysicalResourceId.of(
+          'config-js-' + Date.now().toString()
+        ),
+      },
+      policy: AwsCustomResourcePolicy.fromSdkCalls({
+        resources: AwsCustomResourcePolicy.ANY_RESOURCE,
+      }),
     })
   }
 }
