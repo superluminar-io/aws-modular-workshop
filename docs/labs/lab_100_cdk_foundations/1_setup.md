@@ -48,7 +48,7 @@ First, let's set up your AWS credentials using AWS IAM Identity Center (formerly
 2. **Verify Configuration**:
 
    ```bash
-   aws sts get-caller-identity --profile your-profile-name
+   aws sts get-caller-identity
    ```
 
    This should display your AWS account ID, user ID, and ARN.
@@ -69,11 +69,14 @@ First, let's set up your AWS credentials using AWS IAM Identity Center (formerly
 
 2. **Bootstrap Your AWS Environment**:
 
-   ```bash
-   cdk bootstrap --profile your-profile-name
-   ```
+```bash
+# Optionally set AWS profile for all commands in this shell
+export AWS_PROFILE=your-profile-name
 
-   This creates the necessary resources in your AWS account to deploy CDK applications.
+cdk bootstrap
+```
+
+This creates the necessary resources in your AWS account to deploy CDK applications.
 
 ## Create Your First CDK Project
 
@@ -105,19 +108,19 @@ Let's examine the key files created by CDK:
 1. **Open `lib/my-cdk-app-stack.ts`** and replace its contents with:
 
    ```typescript
-   import { Stack, StackProps, CfnOutput } from "aws-cdk-lib";
-   import { Construct } from "constructs";
+   import { Stack, StackProps, CfnOutput } from "aws-cdk-lib"
+   import { Construct } from "constructs"
 
    export class MyCdkAppStack extends Stack {
      constructor(scope: Construct, id: string, props?: StackProps) {
-       super(scope, id, props);
+       super(scope, id, props)
 
        // Add a CloudFormation output
        new CfnOutput(this, "MyFirstOutput", {
          value: "Hello, AWS CDK!",
          description: "A simple output to verify our CDK deployment",
          exportName: "MyFirstOutput",
-       });
+       })
      }
    }
    ```
@@ -125,7 +128,7 @@ Let's examine the key files created by CDK:
 2. **Synthesize the CloudFormation Template**:
 
    ```bash
-   cdk synth --profile your-profile-name
+   cdk synth
    ```
 
    This command generates the CloudFormation template from your CDK code. Review the output to see the YAML template that CDK created.
@@ -133,7 +136,7 @@ Let's examine the key files created by CDK:
 3. **Deploy the Stack**:
 
    ```bash
-   cdk deploy --profile your-profile-name
+   cdk deploy
    ```
 
    When prompted to approve security-related changes, review them and enter 'y' to proceed.
@@ -152,7 +155,7 @@ Let's examine the key files created by CDK:
    aws cloudformation describe-stacks \
      --stack-name my-cdk-app \
      --query 'Stacks[0].Outputs[0].OutputValue' \
-     --profile your-profile-name
+
    ```
 
 ## Validate Your CDK Environment
@@ -163,13 +166,13 @@ After deployment, verify your CDK setup is working correctly:
 
 ```bash
 # Check CDK version and environment
-cdk doctor --profile your-profile-name
+cdk doctor
 
 # List all stacks in your account
-cdk list --profile your-profile-name
+cdk list
 
 # Show stack differences (should show no changes after deployment)
-cdk diff --profile your-profile-name
+cdk diff
 ```
 
 ### 2. Bootstrap Verification
@@ -178,7 +181,7 @@ cdk diff --profile your-profile-name
 # Verify CDK bootstrap stack exists
 aws cloudformation describe-stacks \
   --stack-name CDKToolkit \
-  --profile your-profile-name
+
 
 # Check S3 bucket for CDK assets
 aws s3 ls | grep cdk
@@ -213,7 +216,7 @@ aws s3 ls | grep cdk
 
    ```bash
    # Get detailed synthesis output
-   cdk synth --verbose --profile your-profile-name
+   cdk synth --verbose
 
    # Validate CloudFormation template
    aws cloudformation validate-template \
@@ -226,10 +229,10 @@ Add environment-specific settings to your CDK app:
 
 ```typescript
 // In bin/my-cdk-app.ts
-import * as cdk from 'aws-cdk-lib';
-import { MyCdkAppStack } from '../lib/my-cdk-app-stack';
+import * as cdk from "aws-cdk-lib"
+import { MyCdkAppStack } from "../lib/my-cdk-app-stack"
 
-const app = new cdk.App();
+const app = new cdk.App()
 
 // Development environment
 new MyCdkAppStack(app, "MyCdkApp-Dev", {
@@ -241,7 +244,7 @@ new MyCdkAppStack(app, "MyCdkApp-Dev", {
     Environment: "Development",
     Project: "Workshop",
   },
-});
+})
 
 // Production environment (commented out for workshop)
 // new MyCdkAppStack(app, 'MyCdkApp-Prod', {
@@ -256,28 +259,28 @@ new MyCdkAppStack(app, "MyCdkApp-Dev", {
 
    ```typescript
    // Use descriptive names with environment prefixes
-   const bucket = new s3.Bucket(this, 'MyAppDataBucket', {
+   const bucket = new s3.Bucket(this, "MyAppDataBucket", {
      bucketName: `myapp-data-${props.environment}`,
-   });
+   })
    ```
 
 2. **Implement CDK Aspects** for cross-cutting concerns:
 
    ```typescript
-   import { IAspect, IConstruct } from "constructs";
-   import { CfnResource, Aspects, Tag } from "aws-cdk-lib";
+   import { IAspect, IConstruct } from "constructs"
+   import { CfnResource, Aspects, Tag } from "aws-cdk-lib"
 
    class SecurityAspect implements IAspect {
      visit(node: IConstruct): void {
        if (node instanceof CfnResource) {
          // Add security tags to all resources
-         Aspects.of(node).add(new Tag("SecurityLevel", "Workshop"));
+         Aspects.of(node).add(new Tag("SecurityLevel", "Workshop"))
        }
      }
    }
 
    // Apply to your stack
-   Aspects.of(this).add(new SecurityAspect());
+   Aspects.of(this).add(new SecurityAspect())
    ```
 
 ## Clean Up
@@ -285,7 +288,7 @@ new MyCdkAppStack(app, "MyCdkApp-Dev", {
 When you're done experimenting, clean up your resources:
 
 ```bash
-cdk destroy --profile your-profile-name
+cdk destroy
 ```
 
 ## Troubleshooting Tips

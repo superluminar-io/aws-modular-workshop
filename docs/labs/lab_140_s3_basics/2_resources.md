@@ -27,7 +27,7 @@
 ## AWS CDK and S3
 
 - [CDK S3 Module](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3-readme.html) - S3 construct library documentation
-- [CDK S3 Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/s3) - Sample S3 configurations
+- [CDK S3 Examples](https://github.com/aws-samples/aws-cdk-examples) - Sample S3 configurations
 - [S3 Deployment Patterns](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3_deployment-readme.html) - Deploying content to S3
 
 ## Tools and Utilities
@@ -45,7 +45,7 @@
 ## Common Use Cases
 
 - [Static Website Hosting](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html) - Hosting static websites
-- [Data Lakes](https://aws.amazon.com/solutions/data-lake/) - Building data lakes on S3
+- [Data Lakes](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html) - Building data lakes on S3
 - [Backup and Archive](https://aws.amazon.com/backup-restore/getting-started/) - Using S3 for backups
 
 ## Monitoring and Troubleshooting

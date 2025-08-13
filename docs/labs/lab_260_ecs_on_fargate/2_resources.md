@@ -71,7 +71,7 @@
 - [ECS Module in CDK](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecs-readme.html)
 - [ECS Patterns Module](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecs_patterns-readme.html)
 - [Fargate Service Construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecs.FargateService.html)
-- [CDK ECS Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs)
+- [CDK ECS Examples](https://github.com/aws-samples/aws-cdk-examples)
 
 ## Tools and Utilities
 
@@ -102,14 +102,14 @@
 
 ### Blogs and Articles
 
-- [AWS Containers Blog](https://aws.amazon.com/blogs/containers/)
+- [AWS Containers Blog](https://aws.amazon.com/blogs/containers/
 - [ECS Workshop](https://ecsworkshop.com/)
 - [AWS GitHub Repositories](https://github.com/aws-samples?q=ecs&type=all&language=&sort=)
-- [AWS re:Post ECS Forum](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-elastic-container-service-ecs)
+- [AWS re:Post ECS Forum](https://repost.aws/)
 
 ### Additional Learning
 
-- [ECS Deep Dive Series](https://aws.amazon.com/blogs/containers/category/compute/amazon-ecs/)
+- [ECS Deep Dive Series](https://aws.amazon.com/blogs/containers/
 - [AWS Skill Builder - ECS Courses](https://skillbuilder.aws/learning-plans/containers)
 - [AWS Solutions Library - Containers](https://aws.amazon.com/solutions/?solutions-all.sort-by=item.additionalFields.sortDate&solutions-all.sort-order=desc&awsf.AWS-Product%20Category=tech-category%23containers)
-- [Container Security Best Practices](https://aws.amazon.com/blogs/containers/guidance-for-container-image-security-in-amazon-elastic-container-registry/)
+- [Container Security Best Practices](https://aws.amazon.com/blogs/containers/

@@ -6,7 +6,7 @@ AWS Step Functions is a serverless workflow service that lets you coordinate mul
 
 [DIAGRAM: Step Functions Overview]
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_440_step_functions_multi_service_orchestration.drawio.svg -->
+<!-- Removed placeholder: diagram defined below -->
 
 ```mermaid
 flowchart TB
@@ -78,7 +78,7 @@ flowchart TB
     class CHOICE,FAIL error
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 ## Learning Objectives
 

@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 Before starting this lab, ensure you have:
 
 - AWS CDK and AWS CLI configured
@@ -371,7 +377,7 @@ testRestore();
 1. Deploy the stack:
 
 ```bash
-cdk deploy AwsBackupStack --profile your-profile-name
+cdk deploy AwsBackupStack
 ```
 
 2. Set environment variables:
@@ -381,13 +387,13 @@ export BACKUP_VAULT_NAME=$(aws cloudformation describe-stacks \
   --stack-name AwsBackupStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BackupVaultName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 export BACKUP_PLAN_ID=$(aws cloudformation describe-stacks \
   --stack-name AwsBackupStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BackupPlanId`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 ```
 
 3. Test the backup system:
@@ -399,12 +405,12 @@ ts-node scripts/monitor-backups.ts
 # Check backup plan
 aws backup get-backup-plan \
   --backup-plan-id $BACKUP_PLAN_ID \
-  --profile your-profile-name
+ 
 
 # List recovery points
 aws backup list-recovery-points \
   --backup-vault-name $BACKUP_VAULT_NAME \
-  --profile your-profile-name
+ 
 
 # Test restore (list available points)
 ts-node scripts/test-restore.ts
@@ -464,17 +470,17 @@ aws backup list-backup-jobs \
   --by-state RUNNING \
   --query 'BackupJobs[].BackupJobId' \
   --output table \
-  --profile your-profile-name
+ 
 
 # Delete recovery points (optional - they have retention policies)
 aws backup list-recovery-points \
   --backup-vault-name $BACKUP_VAULT_NAME \
   --query 'RecoveryPoints[].RecoveryPointArn' \
   --output table \
-  --profile your-profile-name
+ 
 
 # Destroy the CDK stack
-cdk destroy AwsBackupStack --profile your-profile-name
+cdk destroy AwsBackupStack
 ```
 
 Note: Recovery points may need to be manually deleted if you want immediate cleanup, as they follow retention policies.

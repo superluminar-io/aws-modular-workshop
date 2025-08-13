@@ -1,70 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Translation Test</title>
-    <link rel="stylesheet" href="./docs/css/language-toggle.css">
+    <link rel="stylesheet" href="./docs/css/language-toggle.css" />
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            padding: 20px; 
-            background: #2a1c23; 
-            color: white;
-        }
-        .test-content { 
-            margin: 20px 0; 
-            padding: 20px; 
-            border: 1px solid #03feb7; 
-            border-radius: 8px;
-        }
-        h1, h2, h3 { color: #03feb7; }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #2a1c23;
+        color: white;
+      }
+      .test-content {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #03feb7;
+        border-radius: 8px;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #03feb7;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="language-toggle-container">
-        <button id="language-toggle" onclick="toggleLanguage()">🇺🇸 EN</button>
+      <button id="language-toggle" onclick="toggleLanguage()">🇺🇸 EN</button>
     </div>
 
     <h1>Translation Test Page</h1>
-    
+
     <div class="test-content">
-        <h2>Welcome</h2>
-        <p>This is a test of the AWS translation functionality.</p>
-        
-        <h3>Overview</h3>
-        <p>The translation service should convert this English content into German when you click the toggle button.</p>
-        
-        <ul>
-            <li>Prerequisites for the workshop</li>
-            <li>Setup instructions</li>
-            <li>Lab exercises</li>
-        </ul>
-        
-        <h3>Next Steps</h3>
-        <p>Click the language toggle button in the top-right corner to test the translation.</p>
+      <h2>Welcome</h2>
+      <p>This is a test of the AWS translation functionality.</p>
+
+      <h3>Overview</h3>
+      <p>
+        The translation service should convert this English content into German
+        when you click the toggle button.
+      </p>
+
+      <ul>
+        <li>Prerequisites for the workshop</li>
+        <li>Setup instructions</li>
+        <li>Lab exercises</li>
+      </ul>
+
+      <h3>Next Steps</h3>
+      <p>
+        Click the language toggle button in the top-right corner to test the
+        translation.
+      </p>
     </div>
 
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1480.0.min.js"></script>
     <script src="./docs/js/translator.js"></script>
     <script>
-        async function toggleLanguage() {
-            const button = document.getElementById('language-toggle');
-            const currentLang = window.translationService.currentLanguage;
-            const newLang = currentLang === 'en' ? 'de' : 'en';
-            
-            button.classList.add('loading');
-            button.disabled = true;
-            
-            try {
-                await window.translationService.switchLanguage(newLang);
-                console.log(`Language switched to: ${newLang}`);
-            } catch (error) {
-                console.error('Error switching language:', error);
-            } finally {
-                button.classList.remove('loading');
-                button.disabled = false;
-            }
+      async function toggleLanguage() {
+        const button = document.getElementById('language-toggle')
+        const currentLang = window.translationService.currentLanguage
+        const newLang = currentLang === 'en' ? 'de' : 'en'
+
+        button.classList.add('loading')
+        button.disabled = true
+
+        try {
+          await window.translationService.switchLanguage(newLang)
+          console.log(`Language switched to: ${newLang}`)
+        } catch (error) {
+          console.error('Error switching language:', error)
+        } finally {
+          button.classList.remove('loading')
+          button.disabled = false
         }
+      }
     </script>
-</body>
+  </body>
 </html>

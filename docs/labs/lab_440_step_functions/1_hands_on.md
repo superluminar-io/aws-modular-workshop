@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
 - AWS CDK and AWS CLI configured
 - Node.js installed
 - Completed Lambda and Event Triggers lab
@@ -87,7 +93,7 @@ Instructions for draw.io:
 
 ## Step Functions Implementation
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_440_step_functions_detailed_implementation.drawio.svg -->
+<!-- End of diagram overview -->
 
 ```mermaid
 flowchart TD
@@ -170,7 +176,7 @@ flowchart TD
     class PRIORITY aws
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 ## Lab Steps
 
@@ -377,7 +383,7 @@ export const handler = async (event: any): Promise<any> => {
 1. Deploy the stack:
 
 ```bash
-cdk deploy StepFunctionsStack --profile your-profile-name
+cdk deploy StepFunctionsStack
 ```
 
 2. Create a test execution script `scripts/start-execution.ts`:
@@ -462,7 +468,7 @@ aws logs get-log-events \
     --limit 1 \
     --query 'logStreams[0].logStreamName' \
     --output text) \
-  --profile your-profile-name
+
 ```
 
 ## Validation Steps
@@ -514,5 +520,5 @@ aws logs get-log-events \
 Remove the stack:
 
 ```bash
-cdk destroy StepFunctionsStack --profile your-profile-name
+cdk destroy StepFunctionsStack
 ```

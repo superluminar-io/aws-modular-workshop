@@ -6,7 +6,7 @@ Amazon EventBridge is a serverless event bus service that makes it easy to conne
 
 [DIAGRAM: EventBridge Overview]
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_420_eventbridge_event_driven_architecture.drawio.svg -->
+<!-- Removed placeholder: diagram defined below -->
 
 ```mermaid
 flowchart LR
@@ -105,7 +105,7 @@ flowchart LR
     class XACCOUNT,XREGION,ARCHIVE,DLQ targets
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 ## Learning Objectives
 

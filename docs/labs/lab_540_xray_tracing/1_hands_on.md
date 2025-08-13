@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 Before starting this lab, ensure you have:
 
 - AWS CDK and AWS CLI configured
@@ -379,7 +385,7 @@ analyzeTraces();
 1. Deploy the stack:
 
 ```bash
-cdk deploy XRayStack --profile your-profile-name
+cdk deploy XRayStack
 ```
 
 2. Set environment variables:
@@ -389,7 +395,7 @@ export API_URL=$(aws cloudformation describe-stacks \
   --stack-name XRayStack \
   --query 'Stacks[0].Outputs[?OutputKey==`ApiUrl`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 ```
 
 3. Run test scripts:
@@ -446,7 +452,7 @@ ts-node scripts/analyze-traces.ts
 Remove the stack:
 
 ```bash
-cdk destroy XRayStack --profile your-profile-name
+cdk destroy XRayStack
 ```
 
 Note: Ensure all trace data is no longer needed before cleanup.

@@ -98,10 +98,10 @@
 - [Getting Started Tutorial](https://docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials_basic.html)
 - [Database Credentials Tutorial](https://docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials_database-rotate.html)
 - [AWS Workshop Studio](https://workshops.aws/)
-- [Sample Applications](https://github.com/aws-samples/aws-secrets-manager-examples)
+- [Sample Applications](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
 
 ## Community Resources
 
 - [AWS Security Blog](https://aws.amazon.com/blogs/security/category/security-identity-compliance/aws-secrets-manager/)
-- [AWS re:Post - Secrets Manager](https://repost.aws/tags/TAmo05QHWFYw7VhKYGNRbrdg/aws-secrets-manager)
+- [AWS re:Post - Secrets Manager](https://repost.aws/)
 - [GitHub Examples](https://github.com/aws-samples/aws-secrets-manager-rotation-examples)

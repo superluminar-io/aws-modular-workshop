@@ -31,14 +31,14 @@
 
 ## Blogs and Articles
 
-- [AWS Developer Blog](https://aws.amazon.com/blogs/developer/category/developer-tools/aws-cdk/) - Latest news and tips about CDK
+- [AWS Developer Blog](https://aws.amazon.com/blogs/devops/) - Latest news and tips about CDK
 - [CDK Best Practices](https://aws.amazon.com/blogs/devops/best-practices-for-developing-cloud-applications-with-aws-cdk/) - AWS blog post on CDK development
-- [CDK Tips and Tricks](https://aws.amazon.com/blogs/developer/aws-cdk-tips-and-tricks/) - Helpful CDK development tips
+- [CDK Tips and Tricks](https://aws.amazon.com/blogs/devops/best-practices-for-developing-cloud-applications-with-aws-cdk/) - Helpful CDK development tips
 
 ## Video Content
 
 - [AWS CDK Video Content](https://www.youtube.com/c/AmazonWebServices/search?query=cdk) - Official AWS CDK video tutorials
-- [AWS Online Tech Talks](https://aws.amazon.com/developer/learning/online-tech-talks/) - Technical deep dives
+- [AWS Online Tech Talks](https://aws.amazon.com/events/online-tech-talks/) - Technical deep dives
 - [AWS Builders Online Series](https://aws.amazon.com/events/builders-online-series/) - Educational webinars
 
 ## Training and Certification

@@ -145,7 +145,7 @@ EC2 offers multiple storage options:
 
    - Data about your instance
    - Accessible from within instance
-   - Example endpoint: http://169.254.169.254/latest/meta-data/
+   - Example endpoint: 169.254.169.254/latest/meta-data/ (do not open directly)
 
 2. **User Data**
    - Scripts run at instance launch

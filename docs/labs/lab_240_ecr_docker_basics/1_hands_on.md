@@ -34,6 +34,12 @@ flowchart TD
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 Create a new CDK project:
 
 ```bash
@@ -163,8 +169,8 @@ First, get your AWS account ID and region:
 
 ```bash
 # Get account ID and region
-export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text --profile your-profile-name)
-export AWS_REGION=$(aws configure get region --profile your-profile-name)
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export AWS_REGION=$(aws configure get region)
 
 echo "Account ID: $AWS_ACCOUNT_ID"
 echo "Region: $AWS_REGION"
@@ -173,7 +179,7 @@ echo "Region: $AWS_REGION"
 Authenticate Docker to ECR:
 
 ```bash
-aws ecr get-login-password --region $AWS_REGION --profile your-profile-name | \
+aws ecr get-login-password --region $AWS_REGION | \
   docker login --username AWS --password-stdin \
   $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 ```
@@ -199,7 +205,7 @@ View scan results:
 aws ecr describe-image-scan-findings \
   --repository-name my-app-repo \
   --image-id imageTag=latest \
-  --profile your-profile-name
+ 
 ```
 
 ### 7. Test Image Pull
@@ -267,7 +273,7 @@ docker rmi $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app-repo:latest
 Destroy CDK stack:
 
 ```bash
-cdk destroy --profile your-profile-name
+cdk destroy
 ```
 
 [DIAGRAM: Container Build Flow]

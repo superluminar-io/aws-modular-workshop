@@ -43,6 +43,12 @@ flowchart TD
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 Create a new CDK project:
 
 ```bash
@@ -357,7 +363,7 @@ export TABLE_NAME=$(aws cloudformation describe-stacks \
   --stack-name DynamodbLabStack \
   --query 'Stacks[0].Outputs[?OutputKey==`TableName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 echo "Table name: $TABLE_NAME"
 ```
@@ -382,7 +388,7 @@ ts-node scripts/ttl-examples.ts
 aws dynamodb get-item \
   --table-name $TABLE_NAME \
   --key '{"userId":{"S":"user1"},"email":{"S":"user1@example.com"}}' \
-  --profile your-profile-name
+ 
 ```
 
 **Query all items for a user:**
@@ -392,7 +398,7 @@ aws dynamodb query \
   --table-name $TABLE_NAME \
   --key-condition-expression "userId = :uid" \
   --expression-attribute-values '{":uid":{"S":"user1"}}' \
-  --profile your-profile-name
+ 
 ```
 
 **Query with age filter:**
@@ -403,7 +409,7 @@ aws dynamodb query \
   --key-condition-expression "userId = :uid" \
   --filter-expression "age > :age" \
   --expression-attribute-values '{":uid":{"S":"user1"},":age":{"N":"25"}}' \
-  --profile your-profile-name
+ 
 ```
 
 #### Global Secondary Index Queries
@@ -416,7 +422,7 @@ aws dynamodb query \
   --index-name EmailIndex \
   --key-condition-expression "email = :email" \
   --expression-attribute-values '{":email":{"S":"user1@example.com"}}' \
-  --profile your-profile-name
+ 
 ```
 
 #### TTL Monitoring
@@ -430,7 +436,7 @@ aws dynamodb scan \
   --table-name $TABLE_NAME \
   --filter-expression "ttl BETWEEN :now AND :next_hour" \
   --expression-attribute-values "{\":now\":{\"N\":\"$(date +%s)\"},\":next_hour\":{\"N\":\"$NEXT_HOUR\"}}" \
-  --profile your-profile-name
+ 
 ```
 
 **List all TTL values:**
@@ -440,7 +446,7 @@ aws dynamodb scan \
   --table-name $TABLE_NAME \
   --projection-expression "userId, email, #type, ttl" \
   --expression-attribute-names '{"#type":"type"}' \
-  --profile your-profile-name
+ 
 ```
 
 ## Validation Steps
@@ -481,15 +487,15 @@ When you're finished with this lab:
 
 ```bash
 # Empty the table (if needed)
-aws dynamodb scan --table-name $TABLE_NAME --projection-expression "userId,email" --profile your-profile-name | \
+aws dynamodb scan --table-name $TABLE_NAME --projection-expression "userId,email" | \
   jq -r '.Items[] | [.userId.S, .email.S] | @tsv' | \
   while read userId email; do
     aws dynamodb delete-item \
       --table-name $TABLE_NAME \
       --key "{\"userId\":{\"S\":\"$userId\"},\"email\":{\"S\":\"$email\"}}" \
-      --profile your-profile-name
+     
   done
 
 # Destroy the CDK stack
-cdk destroy --profile your-profile-name
+cdk destroy
 ```

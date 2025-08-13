@@ -143,64 +143,66 @@
       })
     </script>
 
+    <!-- AWS SDK for JavaScript (v2) for AWS Translate in browser -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1480.0.min.js"></script>
     <!-- Translation Service -->
     <script src="./js/translator.js"></script>
     <script>
       // Toggle language function
       async function toggleLanguage() {
-        const button = document.getElementById('language-toggle');
-        const currentLang = window.translationService.currentLanguage;
-        const newLang = currentLang === 'en' ? 'de' : 'en';
-        
-        button.classList.add('loading');
-        button.disabled = true;
-        
+        const button = document.getElementById('language-toggle')
+        const currentLang = window.translationService.currentLanguage
+        const newLang = currentLang === 'en' ? 'de' : 'en'
+
+        button.classList.add('loading')
+        button.disabled = true
+
         try {
-          await window.translationService.switchLanguage(newLang);
+          await window.translationService.switchLanguage(newLang)
         } catch (error) {
-          console.error('Error switching language:', error);
+          console.error('Error switching language:', error)
         } finally {
-          button.classList.remove('loading');
-          button.disabled = false;
+          button.classList.remove('loading')
+          button.disabled = false
         }
       }
 
       // Initialize translation on page load
-      window.addEventListener('DOMContentLoaded', function() {
+      window.addEventListener('DOMContentLoaded', function () {
         // Set up observer for dynamic content changes
-        const observer = new MutationObserver(function(mutations) {
+        const observer = new MutationObserver(function (mutations) {
           // Debounce translation calls
-          clearTimeout(window.translationTimeout);
+          clearTimeout(window.translationTimeout)
           window.translationTimeout = setTimeout(() => {
             if (window.translationService.currentLanguage === 'de') {
-              window.translationService.translatePage();
+              window.translationService.translatePage()
             }
-          }, 500);
-        });
+          }, 500)
+        })
 
         // Observe the main app div for changes
-        const appElement = document.getElementById('app');
+        const appElement = document.getElementById('app')
         if (appElement) {
           observer.observe(appElement, {
             childList: true,
-            subtree: true
-          });
+            subtree: true,
+          })
         }
-      });
+      })
 
       // Hook into Docsify route changes
       window.$docsify.plugins = [
-        function(hook, vm) {
+        function (hook, vm) {
           hook.doneEach(function () {
             // Translate new content after route change
             setTimeout(() => {
               if (window.translationService.currentLanguage === 'de') {
-                window.translationService.translatePage();
+                window.translationService.translatePage()
               }
-            }, 300);
-          });
-        }
-      ].concat(window.$docsify.plugins || []);
+            }, 300)
+          })
+        },
+      ].concat(window.$docsify.plugins || [])
     </script>
   </body>
 </html>

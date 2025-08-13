@@ -120,7 +120,7 @@ After completing this workshop, you'll be ready to:
 
 ---
 
-**Ready to begin?** Start with [LAB-XXX: First Lab Name] or review the [Core Concepts](/1_core_concepts) if you're new to AWS.
+**Ready to begin?** Start with [LAB-XXX: First Lab Name] or review the [Core Concepts](1_core_concepts.md) if you're new to AWS.
 
 ---
 

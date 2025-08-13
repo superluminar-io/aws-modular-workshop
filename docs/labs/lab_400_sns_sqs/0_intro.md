@@ -6,7 +6,7 @@ Amazon Simple Notification Service (SNS) and Amazon Simple Queue Service (SQS) a
 
 [DIAGRAM: Messaging Overview]
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_400_sns_sqs_complex_messaging_overview.drawio.svg -->
+<!-- Removed placeholder: diagram defined below -->
 
 ```mermaid
 flowchart TB
@@ -172,7 +172,7 @@ flowchart TB
     class CW_METRICS,CW_LOGS,XRAY,CW_INSIGHTS monitoring
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 ## Learning Objectives
 

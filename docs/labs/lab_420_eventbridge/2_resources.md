@@ -70,12 +70,12 @@
 
 - [EventBridge Construct Library](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_events-readme.html)
 - [EventBridge Targets](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_events_targets-readme.html)
-- [CDK Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/eventbridge)
+- [CDK Examples](https://github.com/aws-samples/aws-cdk-examples)
 - [CDK Patterns](https://cdkpatterns.com/patterns/)
 
 ### Example Implementations
 
-- [Event-Driven Patterns](https://github.com/aws-samples/serverless-patterns/tree/main/eventbridge-patterns)
+- [Event-Driven Patterns](https://serverlessland.com/patterns?service=eventbridge)
 - [Cross-Account Events](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/send-events-across-aws-accounts-using-amazon-eventbridge.html)
 - [Serverless Architectures](https://serverlessland.com/patterns?service=eventbridge)
 - [AWS Solutions Constructs](https://docs.aws.amazon.com/solutions/latest/constructs/welcome.html)
@@ -102,28 +102,28 @@
 
 - [Event-Driven Design](https://aws.amazon.com/event-driven-architecture/)
 - [Serverless Patterns](https://serverlessland.com/patterns)
-- [Integration Patterns](https://aws.amazon.com/blogs/compute/integrating-amazon-eventbridge-into-your-serverless-applications/)
-- [Microservices Patterns](https://aws.amazon.com/blogs/compute/building-microservices-with-amazon-eventbridge/)
+- [Integration Patterns](https://aws.amazon.com/blogs/compute/
+- [Microservices Patterns](https://aws.amazon.com/blogs/compute/
 
 ### Performance Optimization
 
-- [Event Bus Design](https://aws.amazon.com/blogs/compute/designing-event-driven-architectures-using-amazon-eventbridge/)
+- [Event Bus Design](https://aws.amazon.com/blogs/compute/
 - [Rule Optimization](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html)
 - [Target Selection](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html)
-- [Cost Optimization](https://aws.amazon.com/blogs/architecture/cost-optimization-patterns-for-amazon-eventbridge/)
+- [Cost Optimization](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-best-practices.html)
 
 ## Community Resources
 
 ### Learning Resources
 
-- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/)
+- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/
 - [EventBridge Workshop](https://catalog.workshops.aws/eventbridge/en-US)
 - [AWS Online Tech Talks](https://aws.amazon.com/events/online-tech-talks/)
 - [AWS EventBridge Video Content](https://www.youtube.com/c/AmazonWebServices/search?query=eventbridge)
 
 ### Support and Forums
 
-- [AWS re:Post EventBridge](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-eventbridge)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/amazon-eventbridge)
+- [AWS re:Post EventBridge](https://repost.aws/)
+- [Stack Overflow](https://serverlessland.com/patterns?service=eventbridge)
 - [GitHub Issues](https://github.com/aws/aws-cdk/issues)
 - [AWS Developer Forums](https://forums.aws.amazon.com/)

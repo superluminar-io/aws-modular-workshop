@@ -22,7 +22,7 @@
 
 - [X-Ray SDK for Node.js](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-nodejs.html)
 - [Node.js Middleware](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-nodejs-middleware.html)
-- [Node.js Sample Applications](https://github.com/aws-samples/aws-xray-sdk-node)
+- [Node.js Sample Applications](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-nodejs.html)
 - [Express.js Integration](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-nodejs-express.html)
 
 ### Other Languages
@@ -104,7 +104,7 @@
 ### Development Tools
 
 - [AWS X-Ray Daemon](https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon.html)
-- [X-Ray SDK GitHub Repositories](https://github.com/aws/aws-xray-sdk)
+- [X-Ray SDK GitHub Repositories](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk.html)
 - [Testing Tools](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-nodejs-testing.html)
 
 ## Best Practices and Patterns
@@ -132,5 +132,5 @@
 
 - [AWS Compute Blog](https://aws.amazon.com/blogs/compute/)
 - [AWS Developer Blog](https://aws.amazon.com/blogs/developer/)
-- [AWS re:Post - X-Ray](https://repost.aws/tags/TAmo05QHWFYw7VhKYGNRbrdg/aws-x-ray)
+- [AWS re:Post - X-Ray](https://repost.aws/)
 - [GitHub Samples](https://github.com/aws-samples?q=xray&type=all&language=&sort=)

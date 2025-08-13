@@ -39,6 +39,12 @@ flowchart TD
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - AWS CDK and AWS CLI configured
 - GitHub account
 - Multiple AWS accounts for testing (recommended)
@@ -158,7 +164,7 @@ git push origin main
 2. Deploy the pipeline:
 
 ```bash
-cdk deploy --profile your-profile-name
+cdk deploy
 ```
 
 ### 4. Configure Testing and Validation
@@ -310,12 +316,12 @@ Deploy the CI/CD infrastructure:
 
 ```bash
 # Deploy the pipeline stack
-cdk deploy PipelineStack --profile your-profile-name
+cdk deploy PipelineStack
 
 # Check pipeline status
 aws codepipeline get-pipeline-state \
   --name WorkshopPipeline \
-  --profile your-profile-name
+ 
 
 # Monitor first execution
 aws codepipeline get-pipeline-execution \
@@ -325,8 +331,8 @@ aws codepipeline get-pipeline-execution \
     --max-items 1 \
     --query 'pipelineExecutionSummaries[0].pipelineExecutionId' \
     --output text \
-    --profile your-profile-name) \
-  --profile your-profile-name
+   ) \
+ 
 ```
 
 ## Validation Steps
@@ -368,10 +374,10 @@ Common issues and solutions:
 aws codepipeline stop-pipeline-execution \
   --pipeline-name WorkshopPipeline \
   --abandon \
-  --profile your-profile-name
+ 
 
 # Destroy the CDK stack
-cdk destroy PipelineStack --profile your-profile-name
+cdk destroy PipelineStack
 ```
 
 [DIAGRAM: CI/CD Setup Flow]

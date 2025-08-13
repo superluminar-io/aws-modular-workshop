@@ -20,7 +20,7 @@
 
 ### Image Security
 
-- [Container Image Security Guide](https://docs.aws.amazon.com/prescriptive-guidance/latest/container-security/welcome.html)
+- [Container Image Security Guide](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/welcome.html)
 - [ECR Image Scanning](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html)
 - [AWS Security Hub Container Insights](https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards-fsbp-controls.html)
 - [Docker Security Best Practices](https://docs.docker.com/develop/security-best-practices/)
@@ -59,9 +59,9 @@
 
 ### Example Implementations
 
-- [Container Pipeline Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs)
-- [ECS Deployment Patterns](https://github.com/aws-samples/amazon-ecs-cdk-cicd)
-- [Blue/Green Deployments](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-auto-scaling)
+- [Container Pipeline Examples](https://github.com/aws-samples/aws-cdk-examples)
+- [ECS Deployment Patterns](https://catalog.workshops.aws/ecs/en-US)
+- [Blue/Green Deployments](https://github.com/aws-samples/aws-cdk-examples)
 - [Custom Constructs](https://constructs.dev/search?q=container&offset=0)
 
 ## Tools and Utilities
@@ -86,8 +86,8 @@
 
 - [Docker Build Best Practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 - [ECS Task Sizing](https://docs.aws.amazon.com/AmazonECS/latest/bestpracticesguide/capacity-tasksize.html)
-- [Image Optimization](https://docs.aws.amazon.com/prescriptive-guidance/latest/containers-provision-ecs/optimize-images.html)
-- [Cost Optimization](https://aws.amazon.com/blogs/containers/cost-optimization-for-amazon-ecs-and-aws-fargate/)
+- [Image Optimization](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/welcome.html)
+- [Cost Optimization](https://aws.amazon.com/blogs/containers/
 
 ### Deployment Strategies
 
@@ -100,14 +100,14 @@
 
 ### Learning Resources
 
-- [AWS Containers Blog](https://aws.amazon.com/blogs/containers/)
+- [AWS Containers Blog](https://aws.amazon.com/blogs/containers/
 - [ECS Workshop](https://ecsworkshop.com/)
 - [Container Security Learning](https://aws.amazon.com/security/security-learning/)
 - [AWS Skill Builder - Containers](https://skillbuilder.aws/learning-plans/containers)
 
 ### Support and Forums
 
-- [AWS re:Post Containers](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-elastic-container-service-ecs)
+- [AWS re:Post Containers](https://repost.aws/)
 - [Docker Forums](https://forums.docker.com/)
 - [Stack Overflow - ECS](https://stackoverflow.com/questions/tagged/amazon-ecs)
 - [GitHub AWS Containers](https://github.com/aws/containers-roadmap)

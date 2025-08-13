@@ -28,8 +28,8 @@
 ## AWS CDK and VPC
 
 - [CDK VPC Module](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ec2-readme.html) - VPC construct library
-- [CDK VPC Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/vpc) - Sample VPC configurations
-- [CDK Network Patterns](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/application-load-balancer) - Network architecture examples
+- [CDK VPC Examples](https://github.com/aws-samples/aws-cdk-examples) - Sample VPC configurations
+- [CDK Network Patterns](https://github.com/aws-samples/aws-cdk-examples) - Network architecture examples
 
 ## Advanced Networking
 
@@ -60,7 +60,7 @@
 
 - [AWS CLI VPC Commands](https://docs.aws.amazon.com/cli/latest/reference/ec2/index.html#cli-aws-ec2) - CLI reference
 - [VPC Reachability Analyzer](https://docs.aws.amazon.com/vpc/latest/reachability/what-is-reachability-analyzer.html) - Network path analysis
-- [AWS Network Manager](https://docs.aws.amazon.com/network-manager/latest/userguide/what-is-network-manager.html) - Centralized network management
+- [AWS Network Manager](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html) - Centralized network management
 
 ## Community and Support
 

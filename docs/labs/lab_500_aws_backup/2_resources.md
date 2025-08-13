@@ -100,8 +100,8 @@
 ### Architecture Patterns
 
 - [Backup Strategies](https://docs.aws.amazon.com/prescriptive-guidance/latest/backup-recovery/)
-- [Disaster Recovery](https://docs.aws.amazon.com/prescriptive-guidance/latest/disaster-recovery/)
-- [Multi-Region Backup](https://aws.amazon.com/blogs/storage/implementing-cross-region-backup-using-aws-backup/)
+- [Disaster Recovery](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/)
+- [Multi-Region Backup](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html)
 
 ### Cost Optimization
 
@@ -119,5 +119,5 @@
 ## Community Resources
 
 - [AWS Storage Blog](https://aws.amazon.com/blogs/storage/category/storage/aws-backup/)
-- [AWS re:Post - AWS Backup](https://repost.aws/tags/TAmo05QHWFYw7VhKYGNRbrdg/aws-backup)
+- [AWS re:Post - AWS Backup](https://repost.aws/)
 - [GitHub Examples](https://github.com/aws-samples?q=backup&type=all&language=&sort=)

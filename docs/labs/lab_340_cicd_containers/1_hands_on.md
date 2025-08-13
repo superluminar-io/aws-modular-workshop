@@ -36,6 +36,12 @@ flowchart TD
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - Completed ECR-Docker Basics lab
 - Completed ECS on Fargate lab
 - GitHub account and repository
@@ -270,7 +276,7 @@ describe('App', () => {
 aws secretsmanager create-secret \
   --name github-token \
   --secret-string YOUR_GITHUB_TOKEN \
-  --profile your-profile-name
+ 
 ```
 
 2. Update repository settings:
@@ -284,7 +290,7 @@ aws secretsmanager create-secret \
 1. Deploy the stack:
 
 ```bash
-cdk deploy ContainerPipelineStack --profile your-profile-name
+cdk deploy ContainerPipelineStack
 ```
 
 2. Trigger initial pipeline run:
@@ -302,7 +308,7 @@ git push origin main
 ```bash
 aws codepipeline get-pipeline-state \
   --name ContainerPipeline \
-  --profile your-profile-name
+ 
 ```
 
 2. View container logs:
@@ -311,7 +317,7 @@ aws codepipeline get-pipeline-state \
 aws logs get-log-events \
   --log-group-name /aws/codebuild/BuildProject \
   --log-stream-name latest \
-  --profile your-profile-name
+ 
 ```
 
 ## Validation Steps
@@ -363,7 +369,7 @@ aws logs get-log-events \
 Remove the stack:
 
 ```bash
-cdk destroy ContainerPipelineStack --profile your-profile-name
+cdk destroy ContainerPipelineStack
 ```
 
 [DIAGRAM: Container CI/CD Setup Flow]

@@ -25,6 +25,12 @@ flowchart TD
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - Completed the CDK Foundations lab
 - AWS CDK and CLI configured with appropriate permissions
 
@@ -101,7 +107,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
 Deploy the stack:
 
 ```bash
-cdk deploy --profile your-profile-name
+cdk deploy
 ```
 
 ### 2. Interact with the Bucket
@@ -115,7 +121,7 @@ export BUCKET_NAME=$(aws cloudformation describe-stacks \
   --stack-name AwsFundamentalsWorkshopLabsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 echo "Bucket name: $BUCKET_NAME"
 ```
@@ -129,19 +135,19 @@ echo "Hello, S3!" > test.txt
 3. **Upload the file**:
 
 ```bash
-aws s3 cp test.txt s3://$BUCKET_NAME/test.txt --profile your-profile-name
+aws s3 cp test.txt s3://$BUCKET_NAME/test.txt
 ```
 
 4. **List bucket contents**:
 
 ```bash
-aws s3 ls s3://$BUCKET_NAME --profile your-profile-name
+aws s3 ls s3://$BUCKET_NAME
 ```
 
 5. **Download the file**:
 
 ```bash
-aws s3 cp s3://$BUCKET_NAME/test.txt downloaded.txt --profile your-profile-name
+aws s3 cp s3://$BUCKET_NAME/test.txt downloaded.txt
 ```
 
 ### 3. Enable Versioning
@@ -152,16 +158,16 @@ Our bucket already has versioning enabled. Let's see it in action:
 
 ```bash
 echo "Version 1" > test.txt
-aws s3 cp test.txt s3://$BUCKET_NAME/test.txt --profile your-profile-name
+aws s3 cp test.txt s3://$BUCKET_NAME/test.txt
 
 echo "Version 2" > test.txt
-aws s3 cp test.txt s3://$BUCKET_NAME/test.txt --profile your-profile-name
+aws s3 cp test.txt s3://$BUCKET_NAME/test.txt
 ```
 
 2. **List versions**:
 
 ```bash
-aws s3api list-object-versions --bucket $BUCKET_NAME --prefix test.txt --profile your-profile-name
+aws s3api list-object-versions --bucket $BUCKET_NAME --prefix test.txt
 ```
 
 ### 4. Work with Lifecycle Rules
@@ -171,13 +177,13 @@ We've configured a lifecycle rule to move objects to INFREQUENT_ACCESS storage c
 1. **Check object storage class**:
 
 ```bash
-aws s3api head-object --bucket $BUCKET_NAME --key test.txt --profile your-profile-name
+aws s3api head-object --bucket $BUCKET_NAME --key test.txt
 ```
 
 2. **View lifecycle configuration**:
 
 ```bash
-aws s3api get-bucket-lifecycle-configuration --bucket $BUCKET_NAME --profile your-profile-name
+aws s3api get-bucket-lifecycle-configuration --bucket $BUCKET_NAME
 ```
 
 ### 5. Clean Up
@@ -186,10 +192,10 @@ When you're finished with this lab:
 
 ```bash
 # Remove all objects from the bucket
-aws s3 rm s3://$BUCKET_NAME --recursive --profile your-profile-name
+aws s3 rm s3://$BUCKET_NAME --recursive
 
 # Destroy the CDK stack
-cdk destroy --profile your-profile-name
+cdk destroy
 ```
 
 ## Validation Steps

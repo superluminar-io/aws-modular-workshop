@@ -6,7 +6,7 @@ Amazon API Gateway is a fully managed service that makes it easy for developers 
 
 [DIAGRAM: API Gateway Overview]
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_380_api_gateway_multi_api_architecture.drawio.svg -->
+<!-- Removed placeholder: diagram defined below -->
 
 ```mermaid
 flowchart TB
@@ -132,7 +132,7 @@ flowchart TB
     class WAF,SHIELD,CW,XRAY,LOGS monitoring
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 ## Learning Objectives
 

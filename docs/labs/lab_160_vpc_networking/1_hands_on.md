@@ -53,6 +53,12 @@ flowchart TD
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
 - Completed the CDK Foundations lab
 - AWS CDK and CLI configured with appropriate permissions
 
@@ -63,8 +69,8 @@ flowchart TD
 Update your stack file with the following code:
 
 ```typescript
-import * as cdk from 'aws-cdk-lib';
-import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
+import * as cdk from "aws-cdk-lib"
+import { CfnOutput, Stack, StackProps } from "aws-cdk-lib"
 import {
   Vpc,
   SubnetType,
@@ -81,13 +87,13 @@ import {
   FlowLog,
   FlowLogResourceType,
   FlowLogDestination,
-} from "aws-cdk-lib/aws-ec2";
-import * as logs from "aws-cdk-lib/aws-logs";
-import { Construct } from "constructs";
+} from "aws-cdk-lib/aws-ec2"
+import * as logs from "aws-cdk-lib/aws-logs"
+import { Construct } from "constructs"
 
 export class AwsFundamentalsWorkshopLabsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     // Create a VPC with public and private subnets across 2 AZs
     const vpc = new Vpc(this, "WorkshopVPC", {
@@ -105,33 +111,33 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
           cidrMask: 24,
         },
       ],
-    });
+    })
 
     // Create security group for public instances
     const publicSG = new SecurityGroup(this, "PublicSecurityGroup", {
       vpc,
       description: "Security group for public instances",
       allowAllOutbound: true,
-    });
+    })
 
     publicSG.addIngressRule(
       Peer.anyIpv4(),
       Port.tcp(80),
       "Allow HTTP access from anywhere"
-    );
+    )
 
     // Create security group for private instances
     const privateSG = new SecurityGroup(this, "PrivateSecurityGroup", {
       vpc,
       description: "Security group for private instances",
       allowAllOutbound: true,
-    });
+    })
 
     privateSG.addIngressRule(
       publicSG,
       Port.tcp(80),
       "Allow HTTP access from public security group"
-    );
+    )
 
     // Create a public EC2 instance
     const publicInstance = new Instance(this, "PublicInstance", {
@@ -142,7 +148,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
       instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
       machineImage: MachineImage.latestAmazonLinux2(),
       securityGroup: publicSG,
-    });
+    })
 
     // Create a private EC2 instance
     const privateInstance = new Instance(this, "PrivateInstance", {
@@ -153,25 +159,26 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
       instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
       machineImage: MachineImage.latestAmazonLinux2(),
       securityGroup: privateSG,
-    });
+    })
 
-    // Output the VPC ID
+    // Output the VPC ID and instance IDs for later steps
     new CfnOutput(this, "VpcId", {
       value: vpc.vpcId,
       description: "VPC ID",
-    });
+      exportName: "WorkshopVpcId",
+    })
 
     // Output the public instance ID
     new CfnOutput(this, "PublicInstanceId", {
       value: publicInstance.instanceId,
       description: "Public Instance ID",
-    });
+    })
 
     // Output the private instance ID
     new CfnOutput(this, "PrivateInstanceId", {
       value: privateInstance.instanceId,
       description: "Private Instance ID",
-    });
+    })
   }
 }
 ```
@@ -179,7 +186,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
 Deploy the stack:
 
 ```bash
-cdk deploy --profile your-profile-name
+cdk deploy
 ```
 
 ### 2. Explore VPC Components
@@ -211,7 +218,7 @@ Let's verify our network setup works as expected:
 # Use AWS Systems Manager Session Manager
 aws ssm start-session \
     --target your-public-instance-id \
-    --profile your-profile-name
+
 ```
 
 2. **Test Internet Connectivity**
@@ -228,7 +235,7 @@ curl http://example.com
 # Use Systems Manager again
 aws ssm start-session \
     --target your-private-instance-id \
-    --profile your-profile-name
+
 ```
 
 4. **Test NAT Gateway**
@@ -247,7 +254,7 @@ Add an S3 VPC Endpoint to allow private instances to access S3 without using the
 // Add to your stack
 const s3Endpoint = vpc.addGatewayEndpoint("S3Endpoint", {
   service: GatewayVpcEndpointAwsService.S3,
-});
+})
 ```
 
 ### 5. Monitor VPC Traffic
@@ -256,12 +263,12 @@ Enable VPC Flow Logs to monitor network traffic:
 
 ```typescript
 // Add to your stack
-const logGroup = new logs.LogGroup(this, "VPCFlowLogs");
+const logGroup = new logs.LogGroup(this, "VPCFlowLogs")
 
 new FlowLog(this, "FlowLog", {
   resourceType: FlowLogResourceType.fromVpc(vpc),
   destination: FlowLogDestination.toCloudWatchLogs(logGroup),
-});
+})
 ```
 
 ### 6. Test Security Groups
@@ -328,6 +335,7 @@ This lab has implemented several AWS networking best practices:
    - Least privilege security groups
    - VPC Flow Logs for monitoring
    - Systems Manager for secure access
+   - Note: Inbound examples using 0.0.0.0/0 are for workshop convenience only; scope to known CIDR ranges or SG sources in production, and limit egress.
 
 2. **High Availability**
 
@@ -509,14 +517,14 @@ flowchart TD
     class RDS_PRIMARY,RDS_REPLICA database
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 ## Clean Up
 
 When you're finished with this lab, clean up the resources to avoid ongoing charges:
 
 ```bash
-cdk destroy --profile your-profile-name
+cdk destroy
 ```
 
 Confirm the deletion when prompted. This will remove:

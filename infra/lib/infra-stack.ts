@@ -16,7 +16,7 @@ import {
   CachedMethods,
   PriceClass,
 } from 'aws-cdk-lib/aws-cloudfront'
-import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins'
+import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins'
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment'
 import { PolicyStatement, CanonicalUserPrincipal } from 'aws-cdk-lib/aws-iam'
 
@@ -54,9 +54,7 @@ export class InfraStack extends Stack {
     // Create CloudFront distribution
     const distribution = new Distribution(this, 'WorkshopDistribution', {
       defaultBehavior: {
-        origin: S3BucketOrigin.withOriginAccessIdentity(workshopBucket, {
-          originAccessIdentity,
-        }),
+        origin: new S3Origin(workshopBucket, { originAccessIdentity }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: CachePolicy.CACHING_DISABLED, // ← Changed to DISABLED
         allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
@@ -65,9 +63,7 @@ export class InfraStack extends Stack {
       additionalBehaviors: {
         // Handle media assets with caching (images are safe to cache)
         'media/*': {
-          origin: S3BucketOrigin.withOriginAccessIdentity(workshopBucket, {
-            originAccessIdentity,
-          }),
+          origin: new S3Origin(workshopBucket, { originAccessIdentity }),
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: CachePolicy.CACHING_OPTIMIZED,
         },

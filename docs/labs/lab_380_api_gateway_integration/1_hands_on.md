@@ -24,6 +24,12 @@ Instructions for draw.io:
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - AWS CDK and AWS CLI configured
 - Postman or similar API testing tool
 - Node.js installed
@@ -237,7 +243,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 1. Deploy the stack:
 
 ```bash
-cdk deploy ApiStack --profile your-profile-name
+cdk deploy ApiStack
 ```
 
 2. Get API key value:
@@ -248,11 +254,11 @@ export API_KEY=$(aws apigateway get-api-key \
     --stack-name ApiStack \
     --query 'Stacks[0].Outputs[?OutputKey==`ApiKey`].OutputValue' \
     --output text \
-    --profile your-profile-name) \
+   ) \
   --include-value \
   --query 'value' \
   --output text \
-  --profile your-profile-name)
+ )
 
 echo "API Key: $API_KEY"
 ```
@@ -265,7 +271,7 @@ export API_URL=$(aws cloudformation describe-stacks \
   --stack-name ApiStack \
   --query 'Stacks[0].Outputs[?OutputKey==`ApiUrl`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 # Test GET endpoint
 curl -X GET $API_URL/items \
@@ -327,7 +333,7 @@ curl -X POST $API_URL/items \
 Remove the stack:
 
 ```bash
-cdk destroy ApiStack --profile your-profile-name
+cdk destroy ApiStack
 ```
 
 [DIAGRAM: API Gateway Setup Flow]
@@ -369,12 +375,12 @@ You can further customize your API with additional features:
 
 ```bash
 # Get the API Gateway ID from the console or use:
-aws apigateway get-rest-apis --profile your-profile-name
+aws apigateway get-rest-apis
 
 # View API usage metrics
 aws logs get-metric-filter \
   --log-group-name API-Gateway-Execution-Logs \
-  --profile your-profile-name
+
 ```
 
 [DIAGRAM: API Gateway Request Flow]
@@ -398,7 +404,7 @@ sequenceDiagram
 
 ## API Gateway Implementation
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_380_api_gateway_complete_implementation.drawio.svg -->
+<!-- Removed placeholder: diagram defined below -->
 
 ```mermaid
 flowchart TD
@@ -551,4 +557,4 @@ flowchart TD
     class API_LOGS,LAMBDA_LOGS,XRAY_TRACE,CW_METRICS monitoring
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->

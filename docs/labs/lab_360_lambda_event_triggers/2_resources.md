@@ -70,7 +70,7 @@
 
 - [Lambda Construct Library](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda-readme.html)
 - [Event Sources in CDK](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_event_sources-readme.html)
-- [CDK Lambda Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-cron)
+- [CDK Lambda Examples](https://github.com/aws-samples/aws-cdk-examples)
 - [CDK Best Practices](https://docs.aws.amazon.com/cdk/v2/guide/best-practices.html)
 
 ### Example Implementations
@@ -102,28 +102,28 @@
 
 - [Serverless Patterns](https://aws.amazon.com/architecture/serverless/)
 - [Event-Driven Architecture](https://aws.amazon.com/event-driven-architecture/)
-- [Lambda Design Patterns](https://docs.aws.amazon.com/lambda/latest/operatorguide/design-patterns.html)
-- [Scalability Best Practices](https://docs.aws.amazon.com/lambda/latest/operatorguide/scaling-patterns.html)
+- [Lambda Design Patterns](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
+- [Scalability Best Practices](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
 
 ### Performance Optimization
 
-- [Performance Best Practices](https://docs.aws.amazon.com/lambda/latest/operatorguide/performance-optimization.html)
-- [Cold Start Optimization](https://aws.amazon.com/blogs/compute/operating-lambda-performance-optimization-part-1/)
-- [Cost Optimization](https://aws.amazon.com/blogs/compute/operating-lambda-cost-optimization-part-1/)
+- [Performance Best Practices](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
+- [Cold Start Optimization](https://aws.amazon.com/blogs/compute/
+- [Cost Optimization](https://aws.amazon.com/blogs/compute/
 - [Memory Configuration](https://docs.aws.amazon.com/lambda/latest/operatorguide/computing-power.html)
 
 ## Community Resources
 
 ### Learning Resources
 
-- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/)
+- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/
 - [Serverless Land](https://serverlessland.com/)
 - [AWS re:Invent Sessions](https://aws.amazon.com/events/reinvent/)
 - [AWS Online Tech Talks](https://aws.amazon.com/events/online-tech-talks/on-demand/)
 
 ### Support and Forums
 
-- [AWS re:Post Lambda](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/aws-lambda)
+- [AWS re:Post Lambda](https://repost.aws/)
 - [Stack Overflow Lambda](https://stackoverflow.com/questions/tagged/aws-lambda)
 - [GitHub AWS Lambda](https://github.com/aws/aws-lambda-runtime-interface-emulator)
 - [AWS Lambda Workshop](https://catalog.workshops.aws/lambda-foundations/en-US)

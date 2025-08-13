@@ -21,7 +21,7 @@
 ## AWS CDK and IAM
 
 - [CDK IAM Module Documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam-readme.html) - API reference for IAM constructs
-- [CDK IAM Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/iam-groups-users) - Sample IAM configurations
+- [CDK IAM Examples](https://github.com/aws-samples/aws-cdk-examples) - Sample IAM configurations
 - [CDK Security Patterns](https://github.com/aws-samples/aws-security-reference-architecture-examples) - Security architecture examples
 
 ## Troubleshooting

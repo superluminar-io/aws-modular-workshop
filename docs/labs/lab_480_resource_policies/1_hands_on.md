@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - AWS CDK and AWS CLI configured
 - Multiple AWS accounts (recommended for cross-account scenarios)
 - Completed IAM lab
@@ -228,7 +234,7 @@ testMessagingPolicies();
 1. Deploy the stack:
 
 ```bash
-cdk deploy ResourcePoliciesStack --profile your-profile-name
+cdk deploy ResourcePoliciesStack
 ```
 
 2. Set environment variables:
@@ -238,19 +244,19 @@ export BUCKET_NAME=$(aws cloudformation describe-stacks \
   --stack-name ResourcePoliciesStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 export TOPIC_ARN=$(aws cloudformation describe-stacks \
   --stack-name ResourcePoliciesStack \
   --query 'Stacks[0].Outputs[?OutputKey==`TopicArn`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 export QUEUE_URL=$(aws cloudformation describe-stacks \
   --stack-name ResourcePoliciesStack \
   --query 'Stacks[0].Outputs[?OutputKey==`QueueUrl`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 ```
 
 3. Run tests:
@@ -323,12 +329,12 @@ export BUCKET_NAME=$(aws cloudformation describe-stacks \
   --stack-name ResourcePoliciesStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
-aws s3 rm s3://$BUCKET_NAME --recursive --profile your-profile-name
+aws s3 rm s3://$BUCKET_NAME --recursive
 
 # Destroy the CDK stack
-cdk destroy ResourcePoliciesStack --profile your-profile-name
+cdk destroy ResourcePoliciesStack
 ```
 
 Note: Ensure all cross-account access is no longer needed before cleanup.

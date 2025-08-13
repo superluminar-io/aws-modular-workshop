@@ -7,7 +7,7 @@
 - [Docker Overview](https://docs.docker.com/get-started/overview/)
 - [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/)
 - [Docker CLI Reference](https://docs.docker.com/engine/reference/commandline/cli/)
-- [Docker Best Practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+- [Docker Best Practices](https://docs.docker.com/build/)
 
 ### Amazon ECR Documentation
 
@@ -21,15 +21,15 @@
 ### Docker Basics
 
 - [Getting Started with Docker](https://docs.docker.com/get-started/)
-- [Docker Image Building](https://docs.docker.com/develop/develop-images/)
+- [Docker Image Building](https://docs.docker.com/build/)
 - [Container Networking](https://docs.docker.com/network/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
 ### Best Practices
 
 - [Docker Security Best Practices](https://docs.docker.com/engine/security/)
-- [Image Optimization](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#minimize-the-number-of-layers)
-- [Multi-stage Builds](https://docs.docker.com/develop/develop-images/multistage-build/)
+- [Image Optimization](https://docs.docker.com/build/#minimize-the-number-of-layers)
+- [Multi-stage Builds](https://docs.docker.com/build/)
 - [Container Security Scanning](https://docs.docker.com/engine/scan/)
 
 ## ECR Features
@@ -54,7 +54,7 @@
 
 - [ECR Module in CDK](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecr-readme.html)
 - [ECR Repository Construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecr.Repository.html)
-- [CDK ECR Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecr-assets)
+- [CDK ECR Examples](https://github.com/aws-samples/aws-cdk-examples)
 
 ## Tools and Utilities
 
@@ -94,7 +94,7 @@
 
 ### Support Resources
 
-- [AWS re:Post ECR Forum](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-elastic-container-registry-ecr)
+- [AWS re:Post ECR Forum](https://repost.aws/)
 - [Docker Forums](https://forums.docker.com/)
 - [ECR Service Health Dashboard](https://health.aws.amazon.com/health/status)
 

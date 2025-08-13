@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 Before starting this lab, ensure you have:
 
 - AWS CDK and AWS CLI configured
@@ -187,7 +193,7 @@ export const handler = async (event: any): Promise<any> => {
 1. Deploy the stack:
 
 ```bash
-cdk deploy SecretsManagerStack --profile your-profile-name
+cdk deploy SecretsManagerStack
 ```
 
 2. Create a test script `scripts/test-secrets.ts`:
@@ -224,7 +230,7 @@ export FUNCTION_NAME=$(aws cloudformation describe-stacks \
   --stack-name SecretsManagerStack \
   --query 'Stacks[0].Outputs[?OutputKey==`FunctionName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 ts-node scripts/test-secrets.ts
 ```
@@ -298,7 +304,7 @@ apiKeySecret.addRotationSchedule('RotationSchedule', {
 Remove the stack:
 
 ```bash
-cdk destroy SecretsManagerStack --profile your-profile-name
+cdk destroy SecretsManagerStack
 ```
 
 Note: Ensure all secrets are no longer in use before cleanup.

@@ -103,7 +103,7 @@
 
 - [AWS Security Blog](https://aws.amazon.com/blogs/security/)
 - [AWS Architecture Blog](https://aws.amazon.com/blogs/architecture/)
-- [AWS re:Post](https://repost.aws/tags/TAmo05QHWFYw7VhKYGNRbrdg/aws-iam)
+- [AWS re:Post](https://repost.aws/)
 
 ### Training and Workshops
 

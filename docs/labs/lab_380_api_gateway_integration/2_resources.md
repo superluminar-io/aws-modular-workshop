@@ -87,7 +87,7 @@
 - [API Gateway Construct Library](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_apigateway-readme.html)
 - [Lambda Integration](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_apigateway.LambdaIntegration.html)
 - [REST API Construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_apigateway.RestApi.html)
-- [CDK Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/api-gateway-lambda)
+- [CDK Examples](https://github.com/aws-samples/aws-cdk-examples)
 
 ### Example Implementations
 
@@ -139,7 +139,7 @@
 
 ### Support and Forums
 
-- [AWS re:Post API Gateway](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-api-gateway)
+- [AWS re:Post API Gateway](https://repost.aws/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/amazon-api-gateway)
 - [GitHub Issues](https://github.com/aws/aws-cdk/issues)
 - [AWS Developer Forums](https://forums.aws.amazon.com/)

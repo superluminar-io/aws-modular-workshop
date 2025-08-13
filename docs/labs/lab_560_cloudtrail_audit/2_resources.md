@@ -66,7 +66,7 @@
 
 - [CloudTrail Module](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cloudtrail-readme.html)
 - [Trail Configuration](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cloudtrail.Trail.html)
-- [Event Selectors](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cloudtrail.EventSelector.html)
+- [Event Selectors](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html)
 
 ### CDK Examples
 
@@ -113,6 +113,6 @@
 ## Community Resources
 
 - [AWS Security Blog](https://aws.amazon.com/blogs/security/)
-- [AWS re:Post - CloudTrail](https://repost.aws/tags/TAmo05QHWFYw7VhKYGNRbrdg/aws-cloud-trail)
+- [AWS re:Post - CloudTrail](https://repost.aws/)
 - [GitHub Examples](https://github.com/aws-samples?q=cloudtrail&type=all&language=&sort=)
 - [Partner Solutions](https://aws.amazon.com/cloudtrail/partners/)

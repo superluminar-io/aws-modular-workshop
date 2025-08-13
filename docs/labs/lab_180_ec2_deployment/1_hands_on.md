@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 Before starting this lab, ensure you have:
 
 - Completed the VPC Networking lab
@@ -15,7 +21,7 @@ Before starting this lab, ensure you have:
 With our VPC infrastructure in place, let's create an EC2 instance:
 
 ```typescript
-import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as ec2 from "aws-cdk-lib/aws-ec2"
 
 const instance = new ec2.Instance(this, "WebServer", {
   vpc, // Using the VPC created below
@@ -25,7 +31,7 @@ const instance = new ec2.Instance(this, "WebServer", {
   ),
   machineImage: ec2.MachineImage.latestAmazonLinux2(),
   // ... rest of EC2 configuration
-});
+})
 ```
 
 ### 2. Create an EC2 Instance with CDK
@@ -33,8 +39,8 @@ const instance = new ec2.Instance(this, "WebServer", {
 Update your stack file with the following code:
 
 ```typescript
-import * as cdk from 'aws-cdk-lib';
-import { CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
+import * as cdk from "aws-cdk-lib"
+import { CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib"
 import {
   Instance,
   InstanceType,
@@ -49,13 +55,13 @@ import {
   BlockDeviceVolume,
   EbsDeviceVolumeType,
   UserData,
-} from "aws-cdk-lib/aws-ec2";
-import { ManagedPolicy, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
-import { Construct } from "constructs";
+} from "aws-cdk-lib/aws-ec2"
+import { ManagedPolicy, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam"
+import { Construct } from "constructs"
 
 export class AwsFundamentalsWorkshopLabsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     // Create a new VPC for this lab (or import existing one)
     const vpc = new Vpc(this, "EC2LabVPC", {
@@ -73,7 +79,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
           cidrMask: 24,
         },
       ],
-    });
+    })
 
     // Alternative: Use existing VPC (uncomment and replace with your VPC ID)
     // const vpc = Vpc.fromLookup(this, "ExistingVPC", {
@@ -85,32 +91,32 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
       vpc,
       description: "Security group for web server",
       allowAllOutbound: true,
-    });
+    })
 
     webServerSG.addIngressRule(
       Peer.anyIpv4(),
       Port.tcp(80),
       "Allow HTTP access"
-    );
+    )
 
-    // Create IAM role for Systems Manager
+    // Create IAM role for Systems Manager (required for Session Manager access)
     const role = new Role(this, "EC2Role", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-    });
+    })
 
     role.addManagedPolicy(
       ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")
-    );
+    )
 
     // Create user data script
-    const userData = UserData.forLinux();
+    const userData = UserData.forLinux()
     userData.addCommands(
       "yum update -y",
       "yum install -y httpd",
       "systemctl start httpd",
       "systemctl enable httpd",
       'echo "<h1>Hello from EC2</h1>" > /var/www/html/index.html'
-    );
+    )
 
     // Create EC2 instance
     const webServer = new Instance(this, "WebServer", {
@@ -132,26 +138,26 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
           }),
         },
       ],
-    });
+    })
 
     // Add CloudWatch agent configuration
     webServer.userData.addCommands(
       "yum install -y amazon-cloudwatch-agent",
       "systemctl start amazon-cloudwatch-agent",
       "systemctl enable amazon-cloudwatch-agent"
-    );
+    )
 
     // Output the instance ID
     new CfnOutput(this, "InstanceId", {
       value: webServer.instanceId,
       description: "EC2 Instance ID",
-    });
+    })
 
     // Output the public IP
     new CfnOutput(this, "PublicIP", {
       value: webServer.instancePublicIp,
       description: "EC2 Instance Public IP",
-    });
+    })
   }
 }
 ```
@@ -159,7 +165,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
 Deploy the stack:
 
 ```bash
-cdk deploy --profile your-profile-name
+cdk deploy
 ```
 
 ### 2. Connect to Your Instance
@@ -172,11 +178,11 @@ export INSTANCE_ID=$(aws cloudformation describe-stacks \
   --stack-name AwsFundamentalsWorkshopLabsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`InstanceId`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 aws ssm start-session \
     --target $INSTANCE_ID \
-    --profile your-profile-name
+
 ```
 
 ### 3. Verify Web Server Setup
@@ -195,7 +201,7 @@ curl http://localhost
 
 3. **Test Public Access**:
    - Open a web browser
-   - Navigate to http://your-instance-public-ip
+   - Navigate to your instance's public IP (from output)
 
 ### 4. Monitor Your Instance
 
@@ -233,7 +239,7 @@ aws ec2 create-image \
     --instance-id $INSTANCE_ID \
     --name "WebServer-AMI" \
     --description "Apache web server AMI" \
-    --profile your-profile-name
+
 ```
 
 ### 6. Test Instance Recovery
@@ -307,6 +313,7 @@ This lab has implemented several EC2 best practices:
    - Minimal security group rules
    - IAM roles for service access
    - Regular system updates
+   - Note: For workshop simplicity, inbound rules may use 0.0.0.0/0. In production, restrict to known CIDR ranges or trusted security groups, and tighten egress.
 
 2. **Monitoring**
 
@@ -364,7 +371,7 @@ sequenceDiagram
 When you're finished with this lab, clean up the resources to avoid ongoing charges:
 
 ```bash
-cdk destroy --profile your-profile-name
+cdk destroy
 ```
 
 This will remove:

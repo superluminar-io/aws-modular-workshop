@@ -57,6 +57,12 @@ Description: A detailed diagram showing the Systems Manager resources we'll crea
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 This lab builds on the EC2 deployment lab. Download the completed EC2 lab state to begin:
 
 - Completed the EC2 Deployment lab
@@ -96,11 +102,11 @@ export INSTANCE_ID=$(aws cloudformation describe-stacks \
   --stack-name AwsFundamentalsWorkshopLabsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`InstanceId`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 aws ssm start-session \
     --target $INSTANCE_ID \
-    --profile your-profile-name
+   
 ```
 
 2. **Verify System Status**:
@@ -121,12 +127,12 @@ sudo tail -f /var/log/amazon/ssm/amazon-ssm-agent.log
 # Get log level parameter
 aws ssm get-parameter \
     --name "/myapp/dev/log-level" \
-    --profile your-profile-name
+   
 
 # Get backup retention parameter
 aws ssm get-parameter \
     --name "/myapp/dev/backup-retention-days" \
-    --profile your-profile-name
+   
 ```
 
 2. **Read Parameters from EC2 Instance**:
@@ -150,14 +156,14 @@ aws ssm send-command \
     --document-name "AWS-RunShellScript" \
     --parameters 'commands=["df -h"]' \
     --targets "Key=instanceids,Values=$INSTANCE_ID" \
-    --profile your-profile-name
+   
 ```
 
 2. **Check Command Status**:
 
 ```bash
 aws ssm list-commands \
-    --profile your-profile-name
+   
 ```
 
 3. **View Command Output**:
@@ -166,7 +172,7 @@ aws ssm list-commands \
 aws ssm get-command-invocation \
     --command-id "command-id-from-previous-step" \
     --instance-id $INSTANCE_ID \
-    --profile your-profile-name
+   
 ```
 
 ### 5. Configure Session Logging
@@ -239,15 +245,15 @@ When you're finished with this lab:
 # Stop any running sessions (optional)
 aws ssm describe-sessions \
   --state "Active" \
-  --profile your-profile-name
+ 
 
 # Remove any test parameters
 aws ssm delete-parameter \
   --name "/myapp/dev/test-parameter" \
-  --profile your-profile-name
+ 
 
 # Destroy the CDK stack
-cdk destroy --profile your-profile-name
+cdk destroy
 ```
 
 [DIAGRAM: Systems Manager Operations]

@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 Before starting this lab, ensure you have:
 
 - AWS CDK and AWS CLI configured
@@ -307,7 +313,7 @@ publishLogs();
 1. Deploy the stack:
 
 ```bash
-cdk deploy CloudWatchStack --profile your-profile-name
+cdk deploy CloudWatchStack
 ```
 
 2. Set environment variables:
@@ -317,7 +323,7 @@ export LOG_GROUP_NAME=$(aws cloudformation describe-stacks \
   --stack-name CloudWatchStack \
   --query 'Stacks[0].Outputs[?OutputKey==`LogGroupName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 ```
 
 3. Run test scripts:
@@ -378,7 +384,7 @@ ts-node scripts/publish-logs.ts
 Remove the stack:
 
 ```bash
-cdk destroy CloudWatchStack --profile your-profile-name
+cdk destroy CloudWatchStack
 ```
 
 Note: Ensure all monitoring data is no longer needed before cleanup.

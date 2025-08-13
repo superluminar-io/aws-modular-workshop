@@ -75,7 +75,7 @@
 
 ### Example Implementations
 
-- [CDK Pipeline Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/pipeline)
+- [CDK Pipeline Examples](https://github.com/aws-samples/aws-cdk-examples)
 - [Multi-Account Pipelines](https://github.com/aws-samples/aws-bootstrap-kit-examples)
 - [Pipeline Patterns](https://github.com/cdk-patterns/serverless)
 - [AWS Solutions Constructs](https://docs.aws.amazon.com/solutions/latest/constructs/welcome.html)
@@ -99,7 +99,7 @@
 ### Utility Libraries
 
 - [AWS CDK Toolkit](https://github.com/aws/aws-cdk)
-- [CDK Aspects](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aspects-readme.html)
+- [CDK Aspects](https://docs.aws.amazon.com/cdk/v2/guide/aspects.html)
 - [CDK Custom Constructs](https://constructs.dev/search?q=pipeline&offset=0)
 - [AWS Solutions Library](https://aws.amazon.com/solutions/)
 
@@ -114,7 +114,7 @@
 
 ### Support and Discussion
 
-- [AWS re:Post](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/aws-cdk)
+- [AWS re:Post](https://repost.aws/)
 - [GitHub Discussions](https://github.com/aws/aws-cdk/discussions)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/aws-cdk)
 - [CDK Community](https://cdk.dev/)

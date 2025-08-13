@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - AWS CDK and AWS CLI configured
 - Basic understanding of AWS services
 - Completed IAM lab
@@ -237,7 +243,7 @@ queryLake();
 1. Deploy the stack:
 
 ```bash
-cdk deploy CloudTrailStack --profile your-profile-name
+cdk deploy CloudTrailStack
 ```
 
 2. Set environment variables:
@@ -247,7 +253,7 @@ export LAKE_STORE_ARN=$(aws cloudformation describe-stacks \
   --stack-name CloudTrailStack \
   --query 'Stacks[0].Outputs[?OutputKey==`LakeStoreArn`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 ```
 
 ## Validation Steps
@@ -293,12 +299,12 @@ When you're finished with this lab:
 # Stop CloudTrail logging
 aws cloudtrail stop-logging \
   --name MyCloudTrail \
-  --profile your-profile-name
+ 
 
 # Delete CloudWatch log groups (optional)
 aws logs delete-log-group \
   --log-group-name CloudTrail/MyCloudTrail \
-  --profile your-profile-name
+ 
 
 # Empty S3 bucket
 # Get bucket name from stack outputs first
@@ -306,10 +312,10 @@ export BUCKET_NAME=$(aws cloudformation describe-stacks \
   --stack-name CloudTrailStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
-aws s3 rm s3://$BUCKET_NAME --recursive --profile your-profile-name
+aws s3 rm s3://$BUCKET_NAME --recursive
 
 # Destroy the CDK stack
-cdk destroy CloudTrailStack --profile your-profile-name
+cdk destroy CloudTrailStack
 ```

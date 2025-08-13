@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - Completed the CDK Foundations lab
 - AWS CDK installed and configured
 - AWS CLI with appropriate permissions
@@ -306,14 +312,14 @@ Deploy the stack and test the initial permission configuration:
 
 ```bash
 # Deploy the stack
-cdk deploy IamStack --profile your-profile-name
+cdk deploy IamStack
 
 # Get function name for testing
 export FUNCTION_NAME=$(aws cloudformation describe-stacks \
   --stack-name IamStack \
   --query 'Stacks[0].Outputs[?OutputKey==`LambdaFunctionName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 echo "Testing Lambda function: $FUNCTION_NAME"
 
@@ -322,7 +328,7 @@ aws lambda invoke \
   --function-name $FUNCTION_NAME \
   --payload '{}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   response.json
 
 # View the detailed response
@@ -339,27 +345,27 @@ export ALERT_TOPIC=$(aws cloudformation describe-stacks \
   --stack-name IamStack \
   --query 'Stacks[0].Outputs[?OutputKey==`SecurityAlertTopicArn`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 aws sns subscribe \
   --topic-arn $ALERT_TOPIC \
   --protocol email \
   --notification-endpoint YOUR_EMAIL_ADDRESS \
-  --profile your-profile-name
+ 
 
 # Check CloudTrail events for IAM actions
 aws logs filter-log-events \
   --log-group-name CloudTrail/IamAuditTrail \
   --start-time $(date -d '10 minutes ago' +%s000) \
   --filter-pattern '{ ($.eventName = AssumeRole) || ($.eventName = PutObject) }' \
-  --profile your-profile-name
+ 
 
 # Monitor Lambda function errors
 aws logs filter-log-events \
   --log-group-name "/aws/lambda/$FUNCTION_NAME" \
   --start-time $(date -d '10 minutes ago' +%s000) \
   --filter-pattern 'ERROR' \
-  --profile your-profile-name
+ 
 ```
 
 ### 4. Analyze Permission Failures
@@ -376,14 +382,14 @@ aws cloudwatch get-metric-statistics \
   --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
   --period 300 \
   --statistics Sum \
-  --profile your-profile-name
+ 
 
 # Get detailed CloudTrail events for permission denials
 aws logs filter-log-events \
   --log-group-name CloudTrail/IamAuditTrail \
   --start-time $(date -d '30 minutes ago' +%s000) \
   --filter-pattern '{ $.errorCode EXISTS }' \
-  --profile your-profile-name
+ 
 ```
 
 ### 5. Fix Permissions with Monitoring
@@ -419,14 +425,14 @@ Deploy the updated permissions:
 
 ```bash
 # Deploy the updated stack
-cdk deploy IamStack --profile your-profile-name
+cdk deploy IamStack
 
 # Test the function again
 aws lambda invoke \
   --function-name $FUNCTION_NAME \
   --payload '{}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   response.json
 
 # Check the successful response
@@ -441,23 +447,23 @@ Confirm that your security monitoring is working:
 # Check alarm status
 aws cloudwatch describe-alarms \
   --alarm-names iam-workshop-failed-permissions \
-  --profile your-profile-name
+ 
 
 # Verify CloudTrail is logging events
 aws cloudtrail lookup-events \
   --lookup-attributes AttributeKey=EventName,AttributeValue=AssumeRole \
   --start-time $(date -d '1 hour ago' +%Y-%m-%d) \
   --end-time $(date +%Y-%m-%d) \
-  --profile your-profile-name
+ 
 
 # Check S3 bucket contents
 export BUCKET_NAME=$(aws cloudformation describe-stacks \
   --stack-name IamStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
-aws s3 ls s3://$BUCKET_NAME --profile your-profile-name
+aws s3 ls s3://$BUCKET_NAME
 ```
 
 ### 7. Load Test for Monitoring
@@ -476,7 +482,7 @@ for i in {1..10}; do
     --function-name $FUNCTION_NAME \
     --payload '{}' \
     --cli-binary-format raw-in-base64-out \
-    --profile your-profile-name \
+    \
     /tmp/response$i.json &
 
   sleep 2
@@ -522,12 +528,12 @@ chmod +x iam-load-test.sh
    # Check current policy attached to role
    aws iam list-attached-role-policies \
      --role-name YourLambdaRole \
-     --profile your-profile-name
+    
 
    # Check inline policies
    aws iam list-role-policies \
      --role-name YourLambdaRole \
-     --profile your-profile-name
+    
    ```
 
 2. **Permission Escalation Detection**:
@@ -537,7 +543,7 @@ chmod +x iam-load-test.sh
    aws logs filter-log-events \
      --log-group-name CloudTrail/IamAuditTrail \
      --filter-pattern '{ ($.eventName = AttachUserPolicy) || ($.eventName = AttachRolePolicy) || ($.eventName = PutUserPolicy) || ($.eventName = PutRolePolicy) }' \
-     --profile your-profile-name
+    
    ```
 
 3. **Monitoring Alert Verification**:
@@ -546,7 +552,7 @@ chmod +x iam-load-test.sh
    aws lambda invoke \
      --function-name NonExistentFunction \
      --payload '{}' \
-     --profile your-profile-name \
+     \
      error-response.json || echo "Expected error for alarm testing"
    ```
 
@@ -568,7 +574,7 @@ When finished with the lab:
 rm -f response*.json iam-load-test.sh
 
 # Destroy the stack
-cdk destroy IamStack --profile your-profile-name
+cdk destroy IamStack
 ```
 
 This lab demonstrates production-ready IAM implementation with comprehensive security monitoring, giving you practical experience with both permissions management and security operations.

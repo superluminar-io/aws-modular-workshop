@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - AWS CDK and AWS CLI configured
 - Node.js installed
 - Basic TypeScript knowledge
@@ -194,7 +200,7 @@ export const handler = async (event: ScheduledEvent): Promise<void> => {
 1. Deploy the stack:
 
 ```bash
-cdk deploy LambdaStack --profile your-profile-name
+cdk deploy LambdaStack
 ```
 
 2. Test S3 trigger:
@@ -207,7 +213,7 @@ export BUCKET_NAME=$(aws cloudformation describe-stacks \
   --stack-name LambdaStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 echo "Bucket name: $BUCKET_NAME"
 ```
@@ -215,7 +221,7 @@ echo "Bucket name: $BUCKET_NAME"
 ```bash
 # Upload file to S3
 aws s3 cp test.txt s3://$BUCKET_NAME/ \
-  --profile your-profile-name
+ 
 ```
 
 3. Monitor DynamoDB Stream:
@@ -231,7 +237,7 @@ aws logs get-log-events \
     --limit 1 \
     --query 'logStreams[0].logStreamName' \
     --output text) \
-  --profile your-profile-name
+ 
 ```
 
 4. Check scheduled executions:
@@ -246,8 +252,8 @@ aws logs get-log-events \
     --limit 1 \
     --query 'logStreams[0].logStreamName' \
     --output text \
-    --profile your-profile-name) \
-  --profile your-profile-name
+   ) \
+ 
 ```
 
 ## Validation Steps
@@ -291,24 +297,24 @@ When you're finished with this lab:
 
 ```bash
 # Empty S3 bucket
-aws s3 rm s3://$BUCKET_NAME --recursive --profile your-profile-name
+aws s3 rm s3://$BUCKET_NAME --recursive
 
 # Get table name and remove all items from DynamoDB table (optional)
 export TABLE_NAME=$(aws cloudformation describe-stacks \
   --stack-name LambdaStack \
   --query 'Stacks[0].Outputs[?OutputKey==`TableName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
-aws dynamodb scan --table-name $TABLE_NAME --profile your-profile-name | \
+aws dynamodb scan --table-name $TABLE_NAME | \
   jq -r '.Items[].id.S' | \
   while read id; do
     aws dynamodb delete-item \
       --table-name $TABLE_NAME \
       --key "{\"id\":{\"S\":\"$id\"}}" \
-      --profile your-profile-name
+     
   done
 
 # Destroy the CDK stack
-cdk destroy LambdaStack --profile your-profile-name
+cdk destroy LambdaStack
 ```

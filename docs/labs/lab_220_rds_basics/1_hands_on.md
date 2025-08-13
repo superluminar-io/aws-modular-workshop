@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - Completion of VPC Networking lab
 - AWS CDK and AWS CLI configured
 - Basic understanding of SQL
@@ -150,14 +156,14 @@ export DATABASE_ENDPOINT=$(aws cloudformation describe-stacks \
   --stack-name RdsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`DatabaseEndpoint`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 # Get secret ARN
 export SECRET_ARN=$(aws cloudformation describe-stacks \
   --stack-name RdsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`DatabaseSecretArn`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 echo "Database endpoint: $DATABASE_ENDPOINT"
 echo "Secret ARN: $SECRET_ARN"
@@ -170,7 +176,7 @@ aws secretsmanager get-secret-value \
   --secret-id $SECRET_ARN \
   --query 'SecretString' \
   --output text \
-  --profile your-profile-name
+ 
 ```
 
 ### 3. Connect to the Database
@@ -269,7 +275,7 @@ new cdk.CfnOutput(this, 'ReadReplicaEndpoint', {
 To avoid ongoing charges:
 
 ```bash
-cdk destroy --profile your-profile-name
+cdk destroy
 ```
 
 ## Troubleshooting

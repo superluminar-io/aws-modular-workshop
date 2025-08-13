@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 Before starting this lab, ensure you have:
 
 - AWS CDK and AWS CLI configured
@@ -429,14 +435,14 @@ npm install
 cd ../..
 
 # Deploy the stack
-cdk deploy AuroraStack --profile your-profile-name
+cdk deploy AuroraStack
 
 # Get Lambda function name for testing
 export LAMBDA_FUNCTION=$(aws cloudformation describe-stacks \
   --stack-name AuroraStack \
   --query 'Stacks[0].Outputs[?OutputKey==`LambdaFunctionName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 echo "Lambda function: $LAMBDA_FUNCTION"
 ```
@@ -449,7 +455,7 @@ aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"init"}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   response.json
 
 echo "Database initialization result:"
@@ -467,7 +473,7 @@ aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"healthCheck"}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   response.json && cat response.json | jq .
 
 # Create some test users
@@ -476,14 +482,14 @@ aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"createUser","data":{"name":"Alice Johnson","email":"alice@example.com"}}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   response.json && cat response.json | jq .
 
 aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"createUser","data":{"name":"Bob Smith","email":"bob@example.com"}}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   response.json && cat response.json | jq .
 
 # Get user count
@@ -492,7 +498,7 @@ aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"getUserCount"}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   response.json && cat response.json | jq .
 
 # Get all users
@@ -501,7 +507,7 @@ aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"getUsers","data":{"limit":10}}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   response.json && cat response.json | jq .
 ```
 
@@ -523,7 +529,7 @@ aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"loadTest","data":{"count":20}}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   load-response.json
 
 echo "Load test batch 1 completed:"
@@ -536,7 +542,7 @@ aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"loadTest","data":{"count":30}}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   load-response2.json
 
 echo "Load test batch 2 completed:"
@@ -548,7 +554,7 @@ aws lambda invoke \
   --function-name $LAMBDA_FUNCTION \
   --payload '{"operation":"getUserCount"}' \
   --cli-binary-format raw-in-base64-out \
-  --profile your-profile-name \
+  \
   final-count.json && cat final-count.json | jq .
 
 echo "Load test completed!"
@@ -568,13 +574,13 @@ export ALERT_TOPIC=$(aws cloudformation describe-stacks \
   --stack-name AuroraStack \
   --query 'Stacks[0].Outputs[?OutputKey==`AlertTopicArn`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 aws sns subscribe \
   --topic-arn $ALERT_TOPIC \
   --protocol email \
   --notification-endpoint YOUR_EMAIL_ADDRESS \
-  --profile your-profile-name
+ 
 
 # Open the CloudWatch dashboard
 echo "CloudWatch Dashboard URL:"
@@ -582,7 +588,7 @@ aws cloudformation describe-stacks \
   --stack-name AuroraStack \
   --query 'Stacks[0].Outputs[?OutputKey==`DashboardURL`].OutputValue' \
   --output text \
-  --profile your-profile-name
+ 
 
 # Check current ACU utilization
 echo -e "\nCurrent ACU utilization:"
@@ -594,7 +600,7 @@ aws cloudwatch get-metric-statistics \
   --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
   --period 300 \
   --statistics Average,Maximum \
-  --profile your-profile-name
+ 
 
 # Check Lambda function performance
 echo -e "\nLambda function performance:"
@@ -606,7 +612,7 @@ aws cloudwatch get-metric-statistics \
   --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
   --period 300 \
   --statistics Average,Maximum \
-  --profile your-profile-name
+ 
 ```
 
 ## Validation Steps
@@ -668,7 +674,7 @@ Remove all resources when finished:
 
 ```bash
 # Delete the stack
-cdk destroy AuroraStack --profile your-profile-name
+cdk destroy AuroraStack
 
 # Clean up local files
 rm -f response.json load-response*.json final-count.json

@@ -63,5 +63,5 @@
 ## Community Resources
 
 - [AWS Management Tools Blog](https://aws.amazon.com/blogs/mt/) - Latest updates and tips
-- [AWS re:Post](https://repost.aws/tags/TAL4CPfE2jUyYzqR/aws-systems-manager) - Community discussions
+- [AWS re:Post](https://repost.aws/) - Community discussions
 - [GitHub AWS Samples](https://github.com/aws-samples?q=ssm) - Code examples

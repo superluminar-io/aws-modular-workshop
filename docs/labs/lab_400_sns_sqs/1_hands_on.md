@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 - AWS CDK and AWS CLI configured
 - Node.js installed
 - Basic understanding of messaging patterns
@@ -137,7 +143,7 @@ flowchart TD
 
 ## SNS and SQS Implementation
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_400_sns_sqs_multi_service_implementation.drawio.svg -->
+<!-- Removed placeholder: diagram defined below -->
 
 ```mermaid
 flowchart TD
@@ -306,7 +312,7 @@ flowchart TD
     class PAYMENT_FAIL,INVENTORY_FAIL,SHIPPING_FAIL,NOTIFICATION_FAIL error
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 ## Lab Steps
 
@@ -446,9 +452,8 @@ export const handler: SQSHandler = async (event: SQSEvent) => {
         }));
       }
 
-      // Delete processed message
-      // Note: In real implementation, you would get the queue URL from the event source ARN
-      // or pass it as an environment variable specific to each queue
+  // Delete processed message (example)
+  // In production, derive the queue URL from the event source or pass it via environment
       console.log('Message processed successfully:', record.messageId);
 
     } catch (error) {
@@ -464,7 +469,7 @@ export const handler: SQSHandler = async (event: SQSEvent) => {
 1. Deploy the stack:
 
 ```bash
-cdk deploy MessagingStack --profile your-profile-name
+cdk deploy MessagingStack
 ```
 
 ## Cleanup
@@ -478,17 +483,17 @@ aws sqs purge-queue \
     --stack-name MessagingStack \
     --query 'Stacks[0].Outputs[?OutputKey==`StandardQueueUrl`].OutputValue' \
     --output text) \
-  --profile your-profile-name
+
 
 aws sqs purge-queue \
   --queue-url $(aws cloudformation describe-stacks \
     --stack-name MessagingStack \
     --query 'Stacks[0].Outputs[?OutputKey==`FifoQueueUrl`].OutputValue' \
     --output text) \
-  --profile your-profile-name
+
 
 # Destroy the CDK stack
-cdk destroy MessagingStack --profile your-profile-name
+cdk destroy MessagingStack
 ```
 
 This will remove:

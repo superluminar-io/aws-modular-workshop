@@ -6,7 +6,7 @@ Amazon Virtual Private Cloud (VPC) is a service that lets you launch AWS resourc
 
 [DIAGRAM: VPC Overview]
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_160_vpc_complex_network_topology.drawio.svg -->
+<!-- Removed placeholder: diagram defined below -->
 
 ```mermaid
 flowchart TB
@@ -165,7 +165,7 @@ flowchart TB
     class INTERNET,CORPORATE external
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 Instructions for draw.io:
 

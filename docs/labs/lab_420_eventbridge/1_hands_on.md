@@ -2,6 +2,12 @@
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
 - AWS CDK and AWS CLI configured
 - Node.js installed
 - Completed SNS and SQS lab
@@ -80,7 +86,7 @@ Instructions for draw.io:
 
 ## EventBridge Implementation
 
-<!-- 🔄 TEMPORARY MERMAID DIAGRAM - REPLACE WITH MANUAL DRAW.IO: lab_420_eventbridge_event_bus_implementation.drawio.svg -->
+<!-- End of diagram overview -->
 
 ```mermaid
 flowchart TB
@@ -178,7 +184,7 @@ flowchart TB
     class DYNAMO,S3,KINESIS storage
 ```
 
-<!-- 🔄 END TEMPORARY DIAGRAM -->
+<!-- End diagram section -->
 
 ## Lab Steps
 
@@ -391,7 +397,7 @@ async function processTransaction(event: EventBridgeEvent<string, any>): Promise
 1. Deploy the stack:
 
 ```bash
-cdk deploy EventBridgeStack --profile your-profile-name
+cdk deploy EventBridgeStack
 ```
 
 2. Create a test script `scripts/send-events.ts`:
@@ -451,7 +457,7 @@ export EVENT_BUS_NAME=$(aws cloudformation describe-stacks \
   --stack-name EventBridgeStack \
   --query 'Stacks[0].Outputs[?OutputKey==`EventBusName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 ts-node scripts/send-events.ts
 ```
@@ -469,7 +475,7 @@ aws sns subscribe \
     --output text) \
   --protocol email \
   --notification-endpoint YOUR_EMAIL_ADDRESS \
-  --profile your-profile-name
+
 ```
 
 #### Test Event Processing
@@ -480,7 +486,7 @@ export EVENT_BUS_NAME=$(aws cloudformation describe-stacks \
   --stack-name EventBridgeStack \
   --query 'Stacks[0].Outputs[?OutputKey==`EventBusName`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 # Test normal event processing
 ts-node scripts/send-events.ts
@@ -493,12 +499,12 @@ ts-node scripts/send-events.ts
 aws events put-events \
   --entries Source=workshop.events,DetailType=invalid-test,Detail='{"test":"error"}' \
   --event-bus-name $EVENT_BUS_NAME \
-  --profile your-profile-name
+
 
 # Check if alarm triggers (may take a few minutes)
 aws cloudwatch describe-alarms \
   --alarm-names workshop-eventbridge-failed-events \
-  --profile your-profile-name
+
 ```
 
 #### Monitor Event Flow
@@ -507,7 +513,7 @@ aws cloudwatch describe-alarms \
 # Check Lambda function logs
 aws logs tail /aws/lambda/EventBridgeStack-ProcessorFunction \
   --follow \
-  --profile your-profile-name
+
 
 # Check DLQ for failed events
 aws sqs receive-message \
@@ -515,7 +521,7 @@ aws sqs receive-message \
     --stack-name EventBridgeStack \
     --query 'Stacks[0].Outputs[?OutputKey==`DlqUrl`].OutputValue' \
     --output text) \
-  --profile your-profile-name
+
 ```
 
 ## Validation Steps
@@ -578,5 +584,5 @@ aws sqs receive-message \
 Remove the stack:
 
 ```bash
-cdk destroy EventBridgeStack --profile your-profile-name
+cdk destroy EventBridgeStack
 ```

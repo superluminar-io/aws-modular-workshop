@@ -33,7 +33,7 @@
 
 - [CDK Step Functions Module](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_stepfunctions-readme.html)
 - [CDK Step Functions Tasks](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_stepfunctions_tasks-readme.html)
-- [Step Functions Patterns](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_stepfunctions_patterns-readme.html)
+- [Step Functions Patterns](https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html)
 
 ## Monitoring and Debugging
 
@@ -70,7 +70,7 @@
 ## Community Resources
 
 - [AWS Compute Blog - Step Functions](https://aws.amazon.com/blogs/compute/category/application-services/aws-step-functions/)
-- [AWS re:Post - Step Functions](https://repost.aws/tags/TAZyQQWXc6YXxrKxUEJCDx5Q/amazon-step-functions)
+- [AWS re:Post - Step Functions](https://repost.aws/)
 - [GitHub - AWS Step Functions Examples](https://github.com/aws-samples/aws-stepfunctions-examples)
 
 ## Service Limits and Quotas

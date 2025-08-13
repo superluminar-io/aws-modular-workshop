@@ -75,8 +75,8 @@
 
 ### Example Implementations
 
-- [Messaging Patterns](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/sns-sqs-messages)
-- [Event Processing](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/eventbridge-sns-sqs)
+- [Messaging Patterns](https://github.com/aws-samples/aws-cdk-examples)
+- [Event Processing](https://github.com/aws-samples/aws-cdk-examples)
 - [Fanout Pattern](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/implement-serverless-fanout-pattern-with-amazon-sns-and-amazon-sqs-using-aws-cdk.html)
 - [Dead Letter Queues](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/handle-failed-messages-in-a-dead-letter-queue-with-amazon-sqs-and-aws-lambda.html)
 
@@ -94,36 +94,36 @@
 - [AWS SAM Local](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-using-invoke.html)
 - [LocalStack](https://github.com/localstack/localstack)
 - [Queue Management Tools](https://aws.amazon.com/tools/)
-- [Message Generators](https://github.com/aws-samples/amazon-sqs-message-generator)
+- [Message Generators](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html)
 
 ## Best Practices and Patterns
 
 ### Architecture Patterns
 
 - [Event-Driven Architecture](https://aws.amazon.com/event-driven-architecture/)
-- [Messaging Patterns](https://aws.amazon.com/blogs/compute/messaging-patterns-for-event-driven-architectures/)
-- [Integration Patterns](https://aws.amazon.com/blogs/compute/understanding-asynchronous-messaging-for-microservices/)
-- [Scalability Patterns](https://aws.amazon.com/blogs/compute/building-scalable-applications-with-amazon-sqs-and-amazon-sns/)
+- [Messaging Patterns](https://aws.amazon.com/blogs/compute/
+- [Integration Patterns](https://aws.amazon.com/blogs/compute/
+- [Scalability Patterns](https://aws.amazon.com/blogs/compute/
 
 ### Performance Optimization
 
 - [SQS Performance](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-best-practices.html)
 - [SNS Performance](https://docs.aws.amazon.com/sns/latest/dg/sns-best-practices.html)
-- [Cost Optimization](https://aws.amazon.com/blogs/architecture/cost-optimization-patterns-for-amazon-sns-and-amazon-sqs/)
-- [Scaling Considerations](https://aws.amazon.com/blogs/compute/understanding-how-amazon-sqs-scales/)
+- [Cost Optimization](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html)
+- [Scaling Considerations](https://aws.amazon.com/blogs/compute/
 
 ## Community Resources
 
 ### Learning Resources
 
 - [AWS Messaging Workshop](https://catalog.workshops.aws/building-messaging-architectures)
-- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/)
+- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/
 - [AWS Architecture Blog](https://aws.amazon.com/blogs/architecture/)
 - [AWS re:Invent Sessions](https://aws.amazon.com/events/reinvent/)
 
 ### Support and Forums
 
-- [AWS re:Post SNS](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-simple-notification-service-amazon-sns)
-- [AWS re:Post SQS](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-simple-queue-service-sqs)
+- [AWS re:Post SNS](https://repost.aws/)
+- [AWS re:Post SQS](https://repost.aws/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/amazon-sqs)
 - [GitHub Issues](https://github.com/aws/aws-cdk/issues)

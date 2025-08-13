@@ -70,14 +70,14 @@
 
 - [Aurora Module in CDK](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds-readme.html)
 - [ServerlessCluster Construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds.ServerlessCluster.html)
-- [CDK Aurora Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/rds)
+- [CDK Aurora Examples](https://github.com/aws-samples/aws-cdk-examples)
 - [CDK Workshop](https://cdkworkshop.com/)
 
 ## Tools and Utilities
 
 ### Development Tools
 
-- [MySQL Workbench](https://www.mysql.com/products/workbench/)
+- [MySQL Workbench](https://dbeaver.io/download/)
 - [AWS CLI RDS Commands](https://docs.aws.amazon.com/cli/latest/reference/rds/index.html)
 - [Data API CLI](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html#data-api.calling.cli)
 - [Query Editor](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/query-editor.html)
@@ -95,11 +95,11 @@
 
 - [AWS Database Blog - Aurora](https://aws.amazon.com/blogs/database/category/database/amazon-aurora/)
 - [AWS re:Invent Aurora Sessions](https://aws.amazon.com/rds/aurora/resources/)
-- [AWS Online Tech Talks](https://aws.amazon.com/events/online-tech-talks/database/)
+- [AWS Online Tech Talks](https://aws.amazon.com/blogs/database/)
 - [GitHub AWS Samples](https://github.com/aws-samples?q=aurora&type=all&language=&sort=)
 
 ### Support and Discussion
 
-- [AWS re:Post Aurora Forum](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-aurora)
+- [AWS re:Post Aurora Forum](https://repost.aws/)
 - [AWS Support Knowledge Center](https://aws.amazon.com/premiumsupport/knowledge-center/#Amazon_Aurora)
 - [Aurora Service Health Dashboard](https://health.aws.amazon.com/health/status)

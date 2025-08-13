@@ -115,6 +115,6 @@
 ## Community Resources
 
 - [AWS Observability Blog](https://aws.amazon.com/blogs/mt/)
-- [AWS re:Post - CloudWatch](https://repost.aws/tags/TAmo05QHWFYw7VhKYGNRbrdg/amazon-cloud-watch)
+- [AWS re:Post - CloudWatch](https://repost.aws/)
 - [GitHub Examples](https://github.com/aws-samples?q=cloudwatch&type=all&language=&sort=)
 - [AWS Solutions Library](https://aws.amazon.com/solutions/)

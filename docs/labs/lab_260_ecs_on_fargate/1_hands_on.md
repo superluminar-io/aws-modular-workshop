@@ -37,6 +37,12 @@ flowchart TD
 
 ## Prerequisites
 
+> Tip: Set an AWS profile for this shell to avoid repeating profile flags
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+
 This lab builds on the ECR and Docker basics lab. Download the completed ECR lab state to begin:
 
 - Completed the ECR and Docker Basics lab
@@ -262,7 +268,7 @@ LOAD_BALANCER_URL=$(aws cloudformation describe-stacks \
   --stack-name EcsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerURL`].OutputValue' \
   --output text \
-  --profile your-profile-name)
+ )
 
 echo "Application URL: $LOAD_BALANCER_URL"
 ```
@@ -340,7 +346,7 @@ aws cloudformation describe-stacks \
   --stack-name EcsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerDNS`].OutputValue' \
   --output text \
-  --profile your-profile-name
+ 
 ```
 
 Test scaling:
@@ -406,22 +412,22 @@ aws ecs update-service \
   --cluster your-cluster-name \
   --service your-service-name \
   --desired-count 0 \
-  --profile your-profile-name
+ 
 
 # Wait for tasks to stop
 aws ecs wait services-stable \
   --cluster your-cluster-name \
   --services your-service-name \
-  --profile your-profile-name
+ 
 
 # Delete the service
 aws ecs delete-service \
   --cluster your-cluster-name \
   --service your-service-name \
-  --profile your-profile-name
+ 
 
 # Destroy the CDK stack
-cdk destroy --profile your-profile-name
+cdk destroy
 ```
 
 Note: Ensure all tasks are stopped before deleting the service to avoid lingering resources.

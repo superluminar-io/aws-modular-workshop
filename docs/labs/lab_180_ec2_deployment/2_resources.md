@@ -33,8 +33,8 @@
 ## AWS CDK and EC2
 
 - [CDK EC2 Module](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ec2-readme.html) - EC2 construct library
-- [CDK EC2 Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ec2-instance) - Sample configurations
-- [CDK Instance Patterns](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ec2_patterns-readme.html) - Common patterns
+- [CDK EC2 Examples](https://github.com/aws-samples/aws-cdk-examples) - Sample configurations
+- [CDK Instance Patterns](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html) - Common patterns
 
 ## Cost Optimization
 
@@ -70,5 +70,5 @@
 ## Community Resources
 
 - [AWS Compute Blog](https://aws.amazon.com/blogs/compute/) - Latest updates and tips
-- [EC2 Forums](https://repost.aws/tags/TAL4CPfE2jUyYzqR/amazon-elastic-compute-cloud-ec2) - Community discussions
+- [EC2 Forums](https://repost.aws/) - Community discussions
 - [GitHub AWS Samples](https://github.com/aws-samples) - Code examples

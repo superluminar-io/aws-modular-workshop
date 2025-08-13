@@ -76,7 +76,7 @@
 
 - [RDS CDK Module](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds-readme.html)
 - [RDS Construct Library](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds.DatabaseInstance.html)
-- [CDK RDS Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/rds)
+- [CDK RDS Examples](https://github.com/aws-samples/aws-cdk-examples)
 
 ## Tools and Utilities
 
@@ -88,7 +88,7 @@
 
 ### Database Tools
 
-- [MySQL Workbench](https://www.mysql.com/products/workbench/)
+- [MySQL Workbench](https://dbeaver.io/download/)
 - [pgAdmin](https://www.pgadmin.org/)
 - [DBeaver](https://dbeaver.io/)
 
@@ -102,6 +102,6 @@
 
 ### Support Resources
 
-- [AWS re:Post RDS Forum](https://repost.aws/tags/TAF8-XUqojTsadH5jSz3IfFg/amazon-relational-database-service-amazon-rds)
+- [AWS re:Post RDS Forum](https://repost.aws/)
 - [AWS Support Center](https://support.console.aws.amazon.com/)
 - [RDS Service Health Dashboard](https://health.aws.amazon.com/health/status)
