@@ -21,6 +21,11 @@ flowchart LR
 
 ## Prerequisites
 
+> Tip: Set the workshop region (Frankfurt)
+```bash
+export AWS_REGION=eu-central-1
+```
+
 Before starting this lab, ensure you have:
 
 - An AWS account with appropriate permissions

@@ -57,6 +57,11 @@ Description: A detailed diagram showing the Systems Manager resources we'll crea
 
 ## Prerequisites
 
+> Tip: Set the workshop region (Frankfurt)
+```bash
+export AWS_REGION=eu-central-1
+```
+
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
 ```bash
 export AWS_PROFILE=your-profile-name

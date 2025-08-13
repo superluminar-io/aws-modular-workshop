@@ -24,6 +24,11 @@ Instructions for draw.io:
 
 ## Prerequisites
 
+> Tip: Set the workshop region (Frankfurt)
+```bash
+export AWS_REGION=eu-central-1
+```
+
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
 
 ```bash

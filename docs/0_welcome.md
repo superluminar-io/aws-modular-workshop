@@ -67,6 +67,10 @@ This is a self-paced workshop. Each lab typically takes 45-90 minutes to complet
 
    - [CUSTOMIZE: Add specific tooling requirements]
    - Install AWS CLI and configure credentials
+   - Set the workshop region (Frankfurt):
+     ```bash
+     export AWS_REGION=eu-central-1
+     ```
    - Install Node.js and npm (for CDK)
    - Install AWS CDK: `npm install -g aws-cdk`
 
