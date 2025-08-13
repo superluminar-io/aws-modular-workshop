@@ -6,7 +6,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "docsify serve ./docs"
+    "start": "docsify serve ./docs",
+    "lint:links": "find docs -name '*.md' -type f -print0 | xargs -0 -n1 -P6 markdown-link-check -q",
+    "scaffold:lab": "node -e \"const fs=require('fs'),p=process.argv[1];if(!p){console.error('Usage: npm run scaffold:lab lab_XXX_topic');process.exit(1)};fs.mkdirSync('docs/labs/'+p,{recursive:true});['0_intro.md','1_hands_on.md','2_resources.md'].forEach(f=>fs.writeFileSync('docs/labs/'+p+'/'+f,'# '+p+'\\n'));console.log('Created docs/labs/'+p);\""
   },
   "repository": {
     "type": "git",
@@ -27,7 +29,8 @@
   },
   "homepage": "https://github.com/superluminar-io/aws_fundamentals_workshop_labs#readme",
   "devDependencies": {
-    "docsify-cli": "^4.4.4"
+    "docsify-cli": "^4.4.4",
+    "markdown-link-check": "^3.12.2"
   },
   "dependencies": {
     "@aws-sdk/client-translate": "^3.490.0"
