@@ -18,7 +18,7 @@ flowchart TD
         Cluster[Aurora Cluster<br/>Data API Enabled]
         Writer[Writer Instance]
         Reader[Reader Instance]
-        Proxy[Aurora Proxy]
+    Proxy[RDS Proxy]
     end
 
     subgraph Features["Serverless Features"]
@@ -115,20 +115,8 @@ This lab implements a production-ready Aurora Serverless setup with:
 In the hands-on section, you'll:
 
 - Create an Aurora Serverless cluster with monitoring
-- Configure Lambda functions with connection pooling
+- Configure Lambda functions with efficient Data API access
 - Set up CloudWatch dashboards and alarms
-- Implement Data API operations
-- Test auto-scaling behavior
-- Monitor performance metrics
-- Configure alert notifications
-
-## What's Next
-
-In the hands-on section, you'll:
-
-- Create an Aurora Serverless v2 cluster
-- Configure auto-scaling parameters
-- Implement Data API connections
-- Set up monitoring and alerts
-- Test serverless scaling behavior
-- Explore cost optimization features
+- Implement basic Data API operations
+- Test automatic scaling behavior
+- Monitor performance metrics and configure alert notifications

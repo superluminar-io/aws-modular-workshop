@@ -102,12 +102,12 @@
 
 - [Event-Driven Design](https://aws.amazon.com/event-driven-architecture/)
 - [Serverless Patterns](https://serverlessland.com/patterns)
-- [Integration Patterns](https://aws.amazon.com/blogs/compute/
-- [Microservices Patterns](https://aws.amazon.com/blogs/compute/
+- [Integration Patterns](https://aws.amazon.com/blogs/compute/)
+- [Microservices Patterns](https://aws.amazon.com/blogs/compute/)
 
 ### Performance Optimization
 
-- [Event Bus Design](https://aws.amazon.com/blogs/compute/
+- [Event Bus Design](https://aws.amazon.com/blogs/compute/)
 - [Rule Optimization](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html)
 - [Target Selection](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html)
 - [Cost Optimization](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-best-practices.html)
@@ -116,7 +116,7 @@
 
 ### Learning Resources
 
-- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/
+- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/)
 - [EventBridge Workshop](https://catalog.workshops.aws/eventbridge/en-US)
 - [AWS Online Tech Talks](https://aws.amazon.com/events/online-tech-talks/)
 - [AWS EventBridge Video Content](https://www.youtube.com/c/AmazonWebServices/search?query=eventbridge)

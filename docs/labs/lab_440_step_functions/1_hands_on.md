@@ -288,6 +288,11 @@ export class StepFunctionsStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'TopicArn', {
       value: notificationTopic.topicArn,
     });
+
+    // Helpful function name outputs for log tailing
+    new cdk.CfnOutput(this, 'ValidateOrderName', { value: validateOrderFunction.functionName });
+    new cdk.CfnOutput(this, 'ProcessPaymentName', { value: processPaymentFunction.functionName });
+    new cdk.CfnOutput(this, 'UpdateInventoryName', { value: updateInventoryFunction.functionName });
   }
 }
 ```
@@ -420,6 +425,17 @@ startExecution();
 
 3. Run test execution:
 
+```bash
+# Export the State Machine ARN from stack outputs
+export STATE_MACHINE_ARN=$(aws cloudformation describe-stacks \
+  --stack-name StepFunctionsStack \
+  --query 'Stacks[0].Outputs[?OutputKey==`StateMachineArn`].OutputValue' \
+  --output text)
+
+# Start a test execution via script
+ts-node scripts/start-execution.ts
+```
+
 [DIAGRAM: Step Functions Testing Flow]
 
 ```mermaid
@@ -459,16 +475,13 @@ flowchart TD
 2. Check CloudWatch logs:
 
 ```bash
-aws logs get-log-events \
-  --log-group-name /aws/lambda/ValidateOrder \
-  --log-stream-name $(aws logs describe-log-streams \
-    --log-group-name /aws/lambda/ValidateOrder \
-    --order-by LastEventTime \
-    --descending \
-    --limit 1 \
-    --query 'logStreams[0].logStreamName' \
-    --output text) \
+# Fetch function names from stack outputs and tail recent logs
+export VALIDATE_FN=$(aws cloudformation describe-stacks \
+  --stack-name StepFunctionsStack \
+  --query "Stacks[0].Outputs[?OutputKey=='ValidateOrderName'].OutputValue" \
+  --output text)
 
+aws logs tail "/aws/lambda/$VALIDATE_FN" --since 10m --follow
 ```
 
 ## Validation Steps

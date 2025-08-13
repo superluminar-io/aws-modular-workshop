@@ -3,10 +3,10 @@
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 - AWS CDK and AWS CLI configured
 - Node.js installed
@@ -27,6 +27,7 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as sources from 'aws-cdk-lib/aws-lambda-event-sources';
 import { Construct } from 'constructs';
 
 export class LambdaStack extends cdk.Stack {
@@ -93,12 +94,11 @@ export class LambdaStack extends cdk.Stack {
       new s3n.LambdaDestination(s3Handler)
     );
 
-    streamHandler.addEventSourceMapping('StreamHandlerMapping', {
-      eventSourceArn: table.tableStreamArn!,
+    streamHandler.addEventSource(new sources.DynamoEventSource(table, {
       startingPosition: lambda.StartingPosition.LATEST,
       batchSize: 1,
       retryAttempts: 3,
-    });
+    }));
 
     // Add EventBridge schedule
     new events.Rule(this, 'ScheduleRule', {
@@ -118,6 +118,10 @@ export class LambdaStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'DLQUrl', {
       value: dlq.queueUrl,
     });
+
+    new cdk.CfnOutput(this, 'S3HandlerName', { value: s3Handler.functionName });
+    new cdk.CfnOutput(this, 'StreamHandlerName', { value: streamHandler.functionName });
+    new cdk.CfnOutput(this, 'ScheduledHandlerName', { value: scheduledHandler.functionName });
   }
 }
 ```
@@ -221,39 +225,30 @@ echo "Bucket name: $BUCKET_NAME"
 ```bash
 # Upload file to S3
 aws s3 cp test.txt s3://$BUCKET_NAME/ \
- 
+
 ```
 
 3. Monitor DynamoDB Stream:
 
 ```bash
-# Check CloudWatch logs
-aws logs get-log-events \
-  --log-group-name /aws/lambda/StreamHandler \
-  --log-stream-name $(aws logs describe-log-streams \
-    --log-group-name /aws/lambda/StreamHandler \
-    --order-by LastEventTime \
-    --descending \
-    --limit 1 \
-    --query 'logStreams[0].logStreamName' \
-    --output text) \
- 
+# Fetch function name from stack outputs and stream recent logs
+export STREAM_FN=$(aws cloudformation describe-stacks \
+  --stack-name LambdaStack \
+  --query "Stacks[0].Outputs[?OutputKey=='StreamHandlerName'].OutputValue" \
+  --output text)
+
+aws logs tail "/aws/lambda/$STREAM_FN" --since 10m --follow
 ```
 
 4. Check scheduled executions:
 
 ```bash
-aws logs get-log-events \
-  --log-group-name /aws/lambda/ScheduledHandler \
-  --log-stream-name $(aws logs describe-log-streams \
-    --log-group-name /aws/lambda/ScheduledHandler \
-    --order-by LastEventTime \
-    --descending \
-    --limit 1 \
-    --query 'logStreams[0].logStreamName' \
-    --output text \
-   ) \
- 
+export SCHEDULED_FN=$(aws cloudformation describe-stacks \
+  --stack-name LambdaStack \
+  --query "Stacks[0].Outputs[?OutputKey=='ScheduledHandlerName'].OutputValue" \
+  --output text)
+
+aws logs tail "/aws/lambda/$SCHEDULED_FN" --since 10m --follow
 ```
 
 ## Validation Steps
@@ -312,7 +307,7 @@ aws dynamodb scan --table-name $TABLE_NAME | \
     aws dynamodb delete-item \
       --table-name $TABLE_NAME \
       --key "{\"id\":{\"S\":\"$id\"}}" \
-     
+
   done
 
 # Destroy the CDK stack

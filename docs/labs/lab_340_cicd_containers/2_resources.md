@@ -87,7 +87,7 @@
 - [Docker Build Best Practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 - [ECS Task Sizing](https://docs.aws.amazon.com/AmazonECS/latest/bestpracticesguide/capacity-tasksize.html)
 - [Image Optimization](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/welcome.html)
-- [Cost Optimization](https://aws.amazon.com/blogs/containers/
+- [Cost Optimization](https://aws.amazon.com/blogs/containers/)
 
 ### Deployment Strategies
 
@@ -100,7 +100,7 @@
 
 ### Learning Resources
 
-- [AWS Containers Blog](https://aws.amazon.com/blogs/containers/
+- [AWS Containers Blog](https://aws.amazon.com/blogs/containers/)
 - [ECS Workshop](https://ecsworkshop.com/)
 - [Container Security Learning](https://aws.amazon.com/security/security-learning/)
 - [AWS Skill Builder - Containers](https://skillbuilder.aws/learning-plans/containers)

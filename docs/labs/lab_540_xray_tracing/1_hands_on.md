@@ -3,10 +3,10 @@
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 Before starting this lab, ensure you have:
 
@@ -82,6 +82,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as xray from 'aws-cdk-lib/aws-xray';
 import { Construct } from 'constructs';
 
 export class XRayStack extends cdk.Stack {
@@ -129,7 +130,7 @@ export class XRayStack extends cdk.Stack {
     singleItem.addMethod('DELETE', new apigateway.LambdaIntegration(itemsFunction));
 
     // Create custom sampling rule
-    new cdk.aws_xray.CfnSamplingRule(this, 'CustomSamplingRule', {
+    new xray.CfnSamplingRule(this, 'CustomSamplingRule', {
       ruleName: 'ItemsApiRule',
       priority: 1000,
       fixedRate: 0.5,
@@ -311,19 +312,6 @@ async function testApi() {
     console.error('Error testing API:', error);
   }
 }
-
-[DIAGRAM: X-Ray Testing]
-Description: A detailed flowchart showing how to test the X-Ray implementation. The diagram should:
-
-1. Show the testing process:
-   - API requests
-   - Trace collection
-   - Segment analysis
-   - Error tracking
-2. Include different request types
-3. Show the tracing process
-4. Illustrate the testing patterns
-   Use AWS's standard color scheme and include clear labels for each step.
 
 testApi();
 ```

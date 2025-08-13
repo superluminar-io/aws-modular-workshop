@@ -3,10 +3,10 @@
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 Before starting this lab, ensure you have:
 
@@ -188,7 +188,7 @@ export class AwsBackupStack extends cdk.Stack {
         ec2.InstanceClass.T3,
         ec2.InstanceSize.MICRO
       ),
-      machineImage: new ec2.AmazonLinuxImage(),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023(),
       vpcSubnets: {
         subnetType: ec2.SubnetType.PUBLIC,
       },
@@ -405,12 +405,12 @@ ts-node scripts/monitor-backups.ts
 # Check backup plan
 aws backup get-backup-plan \
   --backup-plan-id $BACKUP_PLAN_ID \
- 
+
 
 # List recovery points
 aws backup list-recovery-points \
   --backup-vault-name $BACKUP_VAULT_NAME \
- 
+
 
 # Test restore (list available points)
 ts-node scripts/test-restore.ts
@@ -470,14 +470,14 @@ aws backup list-backup-jobs \
   --by-state RUNNING \
   --query 'BackupJobs[].BackupJobId' \
   --output table \
- 
+
 
 # Delete recovery points (optional - they have retention policies)
 aws backup list-recovery-points \
   --backup-vault-name $BACKUP_VAULT_NAME \
   --query 'RecoveryPoints[].RecoveryPointArn' \
   --output table \
- 
+
 
 # Destroy the CDK stack
 cdk destroy AwsBackupStack

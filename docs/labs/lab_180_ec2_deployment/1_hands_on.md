@@ -3,10 +3,10 @@
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 Before starting this lab, ensure you have:
 
@@ -29,7 +29,7 @@ const instance = new ec2.Instance(this, "WebServer", {
     ec2.InstanceClass.T3,
     ec2.InstanceSize.MICRO
   ),
-  machineImage: ec2.MachineImage.latestAmazonLinux2(),
+  machineImage: ec2.MachineImage.latestAmazonLinux2023(),
   // ... rest of EC2 configuration
 })
 ```
@@ -125,7 +125,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
         subnetType: SubnetType.PUBLIC,
       },
       instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
-      machineImage: MachineImage.latestAmazonLinux2(),
+      machineImage: MachineImage.latestAmazonLinux2023(),
       securityGroup: webServerSG,
       role: role,
       userData: userData,

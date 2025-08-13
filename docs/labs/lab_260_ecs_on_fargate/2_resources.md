@@ -102,14 +102,13 @@
 
 ### Blogs and Articles
 
-- [AWS Containers Blog](https://aws.amazon.com/blogs/containers/
-- [ECS Workshop](https://ecsworkshop.com/)
-- [AWS GitHub Repositories](https://github.com/aws-samples?q=ecs&type=all&language=&sort=)
-- [AWS re:Post ECS Forum](https://repost.aws/)
+- [AWS Containers Blog](https://aws.amazon.com/blogs/containers/) - Official containers blog
+- [ECS Workshop](https://ecsworkshop.com/) - Hands-on ECS workshop
+- [AWS GitHub Repositories](https://github.com/aws-samples?q=ecs&type=all&language=&sort=) - Sample repos related to ECS
+- [AWS re:Post ECS Forum](https://repost.aws/) - Community discussions
 
 ### Additional Learning
 
-- [ECS Deep Dive Series](https://aws.amazon.com/blogs/containers/
-- [AWS Skill Builder - ECS Courses](https://skillbuilder.aws/learning-plans/containers)
-- [AWS Solutions Library - Containers](https://aws.amazon.com/solutions/?solutions-all.sort-by=item.additionalFields.sortDate&solutions-all.sort-order=desc&awsf.AWS-Product%20Category=tech-category%23containers)
-- [Container Security Best Practices](https://aws.amazon.com/blogs/containers/
+- [AWS Skill Builder - ECS Courses](https://skillbuilder.aws/learning-plans/containers) - Curated learning paths
+- [AWS Solutions Library - Containers](https://aws.amazon.com/solutions/?solutions-all.sort-by=item.additionalFields.sortDate&solutions-all.sort-order=desc&awsf.AWS-Product%20Category=tech-category%23containers) - Reference architectures
+- [Container Security Best Practices](https://aws.amazon.com/blogs/containers/) - Security articles (search within)

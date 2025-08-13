@@ -168,3 +168,36 @@ Each lab includes verification steps that confirm both technical implementation 
 - **Integration Points**: How this lab connects to broader architectural patterns
 - **Next Steps**: Suggested areas for deeper exploration
 - **Real-World Applications**: How to apply these concepts in actual projects
+
+## Technical Standards for Labs
+
+- Infrastructure examples use AWS CDK v2 (`aws-cdk-lib`, `constructs` v10+), TypeScript
+- Lambda runtime default: Node.js 22 (`lambda.Runtime.NODEJS_22_X`) unless a lab requires otherwise
+- Application code samples use AWS SDK for JavaScript v3 clients
+- Diagrams: prefer Mermaid blocks in markdown; external diagrams live under `docs/media/`
+- Resources and links: prioritize current, high-signal official docs that match the description text
+
+## Contributing and Upstreaming
+
+This workshop is intended to be forked and extended. New labs and improvements are welcome upstream.
+
+High-level flow:
+
+1. Fork the repo; create a branch (e.g., `lab-5XX-topic`)
+2. Create a new lab folder: `docs/labs/lab_XXX_topic/`
+   - Add `0_intro.md`, `1_hands_on.md`, `2_resources.md`
+   - Use the 20-point numbering gaps (e.g., 100, 120, 140, …)
+3. Update navigation in `docs/_sidebar.md` (use `.md` suffixes)
+4. Validate:
+   - Include validation and cleanup steps in the hands-on file
+   - Run link checks for all three markdown files
+   - Ensure examples align with the Technical Standards above
+5. Open a Pull Request to the parent with screenshots or notes; follow the PR checklist
+
+See `CONTRIBUTING.md` for the full contribution guide (structure, tone, validation checklist, and review criteria).
+
+## Adopt and Personalize
+
+- Fork and rebrand for your audience while keeping the lab structure intact
+- Reorder labs or select a subset to match your curriculum
+- When upstreaming improvements, keep numbering and formatting consistent to minimize review friction

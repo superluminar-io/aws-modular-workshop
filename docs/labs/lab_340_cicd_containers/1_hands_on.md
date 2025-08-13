@@ -37,10 +37,10 @@ flowchart TD
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 - Completed ECR-Docker Basics lab
 - Completed ECS on Fargate lab
@@ -109,7 +109,7 @@ export class ContainerPipelineStack extends cdk.Stack {
               'aws ecr describe-image-scan-findings --repository-name workshop-app --image-id imageTag=$IMAGE_TAG || true',
               'docker push $REPOSITORY_URI:$IMAGE_TAG',
               'docker push $REPOSITORY_URI:latest',
-              'echo "::set-output name=image::$REPOSITORY_URI:$IMAGE_TAG"',
+              'printf "[{\"name\":\"container\",\"imageUri\":\"%s\"}]" "$REPOSITORY_URI:$IMAGE_TAG" > imageDefinitions.json',
             ],
           },
         },
@@ -117,6 +117,7 @@ export class ContainerPipelineStack extends cdk.Stack {
     });
 
     repository.grantPullPush(buildProject);
+    repository.grant(buildProject, 'ecr:GetAuthorizationToken');
 
     // Create Pipeline
     const pipeline = new codepipeline.Pipeline(this, 'Pipeline', {
@@ -276,7 +277,7 @@ describe('App', () => {
 aws secretsmanager create-secret \
   --name github-token \
   --secret-string YOUR_GITHUB_TOKEN \
- 
+
 ```
 
 2. Update repository settings:
@@ -308,7 +309,7 @@ git push origin main
 ```bash
 aws codepipeline get-pipeline-state \
   --name ContainerPipeline \
- 
+
 ```
 
 2. View container logs:
@@ -317,7 +318,7 @@ aws codepipeline get-pipeline-state \
 aws logs get-log-events \
   --log-group-name /aws/codebuild/BuildProject \
   --log-stream-name latest \
- 
+
 ```
 
 ## Validation Steps
@@ -407,7 +408,6 @@ flowchart TD
     style DEBUG fill:#dd344c,color:#fff
     style TARGET fill:#ff9900,color:#fff
 ```
-
 
 ## Final Validation
 

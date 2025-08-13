@@ -101,9 +101,9 @@
 ### Architecture Patterns
 
 - [Event-Driven Architecture](https://aws.amazon.com/event-driven-architecture/)
-- [Messaging Patterns](https://aws.amazon.com/blogs/compute/
-- [Integration Patterns](https://aws.amazon.com/blogs/compute/
-- [Scalability Patterns](https://aws.amazon.com/blogs/compute/
+- [Messaging Patterns](https://aws.amazon.com/blogs/compute/)
+- [Integration Patterns](https://aws.amazon.com/blogs/compute/)
+- [Scalability Patterns](https://aws.amazon.com/blogs/compute/)
 
 ### Performance Optimization
 
@@ -117,7 +117,7 @@
 ### Learning Resources
 
 - [AWS Messaging Workshop](https://catalog.workshops.aws/building-messaging-architectures)
-- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/
+- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/)
 - [AWS Architecture Blog](https://aws.amazon.com/blogs/architecture/)
 - [AWS re:Invent Sessions](https://aws.amazon.com/events/reinvent/)
 

@@ -25,10 +25,10 @@ Instructions for draw.io:
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 - AWS CDK and AWS CLI configured
 - Postman or similar API testing tool
@@ -101,19 +101,13 @@ export class ApiStack extends cdk.Stack {
     // Create API resources and methods
     const items = api.root.addResource('items');
 
-    items.addMethod('GET', new apigateway.LambdaIntegration(getItemsFunction, {
-      proxy: true,
-      requestTemplates: {
-        'application/json': '{ "statusCode": 200 }',
-      },
-    }));
+    items.addMethod('GET', new apigateway.LambdaIntegration(getItemsFunction), {
+      apiKeyRequired: true,
+    });
 
-    items.addMethod('POST', new apigateway.LambdaIntegration(createItemFunction, {
-      proxy: true,
-      requestTemplates: {
-        'application/json': '{ "statusCode": 200 }',
-      },
-    }));
+    items.addMethod('POST', new apigateway.LambdaIntegration(createItemFunction), {
+      apiKeyRequired: true,
+    });
 
     // Add API key requirement
     const plan = api.addUsagePlan('UsagePlan', {
@@ -135,9 +129,7 @@ export class ApiStack extends cdk.Stack {
       value: api.url,
     });
 
-    new cdk.CfnOutput(this, 'ApiKey', {
-      value: key.keyId,
-    });
+    new cdk.CfnOutput(this, 'ApiKeyId', { value: key.keyId });
   }
 }
 ```
@@ -252,7 +244,7 @@ cdk deploy ApiStack
 export API_KEY=$(aws apigateway get-api-key \
   --api-key $(aws cloudformation describe-stacks \
     --stack-name ApiStack \
-    --query 'Stacks[0].Outputs[?OutputKey==`ApiKey`].OutputValue' \
+    --query 'Stacks[0].Outputs[?OutputKey==`ApiKeyId`].OutputValue' \
     --output text \
    ) \
   --include-value \

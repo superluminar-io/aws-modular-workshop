@@ -108,15 +108,15 @@
 ### Performance Optimization
 
 - [Performance Best Practices](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
-- [Cold Start Optimization](https://aws.amazon.com/blogs/compute/
-- [Cost Optimization](https://aws.amazon.com/blogs/compute/
+- [Cold Start Optimization](https://aws.amazon.com/blogs/compute/)
+- [Cost Optimization](https://aws.amazon.com/blogs/compute/)
 - [Memory Configuration](https://docs.aws.amazon.com/lambda/latest/operatorguide/computing-power.html)
 
 ## Community Resources
 
 ### Learning Resources
 
-- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/
+- [AWS Compute Blog](https://aws.amazon.com/blogs/compute/)
 - [Serverless Land](https://serverlessland.com/)
 - [AWS re:Invent Sessions](https://aws.amazon.com/events/reinvent/)
 - [AWS Online Tech Talks](https://aws.amazon.com/events/online-tech-talks/on-demand/)

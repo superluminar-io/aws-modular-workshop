@@ -90,7 +90,7 @@ AMIs provide the information required to launch an instance:
 
 1. **AWS-Provided AMIs**
 
-   - Amazon Linux 2
+   - Amazon Linux 2023
    - Ubuntu
    - Windows Server
 

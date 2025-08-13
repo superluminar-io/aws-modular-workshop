@@ -146,7 +146,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
         subnetType: SubnetType.PUBLIC,
       },
       instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
-      machineImage: MachineImage.latestAmazonLinux2(),
+      machineImage: MachineImage.latestAmazonLinux2023(),
       securityGroup: publicSG,
     })
 
@@ -157,7 +157,7 @@ export class AwsFundamentalsWorkshopLabsStack extends Stack {
         subnetType: SubnetType.PRIVATE_WITH_EGRESS,
       },
       instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
-      machineImage: MachineImage.latestAmazonLinux2(),
+      machineImage: MachineImage.latestAmazonLinux2023(),
       securityGroup: privateSG,
     })
 

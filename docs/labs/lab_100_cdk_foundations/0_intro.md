@@ -133,12 +133,9 @@ When you use AWS CDK:
 
 CDK’s integration with CloudFormation offers several key benefits:
 
-<!-- COMMENT: Reworded for a more natural tone than "This approach provides several benefits:" -->
-
 - **Infrastructure as Code (IaC)**: Version control your infrastructure and apply software engineering practices.
 - **Repeatability**: Deploy infrastructure consistently, reducing human error.
 - **Automation**: Automate resource provisioning and management for better scalability.
-
 
 ## State Management
 

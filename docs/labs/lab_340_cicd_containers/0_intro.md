@@ -44,7 +44,7 @@ flowchart TD
 - Create an automated pipeline for container builds
 - Implement container testing strategies
 - Manage container image versions and tags
-- Deploy containers to ECS using blue-green deployment
+- Deploy containers to ECS with rolling updates and health checks
 - Monitor container deployments
 - Implement security scanning for containers
 

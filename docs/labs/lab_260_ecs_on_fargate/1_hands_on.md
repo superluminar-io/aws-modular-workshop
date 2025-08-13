@@ -38,10 +38,10 @@ flowchart TD
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 This lab builds on the ECR and Docker basics lab. Download the completed ECR lab state to begin:
 
@@ -71,7 +71,7 @@ const vpc = new ec2.Vpc(this, "FargateVPC", {
       subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
     },
   ],
-});
+})
 ```
 
 ### 2. Create ECS Cluster with Load Balancer
@@ -79,17 +79,17 @@ const vpc = new ec2.Vpc(this, "FargateVPC", {
 Now we'll create an ECS cluster, Fargate service, and Application Load Balancer:
 
 ```typescript
-import * as cdk from "aws-cdk-lib";
-import * as ec2 from "aws-cdk-lib/aws-ec2";
-import * as ecs from "aws-cdk-lib/aws-ecs";
-import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import * as ecr from "aws-cdk-lib/aws-ecr";
-import * as logs from "aws-cdk-lib/aws-logs";
-import { Construct } from "constructs";
+import * as cdk from "aws-cdk-lib"
+import * as ec2 from "aws-cdk-lib/aws-ec2"
+import * as ecs from "aws-cdk-lib/aws-ecs"
+import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2"
+import * as ecr from "aws-cdk-lib/aws-ecr"
+import * as logs from "aws-cdk-lib/aws-logs"
+import { Construct } from "constructs"
 
 export class EcsStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     // Create VPC for Fargate
     const vpc = new ec2.Vpc(this, "FargateVPC", {
@@ -106,42 +106,42 @@ export class EcsStack extends cdk.Stack {
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
         },
       ],
-    });
+    })
 
     // Import existing ECR repository from lab 240
     const repository = ecr.Repository.fromRepositoryName(
       this,
       "ImportedRepo",
       "my-app-repo"
-    );
+    )
 
     // Create ECS cluster
     const cluster = new ecs.Cluster(this, "FargateCluster", {
       vpc,
       enableFargateCapacityProviders: true,
-    });
+    })
 
     // Create Application Load Balancer
     const loadBalancer = new elbv2.ApplicationLoadBalancer(this, "ALB", {
       vpc,
       internetFacing: true,
       loadBalancerName: "workshop-alb",
-    });
+    })
 
     // Create security group for ALB
     const albSecurityGroup = new ec2.SecurityGroup(this, "ALBSecurityGroup", {
       vpc,
       description: "Security group for Application Load Balancer",
       allowAllOutbound: true,
-    });
+    })
 
     albSecurityGroup.addIngressRule(
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(80),
       "Allow HTTP access from anywhere"
-    );
+    )
 
-    loadBalancer.addSecurityGroup(albSecurityGroup);
+    loadBalancer.addSecurityGroup(albSecurityGroup)
 
     // Create target group
     const targetGroup = new elbv2.ApplicationTargetGroup(this, "TargetGroup", {
@@ -154,20 +154,20 @@ export class EcsStack extends cdk.Stack {
       healthCheckTimeoutSeconds: 5,
       healthyThresholdCount: 2,
       unhealthyThresholdCount: 3,
-    });
+    })
 
     // Add listener to load balancer
     const listener = loadBalancer.addListener("PublicListener", {
       port: 80,
       open: true,
       defaultTargetGroups: [targetGroup],
-    });
+    })
 
     // Create task definition with health check
     const taskDefinition = new ecs.FargateTaskDefinition(this, "TaskDef", {
       memoryLimitMiB: 512,
       cpu: 256,
-    });
+    })
 
     const container = taskDefinition.addContainer("MyContainer", {
       image: ecs.ContainerImage.fromEcrRepository(repository, "latest"),
@@ -196,7 +196,7 @@ export class EcsStack extends cdk.Stack {
         PORT: "3000",
         NODE_ENV: "production",
       },
-    });
+    })
 
     // Create Fargate service
     const service = new ecs.FargateService(this, "Service", {
@@ -208,21 +208,21 @@ export class EcsStack extends cdk.Stack {
         subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
       },
       healthCheckGracePeriod: cdk.Duration.seconds(60),
-    });
+    })
 
     // Attach service to target group
-    service.attachToApplicationTargetGroup(targetGroup);
+    service.attachToApplicationTargetGroup(targetGroup)
 
     // Output the load balancer DNS name
     new cdk.CfnOutput(this, "LoadBalancerDNS", {
       value: loadBalancer.loadBalancerDnsName,
       description: "DNS name of the load balancer",
-    });
+    })
 
     new cdk.CfnOutput(this, "LoadBalancerURL", {
       value: `http://${loadBalancer.loadBalancerDnsName}`,
       description: "URL of the application",
-    });
+    })
   }
 }
 ```
@@ -304,20 +304,23 @@ scaling.scaleOnCpuUtilization('CpuScaling', {
 
 ### 6. Configure Service Discovery
 
-Add service discovery to your ECS stack:
+Add private DNS service discovery to your ECS stack:
 
 ```typescript:lib/ecs-stack.ts
-const namespace = new ecs.CloudMapNamespace(this, 'WorkshopNamespace', {
+import * as cloudmap from 'aws-cdk-lib/aws-servicediscovery';
+
+// Create a private DNS namespace in the VPC
+const namespace = new cloudmap.PrivateDnsNamespace(this, 'WorkshopNamespace', {
   vpc,
   name: 'workshop.local',
 });
 
-const serviceDiscovery = service.enableCloudMap({
+// Enable Cloud Map service discovery for the ECS service
+service.enableCloudMap({
   name: 'workshop-app',
   cloudMapNamespace: namespace,
 });
 ```
-
 
 ### 7. Configure Enhanced Monitoring
 
@@ -346,7 +349,7 @@ aws cloudformation describe-stacks \
   --stack-name EcsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerDNS`].OutputValue' \
   --output text \
- 
+
 ```
 
 Test scaling:
@@ -412,19 +415,19 @@ aws ecs update-service \
   --cluster your-cluster-name \
   --service your-service-name \
   --desired-count 0 \
- 
+
 
 # Wait for tasks to stop
 aws ecs wait services-stable \
   --cluster your-cluster-name \
   --services your-service-name \
- 
+
 
 # Delete the service
 aws ecs delete-service \
   --cluster your-cluster-name \
   --service your-service-name \
- 
+
 
 # Destroy the CDK stack
 cdk destroy
@@ -469,4 +472,3 @@ flowchart TD
     style HEALTH fill:#ff9900,color:#fff
     style SCALE fill:#ff9900,color:#fff
 ```
-

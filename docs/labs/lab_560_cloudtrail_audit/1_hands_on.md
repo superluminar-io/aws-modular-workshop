@@ -3,10 +3,10 @@
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 - AWS CDK and AWS CLI configured
 - Basic understanding of AWS services
@@ -72,17 +72,13 @@ export class CloudTrailStack extends cdk.Stack {
       isMultiRegionTrail: true,
       cloudWatchLogGroup: trailLogGroup,
       sendToCloudWatchLogs: true,
-      sns: trailTopic,
+      snsTopic: trailTopic,
     });
 
-    // Add data event logging for S3 and Lambda
-    trail.addEventSelector(cloudtrail.DataResourceType.S3_OBJECT, [
-      'arn:aws:s3:::',
-    ]);
-
-    trail.addEventSelector(cloudtrail.DataResourceType.LAMBDA_FUNCTION, [
-      'arn:aws:lambda',
-    ]);
+    // Add S3 data event logging for the trail bucket (example)
+    trail.addS3EventSelector([
+      { bucket: trailBucket },
+    ], { includeManagementEvents: true });
 
     // Create CloudTrail Lake event data store
     const lakeStore = new cloudtrail.CfnEventDataStore(this, 'LakeStore', {
@@ -97,6 +93,8 @@ export class CloudTrailStack extends cdk.Stack {
     const suspiciousActivityRule = new events.Rule(this, 'SuspiciousActivityRule', {
       description: 'Monitor for suspicious API activity',
       eventPattern: {
+        source: ['aws.iam'],
+        detailType: ['AWS API Call via CloudTrail'],
         detail: {
           eventSource: ['iam.amazonaws.com'],
           eventName: [
@@ -299,12 +297,12 @@ When you're finished with this lab:
 # Stop CloudTrail logging
 aws cloudtrail stop-logging \
   --name MyCloudTrail \
- 
+
 
 # Delete CloudWatch log groups (optional)
 aws logs delete-log-group \
   --log-group-name CloudTrail/MyCloudTrail \
- 
+
 
 # Empty S3 bucket
 # Get bucket name from stack outputs first

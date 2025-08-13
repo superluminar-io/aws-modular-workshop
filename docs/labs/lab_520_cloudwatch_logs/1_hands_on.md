@@ -3,10 +3,10 @@
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 Before starting this lab, ensure you have:
 
@@ -106,18 +106,9 @@ export class CloudWatchStack extends cdk.Stack {
         ec2.InstanceClass.T3,
         ec2.InstanceSize.MICRO
       ),
-      machineImage: new ec2.AmazonLinuxImage(),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023(),
+      detailedMonitoring: true,
     });
-
-    // Enable detailed monitoring for the instance
-    instance.node.addDependency(
-      new cdk.CfnResource(this, 'DetailedMonitoring', {
-        type: 'AWS::EC2::Instance',
-        properties: {
-          Monitoring: true,
-        },
-      })
-    );
 
     // Create CloudWatch Dashboard
     const dashboard = new cloudwatch.Dashboard(this, 'MonitoringDashboard', {

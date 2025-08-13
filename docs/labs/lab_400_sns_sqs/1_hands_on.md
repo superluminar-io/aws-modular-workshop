@@ -3,10 +3,10 @@
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 - AWS CDK and AWS CLI configured
 - Node.js installed
@@ -326,6 +326,7 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 import { Construct } from 'constructs';
 
 export class MessagingStack extends cdk.Stack {
@@ -381,8 +382,7 @@ export class MessagingStack extends cdk.Stack {
       handler: 'index.handler',
       code: lambda.Code.fromAsset('src/processor'),
       environment: {
-        STANDARD_QUEUE_URL: standardQueue.queueUrl,
-        FIFO_QUEUE_URL: fifoQueue.queueUrl,
+        TOPIC_ARN: topic.topicArn,
       },
     });
 
@@ -390,6 +390,14 @@ export class MessagingStack extends cdk.Stack {
     standardQueue.grantConsumeMessages(processorFunction);
     fifoQueue.grantConsumeMessages(processorFunction);
     topic.grantPublish(processorFunction);
+
+    // Trigger the processor from SQS queues
+    processorFunction.addEventSource(new lambdaEventSources.SqsEventSource(standardQueue, {
+      batchSize: 10,
+    }));
+    processorFunction.addEventSource(new lambdaEventSources.SqsEventSource(fifoQueue, {
+      batchSize: 10,
+    }));
 
     // Outputs
     new cdk.CfnOutput(this, 'TopicArn', {

@@ -3,10 +3,10 @@
 ## Prerequisites
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 Before starting this lab, ensure you have:
 
@@ -237,26 +237,16 @@ ts-node scripts/test-secrets.ts
 
 ### 4. Configure Secret Rotation
 
-1. Enable automatic rotation for the API key secret:
+1. Enable automatic rotation for the database secret (managed rotation):
 
 ```typescript:lib/secrets-manager-stack.ts
-// Add to the stack after creating apiKeySecret
-const rotationFunction = new lambda.Function(this, 'RotationFunction', {
-  runtime: lambda.Runtime.NODEJS_22_X,
-  handler: 'index.handler',
-  code: lambda.Code.fromAsset('src/rotation-function'),
-  environment: {
-    SECRET_ARN: apiKeySecret.secretArn,
-  },
-});
-
-apiKeySecret.addRotationSchedule('RotationSchedule', {
-  rotationLambda: rotationFunction,
+// Add to the stack after creating the database
+database.addRotationSingleUser({
   automaticallyAfter: cdk.Duration.days(30),
 });
 ```
 
-2. Create rotation function `src/rotation-function/index.ts`:
+This provisions an AWS-managed rotation Lambda and IAM role for the RDS credential secret.
 
 ## Validation Steps
 
@@ -273,9 +263,9 @@ apiKeySecret.addRotationSchedule('RotationSchedule', {
    - [ ] Secret values properly parsed
 
 3. Secret Rotation
-   - [ ] Rotation schedule configured
-   - [ ] Rotation function deployed
-   - [ ] Test rotation manually
+   - [ ] Rotation schedule configured for the database secret
+   - [ ] Managed rotation Lambda created by RDS
+   - [ ] Test rotation manually (optional)
 
 ## Troubleshooting
 
