@@ -1,0 +1,3 @@
+# Auto-assign reviewers based on paths
+/docs/* @your-github-handle
+/infra/* @your-github-handle
