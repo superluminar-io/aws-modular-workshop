@@ -3,15 +3,16 @@
 ## Prerequisites
 
 > Tip: Set the workshop region (Frankfurt)
+
 ```bash
 export AWS_REGION=eu-central-1
 ```
 
 > Tip: Set an AWS profile for this shell to avoid repeating profile flags
+
 ```bash
 export AWS_PROFILE=your-profile-name
 ```
-
 
 - Completed the CDK Foundations lab
 - AWS CDK installed and configured
@@ -61,52 +62,59 @@ flowchart TD
 
 Create a comprehensive IAM stack with monitoring capabilities:
 
-```typescript:lib/iam-stack.ts
-import * as cdk from 'aws-cdk-lib';
-import { CfnOutput, RemovalPolicy, Stack, StackProps, Duration } from "aws-cdk-lib";
+```typescript
+import * as cdk from "aws-cdk-lib"
+import {
+  CfnOutput,
+  RemovalPolicy,
+  Stack,
+  StackProps,
+  Duration,
+} from "aws-cdk-lib"
 import {
   Policy,
   PolicyStatement,
   Role,
   ServicePrincipal,
   Effect,
-} from "aws-cdk-lib/aws-iam";
-import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
-import { Bucket } from "aws-cdk-lib/aws-s3";
-import { Trail } from "aws-cdk-lib/aws-cloudtrail";
-import { Alarm, Metric, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
-import { Topic } from "aws-cdk-lib/aws-sns";
-import { EmailSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
-import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
-import { Construct } from "constructs";
+} from "aws-cdk-lib/aws-iam"
+import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda"
+import { Bucket } from "aws-cdk-lib/aws-s3"
+import { Trail } from "aws-cdk-lib/aws-cloudtrail"
+import { Alarm, Metric, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch"
+import { Topic } from "aws-cdk-lib/aws-sns"
+import { EmailSubscription } from "aws-cdk-lib/aws-sns-subscriptions"
+import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions"
+import { Construct } from "constructs"
 
 export class IamStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     // Create S3 bucket for application data
     const bucket = new Bucket(this, "WorkshopBucket", {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       bucketName: `iam-workshop-${this.account}-${this.region}`,
-    });
+    })
 
     // Create S3 bucket for CloudTrail logs
     const trailBucket = new Bucket(this, "CloudTrailBucket", {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       bucketName: `cloudtrail-iam-workshop-${this.account}-${this.region}`,
-    });
+    })
 
     // Create SNS topic for security alerts
     const securityAlertTopic = new Topic(this, "SecurityAlerts", {
       displayName: "IAM Security Alerts",
-    });
+    })
 
-    // Add email subscription (replace with your email)
+    // ⚠️ IMPORTANT: Replace YOUR_EMAIL_ADDRESS with your actual email address
+    // You will receive security alerts at this email address
     securityAlertTopic.addSubscription(
-      new EmailSubscription("YOUR_EMAIL_ADDRESS") // Replace with your email
-    );
+      new EmailSubscription("YOUR_EMAIL_ADDRESS") // TODO: Replace with your actual email
+    )
 
     // Create CloudTrail for auditing IAM actions
     const trail = new Trail(this, "IamAuditTrail", {
@@ -115,13 +123,13 @@ export class IamStack extends Stack {
       includeGlobalServiceEvents: true,
       isMultiRegionTrail: true,
       enableFileValidation: true,
-    });
+    })
 
     // Define Lambda execution role (initially with minimal permissions)
     const lambdaRole = new Role(this, "LambdaExecutionRole", {
       assumedBy: new ServicePrincipal("lambda.amazonaws.com"),
       description: "IAM role for Lambda function with least privilege access",
-    });
+    })
 
     // Add CloudWatch Logs permissions (required for Lambda)
     lambdaRole.addToPolicy(
@@ -134,7 +142,7 @@ export class IamStack extends Stack {
         ],
         resources: [`arn:aws:logs:${this.region}:${this.account}:*`],
       })
-    );
+    )
 
     // Start with minimal S3 permissions (this will cause an error initially)
     const minimalS3Policy = new Policy(this, "MinimalS3Policy", {
@@ -145,9 +153,9 @@ export class IamStack extends Stack {
           resources: [bucket.bucketArn + "/*"],
         }),
       ],
-    });
+    })
 
-    lambdaRole.attachInlinePolicy(minimalS3Policy);
+    lambdaRole.attachInlinePolicy(minimalS3Policy)
 
     // Create Lambda function for testing IAM permissions
     const iamTestFunction = new Function(this, "IamTestFunction", {
@@ -246,21 +254,22 @@ export class IamStack extends Stack {
       },
       role: lambdaRole,
       timeout: Duration.seconds(30),
-    });
+    })
 
     // CloudWatch alarms for security monitoring
     const failedPermissionAlarm = new Alarm(this, "FailedPermissionAlarm", {
       alarmName: "iam-workshop-failed-permissions",
-      alarmDescription: "Alarm when Lambda function encounters permission errors",
+      alarmDescription:
+        "Alarm when Lambda function encounters permission errors",
       metric: iamTestFunction.metricErrors({
         period: Duration.minutes(5),
       }),
       threshold: 1,
       evaluationPeriods: 1,
       treatMissingData: TreatMissingData.NOT_BREACHING,
-    });
+    })
 
-    failedPermissionAlarm.addAlarmAction(new SnsAction(securityAlertTopic));
+    failedPermissionAlarm.addAlarmAction(new SnsAction(securityAlertTopic))
 
     // Alarm for unusual API activity (using CloudTrail metrics)
     const apiCallVolumeAlarm = new Alarm(this, "UnusualApiActivity", {
@@ -278,35 +287,35 @@ export class IamStack extends Stack {
       threshold: 100, // Adjust based on your normal usage
       evaluationPeriods: 2,
       treatMissingData: TreatMissingData.NOT_BREACHING,
-    });
+    })
 
-    apiCallVolumeAlarm.addAlarmAction(new SnsAction(securityAlertTopic));
+    apiCallVolumeAlarm.addAlarmAction(new SnsAction(securityAlertTopic))
 
     // Outputs for testing and monitoring
     new CfnOutput(this, "LambdaFunctionName", {
       value: iamTestFunction.functionName,
       description: "Lambda function name for IAM testing",
-    });
+    })
 
     new CfnOutput(this, "BucketName", {
       value: bucket.bucketName,
       description: "S3 bucket name for testing access",
-    });
+    })
 
     new CfnOutput(this, "CloudTrailArn", {
       value: trail.trailArn,
       description: "CloudTrail ARN for auditing IAM actions",
-    });
+    })
 
     new CfnOutput(this, "SecurityAlertTopicArn", {
       value: securityAlertTopic.topicArn,
       description: "SNS topic ARN for security alerts",
-    });
+    })
 
     new CfnOutput(this, "LambdaRoleArn", {
       value: lambdaRole.roleArn,
       description: "IAM role ARN used by Lambda function",
-    });
+    })
   }
 }
 ```
@@ -323,8 +332,7 @@ cdk deploy IamStack
 export FUNCTION_NAME=$(aws cloudformation describe-stacks \
   --stack-name IamStack \
   --query 'Stacks[0].Outputs[?OutputKey==`LambdaFunctionName`].OutputValue' \
-  --output text \
- )
+  --output text)
 
 echo "Testing Lambda function: $FUNCTION_NAME"
 
@@ -333,7 +341,6 @@ aws lambda invoke \
   --function-name $FUNCTION_NAME \
   --payload '{}' \
   --cli-binary-format raw-in-base64-out \
-  \
   response.json
 
 # View the detailed response
@@ -349,28 +356,28 @@ Set up monitoring to track IAM actions and security events:
 export ALERT_TOPIC=$(aws cloudformation describe-stacks \
   --stack-name IamStack \
   --query 'Stacks[0].Outputs[?OutputKey==`SecurityAlertTopicArn`].OutputValue' \
-  --output text \
- )
+  --output text)
 
+# ⚠️ IMPORTANT: Replace YOUR_EMAIL_ADDRESS with your actual email address
 aws sns subscribe \
   --topic-arn $ALERT_TOPIC \
   --protocol email \
-  --notification-endpoint YOUR_EMAIL_ADDRESS \
- 
+  --notification-endpoint YOUR_EMAIL_ADDRESS
+
 
 # Check CloudTrail events for IAM actions
 aws logs filter-log-events \
   --log-group-name CloudTrail/IamAuditTrail \
   --start-time $(date -d '10 minutes ago' +%s000) \
   --filter-pattern '{ ($.eventName = AssumeRole) || ($.eventName = PutObject) }' \
- 
+
 
 # Monitor Lambda function errors
 aws logs filter-log-events \
   --log-group-name "/aws/lambda/$FUNCTION_NAME" \
   --start-time $(date -d '10 minutes ago' +%s000) \
   --filter-pattern 'ERROR' \
- 
+
 ```
 
 ### 4. Analyze Permission Failures
@@ -387,14 +394,14 @@ aws cloudwatch get-metric-statistics \
   --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
   --period 300 \
   --statistics Sum \
- 
+
 
 # Get detailed CloudTrail events for permission denials
 aws logs filter-log-events \
   --log-group-name CloudTrail/IamAuditTrail \
   --start-time $(date -d '30 minutes ago' +%s000) \
   --filter-pattern '{ $.errorCode EXISTS }' \
- 
+
 ```
 
 ### 5. Fix Permissions with Monitoring
@@ -437,7 +444,6 @@ aws lambda invoke \
   --function-name $FUNCTION_NAME \
   --payload '{}' \
   --cli-binary-format raw-in-base64-out \
-  \
   response.json
 
 # Check the successful response
@@ -452,21 +458,20 @@ Confirm that your security monitoring is working:
 # Check alarm status
 aws cloudwatch describe-alarms \
   --alarm-names iam-workshop-failed-permissions \
- 
+
 
 # Verify CloudTrail is logging events
 aws cloudtrail lookup-events \
   --lookup-attributes AttributeKey=EventName,AttributeValue=AssumeRole \
   --start-time $(date -d '1 hour ago' +%Y-%m-%d) \
   --end-time $(date +%Y-%m-%d) \
- 
+
 
 # Check S3 bucket contents
 export BUCKET_NAME=$(aws cloudformation describe-stacks \
   --stack-name IamStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
-  --output text \
- )
+  --output text)
 
 aws s3 ls s3://$BUCKET_NAME
 ```
@@ -533,12 +538,12 @@ chmod +x iam-load-test.sh
    # Check current policy attached to role
    aws iam list-attached-role-policies \
      --role-name YourLambdaRole \
-    
+
 
    # Check inline policies
    aws iam list-role-policies \
      --role-name YourLambdaRole \
-    
+
    ```
 
 2. **Permission Escalation Detection**:
@@ -548,7 +553,7 @@ chmod +x iam-load-test.sh
    aws logs filter-log-events \
      --log-group-name CloudTrail/IamAuditTrail \
      --filter-pattern '{ ($.eventName = AttachUserPolicy) || ($.eventName = AttachRolePolicy) || ($.eventName = PutUserPolicy) || ($.eventName = PutRolePolicy) }' \
-    
+
    ```
 
 3. **Monitoring Alert Verification**:

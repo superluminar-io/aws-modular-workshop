@@ -159,8 +159,7 @@ Let's examine the key files created by CDK:
    ```bash
    aws cloudformation describe-stacks \
      --stack-name my-cdk-app \
-     --query 'Stacks[0].Outputs[0].OutputValue' \
-
+     --query 'Stacks[0].Outputs[0].OutputValue'
    ```
 
 ## Validate Your CDK Environment
@@ -185,7 +184,7 @@ cdk diff
 ```bash
 # Verify CDK bootstrap stack exists
 aws cloudformation describe-stacks \
-  --stack-name CDKToolkit \
+  --stack-name CDKToolkit
 
 
 # Check S3 bucket for CDK assets

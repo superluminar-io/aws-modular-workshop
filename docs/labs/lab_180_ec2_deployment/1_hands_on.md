@@ -182,11 +182,10 @@ Use AWS Systems Manager Session Manager to connect:
 export INSTANCE_ID=$(aws cloudformation describe-stacks \
   --stack-name AwsFundamentalsWorkshopLabsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`InstanceId`].OutputValue' \
-  --output text \
- )
+  --output text)
 
 aws ssm start-session \
-    --target $INSTANCE_ID \
+    --target $INSTANCE_ID
 
 ```
 

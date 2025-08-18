@@ -125,8 +125,7 @@ After deployment, let's interact with our bucket using the AWS CLI:
 export BUCKET_NAME=$(aws cloudformation describe-stacks \
   --stack-name AwsFundamentalsWorkshopLabsStack \
   --query 'Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue' \
-  --output text \
- )
+  --output text)
 
 echo "Bucket name: $BUCKET_NAME"
 ```

@@ -21,18 +21,24 @@ class AWSTranslateConfig {
       // Configure AWS SDK (prefer Cognito Identity Pool if provided)
       const identityPoolId =
         window.WORKSHOP_CONFIG && window.WORKSHOP_CONFIG.translateIdentityPoolId
-      const config = { region: this.region }
+      window.AWS.config.update({ region: this.region })
       if (identityPoolId) {
-        config.credentials = new window.AWS.CognitoIdentityCredentials({
-          IdentityPoolId: identityPoolId,
-        })
+        window.AWS.config.credentials =
+          new window.AWS.CognitoIdentityCredentials({
+            IdentityPoolId: identityPoolId,
+          })
       } else if (credentials) {
-        config.credentials = credentials
+        window.AWS.config.credentials = credentials
       }
-      window.AWS.config.update(config)
 
-      // Test connection with a simple call
-      const translate = new window.AWS.Translate()
+      // Resolve Cognito identity to ensure credentials are present
+      if (window.AWS.config.credentials && window.AWS.config.credentials.get) {
+        await new Promise((resolve, reject) => {
+          window.AWS.config.credentials.get((err) =>
+            err ? reject(err) : resolve()
+          )
+        })
+      }
 
       this.isConfigured = true
       console.log('AWS Translate service configured successfully')

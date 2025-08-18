@@ -1,7 +1,7 @@
 /* Language Toggle Switch Styles */
 .language-toggle-container {
   position: fixed;
-  top: 20px;
+  top: 80px; /* move below repo link */
   right: 20px;
   z-index: 1000;
 }
@@ -65,17 +65,21 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .language-toggle-container {
-    top: 10px;
+    top: 60px; /* keep some spacing on mobile */
     right: 10px;
   }
-  
+
   #language-toggle {
     padding: 8px 16px;
     font-size: 12px;
